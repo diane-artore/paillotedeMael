@@ -24,31 +24,12 @@
 
 <main class="contenu">
 
-  <!-- Connexion : visible tant que l'équipe n'est pas identifiée. -->
-  <section class="connexion" id="connexion" hidden>
-    <h1 class="connexion__titre">L’écran de service</h1>
-    <form class="formulaire" id="formulaire-connexion">
-      <div class="champ">
-        <label for="email">Adresse e-mail</label>
-        <input type="email" id="email" name="email" autocomplete="username" required>
-      </div>
-      <div class="champ">
-        <label for="mot_de_passe">Mot de passe</label>
-        <input type="password" id="mot_de_passe" name="mot_de_passe"
-               autocomplete="current-password" required>
-      </div>
-      <p class="message message--erreur" id="connexion-erreur" hidden></p>
-      <button type="submit" class="bouton">Ouvrir la cuisine</button>
-    </form>
-  </section>
-
-  <!-- Le service. -->
-  <section id="service" hidden>
+  <!-- Le service. Pas de compte : l'écran est ouvert à qui a le lien. -->
+  <section id="service">
     <div class="service__barre">
       <h1 class="titre-section" style="font-size: 1.6rem;">En cours</h1>
       <button type="button" class="service__bouton" id="bouton-son"
               aria-pressed="false">🔕 Sonnerie coupée</button>
-      <button type="button" class="service__bouton" id="bouton-sortir">Fermer l’écran</button>
       <p class="service__etat" id="service-etat">—</p>
     </div>
 
