@@ -1,0 +1,209 @@
+/* ==========================================================================
+   La Paillote de Maël — écrans de service (cuisine, admin)
+   S'ajoute à site.css. Pensé pour une tablette posée derrière le comptoir :
+   gros numéros, gros boutons, l'état d'un ticket lisible à deux mètres.
+   ========================================================================== */
+
+/* --- Connexion ------------------------------------------------------------ */
+
+.connexion {
+  max-width: 24rem;
+  margin-inline: auto;
+  padding-block: 3rem 4rem;
+}
+
+.connexion__titre {
+  font-family: var(--serif);
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+/* --- Barre d'outils du service ------------------------------------------- */
+
+.service__barre {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-block: 1rem;
+}
+
+.service__etat {
+  color: var(--gris);
+  font-size: 0.9rem;
+  margin-inline-start: auto;
+}
+
+.service__bouton {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.9rem;
+  background: none;
+  border: 1px solid var(--filet);
+  color: var(--texte);
+  cursor: pointer;
+}
+
+.service__bouton:hover {
+  border-color: var(--abricot);
+  color: var(--abricot-texte);
+}
+
+/* --- Tickets -------------------------------------------------------------- */
+
+.tickets {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+  gap: 1rem;
+  padding-block: 0.5rem 3rem;
+}
+
+.ticket {
+  background: var(--creme);
+  border-top: 5px solid var(--gris);
+  padding: 1rem 1.1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* La couleur du liseré dit l'état, sans avoir à lire. */
+.ticket[data-statut='recue'] { border-top-color: var(--abricot); }
+.ticket[data-statut='en_preparation'] { border-top-color: var(--bassin); }
+.ticket[data-statut='prete'] { border-top-color: var(--olive); }
+
+.ticket__entete {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.ticket__numero {
+  font-family: var(--serif);
+  font-size: 2.6rem;
+  line-height: 1;
+}
+
+.ticket__ou {
+  font-weight: 500;
+}
+
+.ticket__heure {
+  margin-inline-start: auto;
+  color: var(--gris);
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.ticket__lignes {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.ticket__ligne {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+}
+
+.ticket__quantite {
+  font-weight: 600;
+  min-width: 2ch;
+  color: var(--bassin);
+}
+
+.ticket__note {
+  background: var(--papier);
+  border-inline-start: 3px solid var(--abricot);
+  padding: 0.4rem 0.6rem;
+  font-style: italic;
+}
+
+.ticket__pied {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: auto;
+}
+
+.ticket__total {
+  font-weight: 600;
+}
+
+.ticket__paiement {
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--filet);
+  background: none;
+  color: var(--pasteque-texte);
+  cursor: pointer;
+}
+
+.ticket__paiement[data-paye] {
+  color: var(--olive);
+  border-color: var(--olive);
+  cursor: default;
+}
+
+.ticket__actions {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+/* Le bouton d'avancement occupe toute la largeur : c'est LE geste du
+   service, il doit tomber sous le pouce. */
+.ticket__suivant {
+  flex: 1;
+  font: inherit;
+  font-weight: 500;
+  padding: 0.7rem 1rem;
+  border: none;
+  background: var(--bassin);
+  color: var(--creme);
+  cursor: pointer;
+}
+
+.ticket__suivant:hover {
+  background: var(--abricot);
+}
+
+.ticket__annuler {
+  font: inherit;
+  font-size: 0.85rem;
+  background: none;
+  border: none;
+  color: var(--gris);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.ticket__annuler:hover {
+  color: var(--pasteque-texte);
+}
+
+/* --- Historique du jour --------------------------------------------------- */
+
+.historique {
+  padding-block-end: 4rem;
+}
+
+.historique summary {
+  cursor: pointer;
+  color: var(--gris);
+  padding-block: 0.75rem;
+}
+
+.historique .ticket {
+  opacity: 0.72;
+}
+
+.historique .ticket[data-statut='annulee'] {
+  border-top-color: var(--pasteque);
+}
+
+.historique .ticket[data-statut='servie'] {
+  border-top-color: var(--olive);
+}
