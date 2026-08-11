@@ -207,3 +207,99 @@
 .historique .ticket[data-statut='servie'] {
   border-top-color: var(--olive);
 }
+
+/* --- La porte à code ------------------------------------------------------ */
+/* Un voile plein écran : rien de l'écran protégé n'est utilisable derrière,
+   et la base refuse de toute façon chaque geste sans le bon code. */
+
+.porte-pin {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  background: var(--papier, var(--creme));
+  padding: 1.5rem;
+}
+
+.porte-pin__carte {
+  width: min(22rem, 100%);
+}
+
+/* --- L'admin de la carte -------------------------------------------------- */
+
+.admin-rayon {
+  border-top: 2px solid var(--bassin);
+  padding-block: 1.25rem 1.75rem;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.admin-rayon__entete {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.admin-rayon__nom {
+  font-family: var(--serif);
+  font-size: 1.4rem;
+}
+
+.admin-article {
+  background: var(--creme);
+  padding: 0.9rem 1rem;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.admin-article[data-rupture] {
+  opacity: 0.6;
+}
+
+.admin-article__colonnes {
+  display: flex;
+  align-items: end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.admin-article__colonnes .admin-champ:first-child {
+  flex: 1;
+  min-width: 12rem;
+}
+
+.admin-champ {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.admin-dispo {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding-block: 0.6rem;
+  white-space: nowrap;
+}
+
+.admin-dispo input {
+  width: 1.2rem;
+  height: 1.2rem;
+  accent-color: var(--bassin);
+}
+
+.admin-bouton {
+  min-height: 2.6rem;
+  padding: 0.5rem 1.1rem;
+}
+
+.admin-nouveau-rayon {
+  display: flex;
+  align-items: end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  border-top: 2px solid var(--bassin);
+  padding-block: 1.25rem 3rem;
+}

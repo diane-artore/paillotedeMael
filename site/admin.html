@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La carte (admin) — La Paillote de Maël</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/badge.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/caisse.css">
+<script src="js/badge.js" defer></script>
+<script type="module" src="js/admin.js"></script>
+</head>
+<body>
+
+<header class="entete">
+  <div class="contenu entete__barre">
+    <a class="marque" href="admin.html">
+      <span class="cadre-badge marque__badge"><svg class="badge" viewBox="0 0 200 200" aria-hidden="true"><use href="#badge" width="200" height="200"/></svg></span>
+      <span class="marque__nom">La Paillote<br><span class="italique">— admin</span></span>
+    </a>
+    <nav class="nav" aria-label="Écrans d'équipe">
+      <a href="cuisine.html">La cuisine</a>
+      <a href="carte.html">Voir la carte publique</a>
+    </nav>
+  </div>
+</header>
+
+<main class="contenu">
+
+  <section>
+    <div class="service__barre">
+      <h1 class="titre-section" style="font-size: 1.6rem;">La carte</h1>
+      <p class="service__etat" id="admin-etat">Chargement…</p>
+    </div>
+
+    <p class="champ__aide" style="max-width: 46rem;">
+      Les changements sont visibles sur la carte publique dès l'enregistrement.
+      Décocher « En vente » retire l'article de la carte sans le supprimer —
+      pratique pour une rupture du jour.
+    </p>
+
+    <div id="rayons" style="padding-block: 1.5rem 2rem;"></div>
+
+    <form class="admin-nouveau-rayon" id="formulaire-rayon">
+      <div class="champ" style="flex: 1; max-width: 20rem;">
+        <label class="champ__label" for="rayon-nom">Nouveau rayon</label>
+        <input type="text" id="rayon-nom" placeholder="Ex. Desserts" maxlength="60" required>
+      </div>
+      <button type="submit" class="bouton bouton--creux">Ajouter le rayon</button>
+    </form>
+  </section>
+
+</main>
+
+</body>
+</html>

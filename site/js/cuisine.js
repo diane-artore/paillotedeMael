@@ -1,31 +1,18 @@
 // L'écran de la cuisine.
 //
-// Pas de compte : l'écran s'ouvre à quiconque a le lien. Il ne passe pas
-// pour autant par les tables — trois fonctions côté base (cuisine_*)
-// donnent exactement les gestes du service : lire les tickets du jour,
-// avancer un statut, encaisser. Ni téléphone client, ni suppression, ni
-// écriture libre.
+// Pas de compte, mais un code d'équipe : la base vérifie le PIN à chaque
+// geste (voir pin.js), et les fonctions cuisine_* donnent exactement les
+// gestes du service — lire les tickets du jour, avancer un statut,
+// encaisser. Ni téléphone client, ni suppression, ni écriture libre.
 //
 // L'écran se rafraîchit tout seul toutes les 8 secondes. Pas de temps réel :
 // une paillote n'en a pas besoin, et un simple GET périodique survit à tout
 // (wifi capricieux, tablette qui sort de veille…).
 
-import { SUPABASE_URL, SUPABASE_CLE_PUBLIABLE, euros } from './config.js';
+import { euros } from './config.js';
+import { creerRpc } from './pin.js';
 
-/** Appel d'une fonction cuisine_* de la base (rpc PostgREST, clé publiable). */
-async function rpc(fonction, corps = {}) {
-  const reponse = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fonction}`, {
-    method: 'POST',
-    headers: {
-      apikey: SUPABASE_CLE_PUBLIABLE,
-      Authorization: `Bearer ${SUPABASE_CLE_PUBLIABLE}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(corps),
-  });
-  if (!reponse.ok) throw new Error(`La base a répondu ${reponse.status}.`);
-  return reponse.status === 204 ? null : reponse.json();
-}
+const rpc = creerRpc('L’écran de service');
 
 const INTERVALLE_MS = 8000;
 
