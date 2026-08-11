@@ -21,6 +21,7 @@
     <nav class="nav" aria-label="Principale">
       <a href="index.html">La maison</a>
       <a href="carte.html">La carte</a>
+      <a class="nav--commandes" id="nav-commandes" href="suivi.html" aria-current="page" hidden>Vos commandes en cours</a>
     </nav>
   </div>
 </header>
@@ -55,6 +56,13 @@
         Cette page se met à jour toute seule. Gardez-la ouverte.
       </p>
     </div>
+
+    <!-- Rempli par js/suivi.js si d'autres commandes de cet appareil sont en cours. -->
+    <nav class="suivi__autres" id="suivi-autres" hidden
+         aria-label="Vos autres commandes en cours">
+      <p class="suivi__autres-titre">Vos autres commandes en cours</p>
+      <ul class="suivi__autres-liste" id="suivi-autres-liste"></ul>
+    </nav>
   </div>
 </main>
 

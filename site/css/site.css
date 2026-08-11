@@ -266,9 +266,25 @@ a:hover {
   box-shadow: inset 0 -2px 0 var(--abricot);
 }
 
+/* « Vos commandes en cours » : l'onglet n'existe que si l'appareil a une
+   commande fraîche — js/commandes.js retire alors l'attribut hidden. */
+.nav--commandes {
+  color: var(--abricot-texte);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
 @media (max-width: 34rem) {
   .nav--secondaire {
     display: none;
+  }
+
+  /* Sur téléphone, l'onglet des commandes passe à la ligne plutôt que de
+     pousser l'en-tête hors de l'écran. */
+  .nav {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    row-gap: 0.25rem;
   }
 }
 
@@ -870,5 +886,32 @@ select:focus-visible {
 
 .suivi__etape[data-passee] {
   border-color: var(--bassin);
+  color: var(--bassin);
+}
+
+/* D'autres commandes du même appareil : on propose d'aller les suivre. */
+.suivi__autres {
+  margin-top: 3.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--filet);
+}
+
+.suivi__autres-titre {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gris);
+}
+
+.suivi__autres-liste {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin-top: 1rem;
+}
+
+.suivi__autres-liste a {
   color: var(--bassin);
 }

@@ -6,6 +6,7 @@
 // jeton est dans l'URL et périme au bout d'une journée, côté base.
 
 import { SUPABASE_URL, SUPABASE_CLE_PUBLIABLE, euros } from './config.js';
+import { commandesRecentes } from './commandes.js';
 
 const ETAPES = [
   ['recue', 'Reçue'],
@@ -21,7 +22,7 @@ const PAIEMENT = {
 
 const jeton =
   new URLSearchParams(location.search).get('c') ||
-  sessionStorage.getItem('paillote.derniere-commande');
+  commandesRecentes()[0]?.jeton;
 
 const etat = document.getElementById('suivi-etat');
 const corps = document.getElementById('suivi-corps');
@@ -92,6 +93,27 @@ async function rafraichir() {
     etat.hidden = false;
     return false;
   }
+}
+
+// Si d'autres commandes de cet appareil sont encore en cours, on propose
+// d'aller les suivre — sans rien montrer quand celle-ci est la seule.
+const autres = commandesRecentes().filter((c) => c.jeton !== jeton);
+if (autres.length) {
+  const liste = document.getElementById('suivi-autres-liste');
+  for (const c of autres) {
+    const li = document.createElement('li');
+    const lien = document.createElement('a');
+    lien.href = `suivi.html?c=${encodeURIComponent(c.jeton)}`;
+    lien.textContent = c.numero
+      ? `Commande n° ${c.numero}`
+      : `Commande de ${new Date(c.quand).toLocaleTimeString('fr-FR', {
+          hour: '2-digit',
+          minute: '2-digit',
+        })}`;
+    li.append(lien);
+    liste.append(li);
+  }
+  document.getElementById('suivi-autres').hidden = false;
 }
 
 if (!jeton) {

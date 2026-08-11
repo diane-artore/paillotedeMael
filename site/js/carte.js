@@ -7,9 +7,9 @@
 // Un panier trafiqué ne change donc rien à l'addition.
 
 import { lire, appeler, euros } from './config.js';
+import { retenirCommande } from './commandes.js';
 
 const CLE_PANIER = 'paillote.panier';
-const CLE_DERNIERE = 'paillote.derniere-commande';
 
 /** @type {Map<string, number>} id d'article → quantité */
 let panier = new Map();
@@ -180,9 +180,10 @@ async function envoyer(evenement) {
       note: donnees.get('note'),
     });
 
-    // Le jeton est la seule clé de suivi : on le garde pour la page de suivi.
+    // Le jeton est la seule clé de suivi : on le retient pour cet appareil
+    // (voir js/commandes.js et l'onglet « Vos commandes en cours »).
+    retenirCommande(commande);
     try {
-      sessionStorage.setItem(CLE_DERNIERE, commande.jeton);
       sessionStorage.removeItem(CLE_PANIER);
     } catch {
       /* sans stockage, le numéro affiché ci-dessous suffit */

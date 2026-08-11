@@ -8,6 +8,7 @@
 <link rel="icon" href="assets/badge.svg" type="image/svg+xml">
 <link rel="stylesheet" href="css/site.css">
 <script src="js/badge.js" defer></script>
+<script type="module" src="js/commandes.js"></script>
 </head>
 <body>
 
@@ -23,6 +24,7 @@
       <a href="index.html" aria-current="page">La maison</a>
       <a href="carte.html">La carte</a>
       <a class="nav--secondaire" href="#infos">Infos</a>
+      <a class="nav--commandes" id="nav-commandes" href="suivi.html" hidden>Vos commandes en cours</a>
     </nav>
   </div>
 </header>
@@ -136,7 +138,10 @@
         </div>
         <div class="info">
           <h3 class="info__titre">Où</h3>
+          <p>Sandiade, Chemin des Hubacs,<br>83210 Solliès-Toucas.</p>
           <p>Au bord du bassin, côté poolhouse.</p>
+          <p><a href="https://www.google.com/maps/search/?api=1&amp;query=Chemin+des+Hubacs%2C+83210+Solli%C3%A8s-Toucas"
+                target="_blank" rel="noopener">Voir sur la carte</a></p>
         </div>
         <div class="info">
           <h3 class="info__titre">Régler</h3>
@@ -145,8 +150,8 @@
       </div>
 
       <p class="section__intro" style="margin-top: 2.5rem;">
-        <!-- À compléter : adresse exacte, horaires, téléphone, réseaux. -->
-        Les horaires précis et l'adresse complète sont à compléter.
+        <!-- À compléter : horaires, téléphone, réseaux. -->
+        Les horaires précis sont à compléter.
       </p>
     </div>
   </section>
