@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La carte — La Paillote de Maël</title>
+<meta name="description" content="La carte du jour de La Paillote de Maël : fruits frais, bières, entrées et snacks. Commandez depuis votre table.">
+<link rel="icon" href="assets/badge.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/site.css">
+<script src="js/badge.js" defer></script>
+<script type="module" src="js/carte.js"></script>
+</head>
+<body>
+
+<a class="saut" href="#carte">Aller à la carte</a>
+
+<header class="entete">
+  <div class="contenu entete__barre">
+    <a class="marque" href="index.html">
+      <svg class="badge marque__badge" viewBox="0 0 200 200" aria-hidden="true"><use href="#badge" width="200" height="200"/></svg>
+      <span class="marque__nom">La Paillote<br><span class="italique">de Maël</span></span>
+    </a>
+    <nav class="nav" aria-label="Principale">
+      <a href="index.html">La maison</a>
+      <a href="carte.html" aria-current="page">La carte</a>
+      <a class="nav--secondaire" href="index.html#infos">Infos</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="rayures"></div>
+
+  <div class="contenu">
+    <div class="section" style="padding-bottom: 1.5rem;">
+      <p class="surtitre">Servi aujourd'hui</p>
+      <h1 class="titre-section">La carte</h1>
+      <p class="section__intro">
+        Choisissez, ajoutez, envoyez. On prépare, vous réglez au comptoir —
+        en espèces.
+      </p>
+    </div>
+
+    <!-- Rempli par js/carte.js -->
+    <nav class="sommaire" id="sommaire" aria-label="Les rayons de la carte"></nav>
+
+    <p class="message" id="carte-etat">Chargement de la carte…</p>
+
+    <div id="carte" style="padding-block: 2rem 3rem;"></div>
+  </div>
+</main>
+
+<!-- Barre de panier : n'apparaît qu'une fois un article choisi. -->
+<div class="barre-panier" id="barre-panier" hidden>
+  <div class="contenu barre-panier__corps">
+    <div>
+      <p class="barre-panier__compte" id="panier-compte"></p>
+      <p class="barre-panier__total" id="panier-total">0 €</p>
+    </div>
+    <button type="button" class="bouton" id="ouvrir-commande">Voir la commande</button>
+  </div>
+</div>
+
+<dialog class="dialogue" id="dialogue-commande" aria-labelledby="dialogue-titre">
+  <div class="dialogue__corps">
+    <h2 class="dialogue__titre" id="dialogue-titre">Votre commande</h2>
+
+    <ul class="recap" id="recap-lignes"></ul>
+    <p class="recap__total"><span>Total</span> <span id="recap-total">0 €</span></p>
+
+    <form class="formulaire" id="formulaire-commande">
+      <fieldset style="border: 0; padding: 0; margin: 0;">
+        <legend class="champ__label" style="margin-bottom: 0.5rem;">Le service</legend>
+        <div class="choix">
+          <label><input type="radio" name="mode" value="sur_place" checked> Sur place</label>
+          <label><input type="radio" name="mode" value="a_emporter"> À emporter</label>
+        </div>
+      </fieldset>
+
+      <div class="champ" id="champ-table">
+        <label class="champ__label" for="table_numero">Numéro de table</label>
+        <input type="text" id="table_numero" name="table_numero" inputmode="numeric"
+               maxlength="10" autocomplete="off" placeholder="7">
+        <p class="champ__aide">Il est écrit sur le petit chevalet.</p>
+      </div>
+
+      <div class="champ">
+        <label class="champ__label" for="client_nom">À quel nom ?</label>
+        <input type="text" id="client_nom" name="client_nom" maxlength="80"
+               autocomplete="given-name" placeholder="Maël">
+      </div>
+
+      <div class="champ">
+        <label class="champ__label" for="note">Un mot pour la cuisine</label>
+        <textarea id="note" name="note" maxlength="200"
+                  placeholder="Sans oignons, bien cuit, une paille en plus…"></textarea>
+      </div>
+
+      <p class="message" id="commande-erreur" hidden></p>
+
+      <p class="champ__aide">
+        Le règlement se fait au comptoir, en espèces. Rien n'est débité ici.
+      </p>
+
+      <div class="formulaire__actions">
+        <button type="button" class="bouton bouton--creux" data-fermer>Continuer</button>
+        <button type="submit" class="bouton">Envoyer la commande</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<footer class="pied">
+  <div class="contenu pied__barre">
+    <p>La Paillote de Maël — fruits, bières, snacks.</p>
+    <p><a href="index.html#infos">Nous trouver</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

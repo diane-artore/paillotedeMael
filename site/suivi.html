@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Votre commande — La Paillote de Maël</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/badge.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/site.css">
+<script src="js/badge.js" defer></script>
+<script type="module" src="js/suivi.js"></script>
+</head>
+<body>
+
+<header class="entete">
+  <div class="contenu entete__barre">
+    <a class="marque" href="index.html">
+      <svg class="badge marque__badge" viewBox="0 0 200 200" aria-hidden="true"><use href="#badge" width="200" height="200"/></svg>
+      <span class="marque__nom">La Paillote<br><span class="italique">de Maël</span></span>
+    </a>
+    <nav class="nav" aria-label="Principale">
+      <a href="index.html">La maison</a>
+      <a href="carte.html">La carte</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="rayures"></div>
+
+  <div class="contenu suivi">
+    <p class="message" id="suivi-etat">Chargement…</p>
+
+    <div id="suivi-corps" hidden>
+      <p class="surtitre">Commande</p>
+      <p class="suivi__numero" id="suivi-numero">—</p>
+
+      <p style="margin-top: 1rem; color: var(--texte);">
+        <span id="suivi-mode"></span> · <span id="suivi-total"></span>
+      </p>
+      <p style="margin-top: 0.5rem; color: var(--gris);" id="suivi-paiement"></p>
+
+      <ul class="suivi__etapes" id="suivi-etapes"></ul>
+
+      <p class="message message--erreur" id="suivi-annulee" hidden
+         style="margin-top: 2.5rem; text-align: left;">
+        Cette commande a été annulée. Voyez avec nous au comptoir.
+      </p>
+
+      <p style="margin-top: 3rem;">
+        <a class="bouton bouton--creux" href="carte.html">Commander autre chose</a>
+      </p>
+
+      <p class="champ__aide" style="margin-top: 2rem;">
+        Cette page se met à jour toute seule. Gardez-la ouverte.
+      </p>
+    </div>
+  </div>
+</main>
+
+<footer class="pied">
+  <div class="contenu pied__barre">
+    <p>La Paillote de Maël — fruits, bières, snacks.</p>
+    <p><a href="carte.html">La carte</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
