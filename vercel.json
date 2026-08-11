@@ -1,7 +1,12 @@
 {
-  "cleanUrls": true,
   "rewrites": [
     { "source": "/", "destination": "/site/index.html" },
+    { "source": "/carte", "destination": "/site/carte.html" },
+    { "source": "/suivi", "destination": "/site/suivi.html" },
+    { "source": "/cuisine", "destination": "/site/cuisine.html" },
+    { "source": "/admin", "destination": "/site/admin.html" },
+    { "source": "/site", "destination": "/site/index.html" },
+    { "source": "/charte", "destination": "/charte/index.html" },
     { "source": "/:chemin*", "destination": "/site/:chemin*" }
   ]
 }
