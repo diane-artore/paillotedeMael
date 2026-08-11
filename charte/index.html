@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La Paillote de Maël — Charte de marque</title>
+<meta name="description" content="Charte de marque de La Paillote de Maël : logo, palette, typographies, motifs et applications. Édition Été 2026.">
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ==========================================================================
+     Badge — dessin de référence, défini une seule fois.
+     Chaque instance est un <use> qui hérite des couleurs par variables CSS
+     (voir .badge / .badge--mono dans styles.css).
+     ========================================================================== -->
+<svg class="badge-source" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="badge-scene"><circle cx="100" cy="100" r="66"/></clipPath>
+    <path id="badge-arc-haut" d="M 28,100 A 72,72 0 0 1 172,100" fill="none"/>
+    <path id="badge-arc-bas" d="M 18,100 A 82,82 0 0 0 182,100" fill="none"/>
+
+    <symbol id="badge" viewBox="0 0 200 200">
+      <!-- Anneau et filets -->
+      <circle cx="100" cy="100" r="99" fill="var(--badge-anneau)"/>
+      <circle cx="100" cy="100" r="92" fill="none" stroke="var(--badge-lettrage)" stroke-width="1.2" opacity="0.6"/>
+      <circle cx="100" cy="100" r="68" fill="none" stroke="var(--badge-lettrage)" stroke-width="2.4"/>
+      <circle cx="100" cy="100" r="66" fill="var(--badge-ciel)"/>
+
+      <!-- Scène : eau, sable, comptoir, cagette, paillote -->
+      <g clip-path="url(#badge-scene)">
+        <rect x="30" y="30" width="140" height="76" fill="var(--badge-ciel)"/>
+        <rect x="30" y="103" width="140" height="15" fill="var(--badge-eau)"/>
+        <path d="M 30,106 q 14,-2 28,0 t 28,0 t 28,0 t 28,0 t 28,0 v 4 H 30 Z" fill="var(--badge-eau)" opacity="0.55"/>
+        <rect x="30" y="117" width="140" height="55" fill="var(--badge-sable)"/>
+
+        <ellipse cx="100" cy="140" rx="50" ry="6" fill="var(--badge-ombre)" opacity="0.16"/>
+
+        <rect x="58" y="110" width="84" height="26" fill="var(--badge-ombre)"/>
+        <rect x="66" y="121" width="62" height="7" fill="var(--badge-poteau)"/>
+        <rect x="66" y="128" width="62" height="2" fill="var(--badge-ombre)" opacity="0.55"/>
+        <rect x="61" y="110" width="5" height="28" fill="var(--badge-poteau)"/>
+        <rect x="64.2" y="110" width="1.8" height="28" fill="var(--badge-ombre)" opacity="0.45"/>
+        <rect x="97" y="110" width="5" height="28" fill="var(--badge-poteau)"/>
+        <rect x="100.2" y="110" width="1.8" height="28" fill="var(--badge-ombre)" opacity="0.45"/>
+        <rect x="134" y="110" width="5" height="28" fill="var(--badge-poteau)"/>
+        <rect x="137.2" y="110" width="1.8" height="28" fill="var(--badge-ombre)" opacity="0.45"/>
+        <rect x="56" y="136" width="88" height="3.5" fill="var(--badge-poteau)"/>
+
+        <rect x="112" y="126" width="13" height="10" fill="var(--badge-poteau)"/>
+        <rect x="112" y="126" width="13" height="2" fill="var(--badge-ombre)" opacity="0.5"/>
+        <circle cx="115.5" cy="124.5" r="2.2" fill="var(--badge-fruit)"/>
+        <circle cx="120" cy="124" r="2.4" fill="var(--badge-fruit)"/>
+        <circle cx="124" cy="124.8" r="2" fill="var(--badge-fruit)"/>
+
+        <path d="M 100,44 L 158,112 Q 100,124 42,112 Z" fill="var(--badge-toit)"/>
+        <g stroke="var(--badge-ombre)" stroke-width="0.7" opacity="0.4" fill="none">
+          <path d="M 100,46 C 96,70 88,96 72,116"/>
+          <path d="M 100,46 C 99,70 96,96 88,119"/>
+          <path d="M 100,46 C 101,70 104,96 112,119"/>
+          <path d="M 100,46 C 104,70 112,96 128,116"/>
+          <path d="M 100,46 C 92,68 76,94 56,110"/>
+          <path d="M 100,46 C 108,68 124,94 144,110"/>
+        </g>
+        <path d="M 42,112 Q 100,124 158,112 Q 100,119 42,112 Z" fill="var(--badge-ombre)" opacity="0.35"/>
+        <path d="M 100,42 L 132,86 Q 100,95 68,86 Z" fill="var(--badge-toit)"/>
+        <path d="M 68,86 Q 100,95 132,86 Q 100,91 68,86 Z" fill="var(--badge-ombre)" opacity="0.3"/>
+        <g stroke="var(--badge-ombre)" stroke-width="0.6" opacity="0.35" fill="none">
+          <path d="M 100,44 C 97,60 93,76 84,90"/>
+          <path d="M 100,44 C 103,60 107,76 116,90"/>
+        </g>
+        <path d="M 100,40 l -4,-9 4,3 4,-3 Z" fill="var(--badge-ombre)"/>
+        <rect x="99.2" y="34" width="1.6" height="10" fill="var(--badge-ombre)"/>
+      </g>
+
+      <!-- Étoiles de flanc -->
+      <path d="M 16,100 l 2.4,5.4 5.9,0.6 -4.4,4 1.2,5.8 -5.1,-3 -5.1,3 1.2,-5.8 -4.4,-4 5.9,-0.6 Z" fill="var(--badge-etoile)" transform="translate(-3.5,-8)"/>
+      <path d="M 184,100 l 2.4,5.4 5.9,0.6 -4.4,4 1.2,5.8 -5.1,-3 -5.1,3 1.2,-5.8 -4.4,-4 5.9,-0.6 Z" fill="var(--badge-etoile)" transform="translate(-3.5,-8)"/>
+
+      <!-- Lettrage circulaire -->
+      <text fill="var(--badge-lettrage)" font-family="Jost, sans-serif" font-size="14.5" font-weight="500" letter-spacing="2.6">
+        <textPath href="#badge-arc-haut" startOffset="50%" text-anchor="middle">LA PAILLOTE DE MAËL</textPath>
+      </text>
+      <text fill="var(--badge-lettrage)" font-family="Jost, sans-serif" font-size="10" font-weight="400" letter-spacing="2.2">
+        <textPath href="#badge-arc-bas" startOffset="50%" text-anchor="middle">FRUITS · BIÈRES · SNACKS</textPath>
+      </text>
+    </symbol>
+  </defs>
+</svg>
+
+
+<!-- ==========================================================================
+     01 — Couverture
+     ========================================================================== -->
+<section class="page couverture" aria-label="01 Couverture">
+  <div class="couverture__bandeau"></div>
+
+  <div class="couverture__corps">
+    <p class="couverture__mention">Charte de marque</p>
+    <h1 class="couverture__titre">La Paillote<br><span class="italique">de Maël</span></h1>
+    <div class="couverture__filet"></div>
+    <p class="couverture__accroche">Fruits frais, bières fraîches, entrées et snacks. Le poolhouse du printemps et de l'été — soigné, artisanal, à partager.</p>
+  </div>
+
+  <div class="couverture__pied">
+    <p class="couverture__edition">Édition Été 2026 · v1</p>
+    <div class="cadre-badge cadre-badge--32">
+      <svg class="badge" viewBox="0 0 200 200" role="img" aria-label="Badge La Paillote de Maël"><use href="#badge" width="200" height="200"/></svg>
+    </div>
+  </div>
+</section>
+
+
+<!-- ==========================================================================
+     02 — La marque
+     ========================================================================== -->
+<section class="page page--interieure marque" aria-label="02 La marque">
+  <header class="entete">
+    <span class="entete__numero">01</span>
+    <h2 class="entete__titre">La marque</h2>
+  </header>
+
+  <p class="chapo">Une cabane au bord du bassin où tout est frais : les fruits du matin, les bières du soir, et l'accueil entre les deux.</p>
+
+  <div class="trio">
+    <div class="principe">
+      <h3 class="surtitre">Frais d'abord</h3>
+      <p class="principe__texte">Ce qui est bon aujourd'hui ne sera pas là demain. On vend la saison, pas le catalogue.</p>
+    </div>
+    <div class="principe principe--abricot">
+      <h3 class="surtitre surtitre--abricot">Fait main</h3>
+      <p class="principe__texte">Ardoises écrites à la craie, cagettes empilées, tranches coupées devant vous.</p>
+    </div>
+    <div class="principe principe--pasteque">
+      <h3 class="surtitre surtitre--alerte">À partager</h3>
+      <p class="principe__texte">Familles l'après-midi, apéro entre amis le soir. Une table, plusieurs mains.</p>
+    </div>
+  </div>
+
+  <div class="voix">
+    <h3 class="surtitre surtitre--gris" style="margin-bottom: 5mm;">Voix &amp; ton</h3>
+    <div class="voix__grille">
+      <div class="voix__colonne">
+        <p class="voix__titre">On dit</p>
+        <p class="voix__ligne">« Pastèques coupées ce matin. »</p>
+        <p class="voix__ligne">« Trois bières, deux planches, une table à l'ombre. »</p>
+        <p class="voix__ligne">« Ouvert jusqu'à la nuit tombée. »</p>
+      </div>
+      <div class="voix__colonne">
+        <p class="voix__titre voix__titre--evite">On évite</p>
+        <p class="voix__ligne voix__ligne--barree">« Une expérience gustative inoubliable. »</p>
+        <p class="voix__ligne voix__ligne--barree">« Promo choc — 50 % sur tout ! »</p>
+        <p class="voix__ligne voix__ligne--barree">Les majuscules et les points d'exclamation en série.</p>
+      </div>
+    </div>
+  </div>
+
+  <p class="pied">La Paillote de Maël · Charte de marque</p>
+</section>
+
+
+<!-- ==========================================================================
+     03 — Logo & déclinaisons
+     ========================================================================== -->
+<section class="page page--interieure logo" aria-label="03 Logo et déclinaisons">
+  <header class="entete">
+    <span class="entete__numero">02</span>
+    <h2 class="entete__titre">Logo &amp; déclinaisons</h2>
+  </header>
+
+  <div class="logo__grille">
+    <div class="logo__principal">
+      <h3 class="surtitre">Version principale</h3>
+      <div class="logo__scene">
+        <div class="cadre-badge cadre-badge--50">
+          <svg class="badge" viewBox="0 0 200 200" role="img" aria-label="Badge La Paillote de Maël, version couleur"><use href="#badge" width="200" height="200"/></svg>
+        </div>
+      </div>
+      <p class="logo__legende">Le badge circulaire est la signature. Il s'utilise seul dès que le nom est lisible ailleurs.</p>
+    </div>
+
+    <div class="logo__variantes">
+      <div class="logo__variante logo__variante--bassin">
+        <h3 class="surtitre surtitre--clair">Sur fond bassin</h3>
+        <div class="logo__centre">
+          <div class="cadre-badge cadre-badge--32">
+            <svg class="badge badge--mono" viewBox="0 0 200 200" role="img" aria-label="Badge monochrome sur fond Bleu Bassin"><use href="#badge" width="200" height="200"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="logo__variante logo__variante--signature">
+        <h3 class="surtitre">Signature horizontale</h3>
+        <div class="signature">
+          <div class="cadre-badge cadre-badge--20">
+            <svg class="badge" viewBox="0 0 200 200" role="img" aria-label="Badge La Paillote de Maël"><use href="#badge" width="200" height="200"/></svg>
+          </div>
+          <p class="signature__nom">La Paillote<br><span class="italique">de Maël</span></p>
+        </div>
+        <p class="logo__legende">Pour les formats larges : bandeau Instagram, en-tête de flyer, tablier.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="duo">
+    <div>
+      <h3 class="surtitre surtitre--gris" style="margin-bottom: 4mm;">Zone de protection &amp; taille mini</h3>
+      <div class="protection">
+        <div class="cadre-badge cadre-badge--24">
+          <svg class="badge" viewBox="0 0 200 200" role="img" aria-label="Badge La Paillote de Maël"><use href="#badge" width="200" height="200"/></svg>
+        </div>
+        <p class="protection__texte">Marge libre = <strong>½ du diamètre</strong> du badge sur les quatre côtés.<br>Taille minimale : <strong>18 mm</strong> imprimé, <strong>64 px</strong> écran.</p>
+      </div>
+    </div>
+    <div>
+      <h3 class="surtitre surtitre--alerte" style="margin-bottom: 4mm;">À éviter</h3>
+      <ul class="liste-eviter">
+        <li>Déformer, incliner ou ajouter une ombre portée.</li>
+        <li>Poser le badge sur une photo chargée sans plage unie.</li>
+        <li>Recolorer en dehors des couleurs de la charte.</li>
+        <li>Réécrire le nom dans une autre typographie.</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="pied">La Paillote de Maël · Charte de marque</p>
+</section>
+
+
+<!-- ==========================================================================
+     04 — Palette
+     ========================================================================== -->
+<section class="page page--interieure palette" aria-label="04 Palette">
+  <header class="entete">
+    <span class="entete__numero">03</span>
+    <h2 class="entete__titre">Palette</h2>
+  </header>
+
+  <div class="trio">
+    <div class="nuance">
+      <div class="nuance__aplat" style="background: var(--bassin);"></div>
+      <p class="nuance__nom">Bleu Bassin</p>
+      <p class="nuance__detail">#17565C · Pantone 3155 C<br>Couleur d'appui, textes forts</p>
+    </div>
+    <div class="nuance">
+      <div class="nuance__aplat" style="background: var(--abricot);"></div>
+      <p class="nuance__nom">Abricot</p>
+      <p class="nuance__detail">#E8894A · Pantone 157 C<br>Accent chaud, appels à l'action</p>
+    </div>
+    <div class="nuance">
+      <div class="nuance__aplat" style="background: var(--creme);"></div>
+      <p class="nuance__nom">Crème</p>
+      <p class="nuance__detail">#F7F0E4 · Pantone 7527 C<br>Fond dominant, respiration</p>
+    </div>
+  </div>
+
+  <div class="quatuor">
+    <div class="nuance nuance--petite">
+      <div class="nuance__aplat" style="background: var(--pasteque);"></div>
+      <p class="nuance__nom">Pastèque</p>
+      <p class="nuance__detail">#C8425A</p>
+    </div>
+    <div class="nuance nuance--petite">
+      <div class="nuance__aplat" style="background: var(--eau-claire);"></div>
+      <p class="nuance__nom">Eau Claire</p>
+      <p class="nuance__detail">#A8D5D0</p>
+    </div>
+    <div class="nuance nuance--petite">
+      <div class="nuance__aplat" style="background: var(--olive);"></div>
+      <p class="nuance__nom">Olive</p>
+      <p class="nuance__detail">#7C8F4E</p>
+    </div>
+    <div class="nuance nuance--petite">
+      <div class="nuance__aplat" style="background: var(--encre);"></div>
+      <p class="nuance__nom">Encre</p>
+      <p class="nuance__detail">#1C2A26</p>
+    </div>
+  </div>
+
+  <div class="repartition">
+    <h3 class="surtitre surtitre--gris" style="margin-bottom: 4mm;">Répartition</h3>
+    <div class="repartition__barre">
+      <div style="flex: 60; background: var(--creme);"></div>
+      <div style="flex: 22; background: var(--bassin);"></div>
+      <div style="flex: 10; background: var(--abricot);"></div>
+      <div style="flex: 5; background: var(--pasteque);"></div>
+      <div style="flex: 3; background: var(--olive);"></div>
+    </div>
+    <p class="repartition__legende">
+      <span>60 % Crème</span><span>22 % Bassin</span><span>10 % Abricot</span><span>8 % Accents</span>
+    </p>
+  </div>
+
+  <div class="duo">
+    <div class="carte">
+      <h3 class="carte__titre">Règles</h3>
+      <p class="carte__texte">Texte Encre ou Bassin sur Crème. Sur Bassin, écrire en Crème. Abricot et Pastèque restent des accents : jamais de grands aplats côte à côte.</p>
+    </div>
+    <div class="carte carte--bassin">
+      <h3 class="carte__titre">Ardoises</h3>
+      <p class="carte__texte">Prix à la craie blanche sur ardoise noire — l'exception hors palette, assumée. Un seul mot souligné en Abricot par ardoise.</p>
+    </div>
+  </div>
+
+  <p class="pied">La Paillote de Maël · Charte de marque</p>
+</section>
+
+
+<!-- ==========================================================================
+     05 — Typographies
+     ========================================================================== -->
+<section class="page page--interieure typo" aria-label="05 Typographies">
+  <header class="entete">
+    <span class="entete__numero">04</span>
+    <h2 class="entete__titre">Typographies</h2>
+  </header>
+
+  <div class="specimens">
+    <div class="carte carte--large">
+      <div class="specimen__entete">
+        <h3 class="surtitre">Titres — Instrument Serif</h3>
+        <p class="specimen__graisses">Regular · Italic</p>
+      </div>
+      <p class="specimen__titrage">Pastèque, menthe<br><span class="italique">bière fraîche</span></p>
+      <p class="specimen__glyphes">ABCDEFGHIJKLMNOPQRSTUVWXYZ · abcdefghijklmnopqrstuvwxyz · 0123456789 · àéèêç</p>
+    </div>
+
+    <div class="carte carte--large">
+      <div class="specimen__entete">
+        <h3 class="surtitre">Textes — Jost</h3>
+        <p class="specimen__graisses">Light 300 · Regular 400 · Medium 500</p>
+      </div>
+      <p class="specimen__courant">Cagettes rentrées à six heures, tranches coupées à onze, dernière bière servie à la nuit tombée.</p>
+      <p class="specimen__glyphes specimen__glyphes--sans">ABCDEFGHIJKLMNOPQRSTUVWXYZ · abcdefghijklmnopqrstuvwxyz · 0123456789</p>
+    </div>
+  </div>
+
+  <div class="duo">
+    <div>
+      <h3 class="surtitre surtitre--gris" style="margin-bottom: 4mm;">Hiérarchie</h3>
+      <div class="hierarchie">
+        <p><strong>Titre A1</strong> — Instrument Serif, 48–72 pt, interlignage 0,95</p>
+        <p><strong>Titre de section</strong> — Instrument Serif, 24–28 pt</p>
+        <p><strong>Surtitre</strong> — Jost Medium, 10,5 pt, interlettrage 0,16 em, capitales</p>
+        <p><strong>Courant</strong> — Jost Regular, 12 pt, interlignage 1,55</p>
+        <p><strong>Prix</strong> — Jost Medium, aligné à droite, sans centime superflu</p>
+      </div>
+    </div>
+    <div>
+      <h3 class="surtitre surtitre--alerte" style="margin-bottom: 4mm;">À éviter</h3>
+      <ul class="liste-eviter">
+        <li>Instrument Serif en dessous de 14 pt : illisible.</li>
+        <li>Jost Bold ou plus lourd — la marque reste légère.</li>
+        <li>Plus de deux tailles de titre sur un même support.</li>
+        <li>Souligner du texte courant (réservé aux liens).</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="pied">La Paillote de Maël · Charte de marque</p>
+</section>
+
+
+<!-- ==========================================================================
+     06 — Motifs & textures
+     ========================================================================== -->
+<section class="page page--interieure motifs" aria-label="06 Motifs et textures">
+  <header class="entete">
+    <span class="entete__numero">05</span>
+    <h2 class="entete__titre">Motifs &amp; textures</h2>
+  </header>
+
+  <div class="motifs__grille">
+    <div class="motif">
+      <div class="motif__echantillon motif--rayures"></div>
+      <p class="motif__nom">Rayures parasol</p>
+      <p class="motif__usage">Bandes de 8 mm. Bandeaux, tranches de flyer, auvent.</p>
+    </div>
+    <div class="motif">
+      <div class="motif__echantillon motif--carreaux"></div>
+      <p class="motif__nom">Carreaux de bassin</p>
+      <p class="motif__usage">Damier 12 mm. Fonds Instagram, dos de carte.</p>
+    </div>
+    <div class="motif">
+      <div class="motif__echantillon motif--ecailles"></div>
+      <p class="motif__nom">Écailles</p>
+      <p class="motif__usage">Arcs en quinconce. Bas de page, séparateurs.</p>
+    </div>
+    <div class="motif">
+      <div class="motif__echantillon motif--pepins"></div>
+      <p class="motif__nom">Pépins</p>
+      <p class="motif__usage">Pois sur Pastèque. Usage ponctuel : étiquettes, stickers.</p>
+    </div>
+  </div>
+
+  <div class="duo">
+    <div class="carte">
+      <h3 class="carte__titre">Règles d'emploi</h3>
+      <p class="carte__texte">Un seul motif par support, et jamais plus d'un tiers de la surface. Le motif encadre, il ne remplit pas. Toujours une plage unie pour le texte.</p>
+    </div>
+    <div class="carte">
+      <h3 class="carte__titre">Photo</h3>
+      <p class="carte__texte">Lumière du jour, ombres franches, fruits coupés en gros plan. Pas de filtre, pas de fond studio. Une bouteille embuée valant mieux qu'une mise en scène.</p>
+    </div>
+  </div>
+
+  <p class="pied">La Paillote de Maël · Charte de marque</p>
+</section>
+
+
+<!-- ==========================================================================
+     07 — Applications
+     ========================================================================== -->
+<section class="page page--interieure applications" aria-label="07 Applications">
+  <header class="entete">
+    <span class="entete__numero">06</span>
+    <h2 class="entete__titre">Applications</h2>
+  </header>
+
+  <div class="duo">
+    <div class="ardoise">
+      <p class="ardoise__titre">Aujourd'hui</p>
+      <div class="ardoise__carte">
+        <p class="ardoise__ligne"><span>Pastèque coupée</span><span class="ardoise__prix">4 €</span></p>
+        <p class="ardoise__ligne"><span>Abricots du coin, 500 g</span><span class="ardoise__prix">5 €</span></p>
+        <p class="ardoise__ligne"><span>Planche à partager</span><span class="ardoise__prix">12 €</span></p>
+        <p class="ardoise__ligne"><span>Blonde pression 25 cl</span><span class="ardoise__prix">4 €</span></p>
+      </div>
+      <p class="ardoise__note">Ardoise — craie blanche, prix à droite, sans centimes.</p>
+    </div>
+
+    <div class="supports">
+      <div class="carte support-instagram">
+        <!-- Remplacer par <img src="…" alt="…" class="emplacement-photo"> le jour où le visuel est choisi. -->
+        <figure class="emplacement-photo">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>
+          </svg>
+          <figcaption>Photo Instagram</figcaption>
+        </figure>
+        <div>
+          <h3 class="surtitre">Instagram</h3>
+          <p class="support-instagram__texte">Une photo, une phrase, un prix. Badge en coin bas-droit à 8 % de la largeur.</p>
+        </div>
+      </div>
+
+      <div class="carte support-flyer">
+        <div class="support-flyer__bandeau"></div>
+        <p class="support-flyer__titre">Flyer &amp; affiche</p>
+        <p class="support-flyer__texte">Bandeau rayé en tête, titre serif, un seul bloc de texte, badge en pied. Marges généreuses : au moins 12 mm.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="synthese">
+    <div>
+      <h3 class="surtitre surtitre--clair">En un coup d'œil</h3>
+      <p class="synthese__texte">Crème pour respirer, Bassin pour tenir, Abricot pour attirer. Un serif pour le nom, un sans pour le reste. Un motif, jamais deux.</p>
+    </div>
+    <div class="cadre-badge cadre-badge--26">
+      <svg class="badge badge--mono" viewBox="0 0 200 200" role="img" aria-label="Badge monochrome sur fond Bleu Bassin"><use href="#badge" width="200" height="200"/></svg>
+    </div>
+  </div>
+
+  <p class="pied">La Paillote de Maël · Charte de marque</p>
+</section>
+
+</body>
+</html>
