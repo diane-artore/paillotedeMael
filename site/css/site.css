@@ -236,8 +236,6 @@ a:hover {
 
 .marque__badge {
   width: 3rem;
-  height: 3rem;
-  flex: none;
 }
 
 .marque__nom {
@@ -327,7 +325,6 @@ a:hover {
 .accroche__badge {
   justify-self: center;
   width: min(20rem, 62vw);
-  aspect-ratio: 1;
 }
 
 /* --- Sections ------------------------------------------------------------ */
@@ -522,7 +519,16 @@ select:focus-visible {
 }
 
 /* --- Badge --------------------------------------------------------------- */
-/* Le dessin est injecté par js/badge.js ; les couleurs vivent ici. */
+/* Le dessin est injecté par js/badge.js ; les couleurs vivent ici.
+   La TAILLE se règle sur le cadre (.cadre-badge), jamais sur le dessin :
+   le badge remplit toujours son cadre, et une règle de composant ne se
+   retrouve jamais à batailler de spécificité avec celle-ci. */
+
+.cadre-badge {
+  display: block;
+  flex: none;
+  aspect-ratio: 1;
+}
 
 .badge {
   display: block;
