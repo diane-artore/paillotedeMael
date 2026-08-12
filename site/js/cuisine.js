@@ -9,10 +9,25 @@
 // une paillote n'en a pas besoin, et un simple GET périodique survit à tout
 // (wifi capricieux, tablette qui sort de veille…).
 
-import { euros } from './config.js';
+import { euros, SUPABASE_URL, SUPABASE_CLE_PUBLIABLE } from './config.js';
 import { creerRpc } from './pin.js';
 
 const rpc = creerRpc('L’écran de service');
+
+/** Les fonctions publiques (service_etat…) ne prennent pas de PIN. */
+async function rpcPublic(fonction) {
+  const reponse = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fonction}`, {
+    method: 'POST',
+    headers: {
+      apikey: SUPABASE_CLE_PUBLIABLE,
+      Authorization: `Bearer ${SUPABASE_CLE_PUBLIABLE}`,
+      'Content-Type': 'application/json',
+    },
+    body: '{}',
+  });
+  if (!reponse.ok) throw new Error(`La base a répondu ${reponse.status}.`);
+  return reponse.json();
+}
 
 const INTERVALLE_MS = 8000;
 
@@ -218,6 +233,95 @@ function afficher(commandes) {
   numerosConnus = numeros;
 }
 
+// --- L'interrupteur du service -----------------------------------------------
+// Trois positions : « auto » suit les horaires réglés dans l'admin, les deux
+// autres tranchent à la main (orage, coup de feu, plus rien à servir).
+
+const SERVICE_SUIVANT = { auto: 'ferme', ferme: 'ouvert', ouvert: 'auto' };
+
+function direService(etat) {
+  const bouton = document.getElementById('bouton-service');
+  const ouvert = etat.ouvert ? 'ouvert' : 'fermé';
+  bouton.textContent =
+    etat.mode === 'auto'
+      ? `⏱ Horaires (${ouvert})`
+      : etat.mode === 'ouvert'
+        ? '🟢 Ouvert (forcé)'
+        : '🔴 Fermé (forcé)';
+  bouton.dataset.mode = etat.mode;
+}
+
+document.getElementById('bouton-service').addEventListener('click', async (e) => {
+  const mode = SERVICE_SUIVANT[e.currentTarget.dataset.mode || 'auto'];
+  try {
+    direService(await rpc('cuisine_basculer_service', { p_mode: mode }));
+  } catch (err) {
+    console.error(err);
+    alert("Le service n'a pas pu être basculé.");
+  }
+});
+
+// --- Les ruptures -------------------------------------------------------------
+// Plus d'huîtres à 19 h : on décoche, l'article quitte la carte publique.
+
+let rupturesChargees = false;
+
+async function chargerRuptures() {
+  if (rupturesChargees) return;
+  rupturesChargees = true;
+  const etat = document.getElementById('ruptures-etat');
+  const corps = document.getElementById('ruptures-corps');
+  etat.textContent = 'Chargement…';
+  try {
+    const rayons = (await rpc('cuisine_carte')) || [];
+    corps.textContent = '';
+    etat.hidden = true;
+    for (const rayon of rayons) {
+      if (!rayon.articles.length) continue;
+      const bloc = document.createElement('section');
+      bloc.className = 'ruptures__rayon';
+      const titre = document.createElement('h2');
+      titre.className = 'passees__titre';
+      titre.textContent = rayon.nom;
+      bloc.append(titre);
+      for (const article of rayon.articles) {
+        const ligne = document.createElement('label');
+        ligne.className = 'rupture';
+        const case_ = document.createElement('input');
+        case_.type = 'checkbox';
+        case_.checked = article.disponible;
+        case_.addEventListener('change', async () => {
+          case_.disabled = true;
+          try {
+            await rpc('cuisine_rupture', {
+              p_id: article.id,
+              p_disponible: case_.checked,
+            });
+            ligne.dataset.rupture = case_.checked ? '' : 'oui';
+          } catch (err) {
+            console.error(err);
+            case_.checked = !case_.checked;
+            alert("Le changement n'a pas été enregistré.");
+          }
+          case_.disabled = false;
+        });
+        ligne.append(case_, document.createTextNode(` ${article.nom}`));
+        if (!article.disponible) ligne.dataset.rupture = 'oui';
+        bloc.append(ligne);
+      }
+      corps.append(bloc);
+    }
+  } catch (e) {
+    console.error(e);
+    rupturesChargees = false;
+    etat.textContent = 'La carte ne répond pas.';
+  }
+}
+
+document.getElementById('ruptures').addEventListener('toggle', (e) => {
+  if (e.currentTarget.open) chargerRuptures();
+});
+
 // --- Les services précédents ------------------------------------------------
 // L'écran repart à zéro chaque jour à 1 h du matin (le jour de service va de
 // 1 h à 1 h : une commande de minuit et demi appartient encore à la soirée).
@@ -297,6 +401,8 @@ document.getElementById('passees').addEventListener('toggle', (e) => {
 async function rafraichir() {
   try {
     afficher(await lireCommandes());
+    // L'état du service peut changer sans nous (horaires, autre tablette).
+    rpcPublic('service_etat').then(direService).catch(() => {});
     etat.textContent = `À jour — ${new Date().toLocaleTimeString('fr-FR', {
       hour: '2-digit',
       minute: '2-digit',

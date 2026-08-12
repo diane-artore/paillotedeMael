@@ -32,6 +32,7 @@
       <h1 class="titre-section" style="font-size: 1.6rem;">En cours</h1>
       <button type="button" class="service__bouton" id="bouton-son"
               aria-pressed="false">🔕 Sonnerie coupée</button>
+      <button type="button" class="service__bouton" id="bouton-service">Service…</button>
       <p class="service__etat" id="service-etat">—</p>
     </div>
 
@@ -45,6 +46,14 @@
     <details class="historique">
       <summary>Servies &amp; annulées aujourd'hui (<span id="historique-compte">0</span>)</summary>
       <div class="tickets" id="tickets-finis"></div>
+    </details>
+
+    <!-- Les ruptures du jour : décocher retire l'article de la carte
+         publique, sans rien supprimer. -->
+    <details class="historique" id="ruptures">
+      <summary>La carte du jour — signaler une rupture</summary>
+      <p class="message" id="ruptures-etat">Ouvrez pour charger la carte.</p>
+      <div id="ruptures-corps"></div>
     </details>
 
     <!-- Les services précédents. L'écran repart à zéro chaque jour à 1 h du

@@ -6,8 +6,23 @@
 // base, et le total qui fait foi est recalculé par la fonction `commander`.
 // Un panier trafiqué ne change donc rien à l'addition.
 
-import { lire, appeler, euros } from './config.js';
+import { lire, appeler, euros, SUPABASE_URL, SUPABASE_CLE_PUBLIABLE } from './config.js';
 import { retenirCommande } from './commandes.js';
+
+/** Une fonction de la base, en lecture publique. */
+async function rpcPublic(fonction) {
+  const reponse = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fonction}`, {
+    method: 'POST',
+    headers: {
+      apikey: SUPABASE_CLE_PUBLIABLE,
+      Authorization: `Bearer ${SUPABASE_CLE_PUBLIABLE}`,
+      'Content-Type': 'application/json',
+    },
+    body: '{}',
+  });
+  if (!reponse.ok) throw new Error(`La base a répondu ${reponse.status}.`);
+  return reponse.json();
+}
 
 const CLE_PANIER = 'paillote.panier';
 
@@ -152,7 +167,13 @@ function redessiner() {
 
   const n = totalArticles();
   const barre = document.getElementById('barre-panier');
-  barre.hidden = n === 0;
+  // Hors service, la carte reste une carte : on la lit, on ne commande pas.
+  barre.hidden = n === 0 || !serviceOuvert;
+  if (!serviceOuvert) {
+    for (const bouton of document.querySelectorAll('.compteur__bouton')) {
+      bouton.disabled = true;
+    }
+  }
   document.getElementById('panier-compte').textContent =
     n === 0 ? '' : `${n} article${n > 1 ? 's' : ''}`;
   document.getElementById('panier-total').textContent = euros(totalCents());
@@ -286,6 +307,65 @@ function brancherComposition() {
 /** L'article demande-t-il un choix au moment de l'ajouter ? */
 const seCompose = (article) =>
   estFormule(article) || (article.variantes?.valeurs?.length > 0);
+
+// --- Le service et l'heure mystère -------------------------------------------
+// Deux bandeaux, deux vérités qui viennent de la base : hors service, la
+// carte se consulte mais ne prend plus de commande (et `commander` refuse
+// de toute façon) ; pendant l'heure mystère, on l'annonce — c'est tout
+// l'intérêt d'une remise surprise.
+
+let serviceOuvert = true;
+
+function fermerLaCommande(message) {
+  serviceOuvert = false;
+  const bandeau = document.getElementById('bandeau-ferme');
+  bandeau.textContent = message;
+  bandeau.hidden = false;
+  document.getElementById('barre-panier').hidden = true;
+  for (const bouton of document.querySelectorAll('.compteur__bouton')) {
+    bouton.disabled = true;
+  }
+}
+
+function annoncerHeureMystere(hh) {
+  const bandeau = document.getElementById('bandeau-heure');
+  const fin = new Date(hh.jusqu_a);
+  const dire = () => {
+    const minutes = Math.max(0, Math.round((fin - Date.now()) / 60000));
+    if (minutes === 0) {
+      bandeau.hidden = true;
+      return false;
+    }
+    const ou = hh.rayon_nom ? ` sur ${hh.rayon_nom}` : '';
+    bandeau.textContent =
+      hh.mode === 'aleatoire'
+        ? `🎉 C'est l'heure mystère : −${hh.pourcentage} %${ou}, encore ${minutes} min !`
+        : `🎉 Happy hour : −${hh.pourcentage} %${ou}, encore ${minutes} min !`;
+    bandeau.hidden = false;
+    return true;
+  };
+  if (!dire()) return;
+  setInterval(dire, 30000);
+}
+
+async function verifierLeService() {
+  try {
+    const [service, hh] = await Promise.all([
+      rpcPublic('service_etat'),
+      rpcPublic('happy_hour_etat'),
+    ]);
+    if (service && service.ouvert === false) {
+      fermerLaCommande(
+        service.message || 'La paillote est fermée pour le moment.',
+      );
+    }
+    if (hh?.actif) annoncerHeureMystere(hh);
+  } catch (e) {
+    // Pas de réseau pour ces deux-là : on laisse la carte se comporter
+    // normalement, `commander` tranchera.
+    console.error(e);
+  }
+}
 
 // --- Envoi de la commande ----------------------------------------------------
 
@@ -434,6 +514,27 @@ async function demarrer() {
   } catch {
     /* rien */
   }
+
+  // Le QR du chevalet ouvre /carte?table=7 : la table est déjà connue, le
+  // client n'a plus qu'à choisir. Elle est retenue pour la session, le
+  // temps qu'il fasse le tour de la carte.
+  let table = new URLSearchParams(location.search).get('table');
+  try {
+    if (table) sessionStorage.setItem('paillote.table', table);
+    else table = sessionStorage.getItem('paillote.table');
+  } catch {
+    /* sans stockage, la table vaut pour cette page seulement */
+  }
+  if (table) {
+    const champ = document.getElementById('table_numero');
+    champ.value = table.replace(/[^0-9A-Za-z-]/g, '').slice(0, 10);
+    formulaire.querySelector('[name="mode"][value="sur_place"]').checked = true;
+    champTable.hidden = false;
+    champ.closest('.champ').querySelector('.champ__aide').textContent =
+      'Reconnue depuis le QR de votre table — corrigez si besoin.';
+  }
+
+  verifierLeService();
 }
 
 demarrer();

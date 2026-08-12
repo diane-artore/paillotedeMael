@@ -1104,3 +1104,40 @@ select:focus-visible {
   border-top: 1px dashed var(--pointille);
   padding-top: 0.5rem;
 }
+
+/* --- Bandeaux de la carte --------------------------------------------------- */
+/* Le service fermé, l'heure mystère : deux annonces, en haut de la carte. */
+
+.bandeau {
+  margin-top: 1.5rem;
+  padding: 0.9rem 1.1rem;
+  border-inline-start: 3px solid var(--bassin);
+  background: var(--creme);
+  font-weight: 500;
+}
+
+.bandeau--ferme {
+  border-inline-start-color: var(--pasteque);
+  color: var(--pasteque-texte);
+}
+
+.bandeau--heure {
+  border-inline-start-color: var(--abricot);
+  color: var(--abricot-texte);
+}
+
+/* Un bouton de service, discret : « me prévenir », et compagnie. */
+.bouton-discret {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.45rem 0.9rem;
+  background: none;
+  border: 1px solid var(--filet);
+  color: var(--texte);
+  cursor: pointer;
+}
+
+.bouton-discret:hover {
+  border-color: var(--abricot);
+  color: var(--abricot-texte);
+}

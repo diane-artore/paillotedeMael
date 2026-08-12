@@ -50,6 +50,11 @@ function afficher(commande) {
   document.getElementById('suivi-paiement').textContent =
     PAIEMENT[commande.statut_paiement] || '';
 
+  guetterPrete(commande.statut);
+  // Plus rien à guetter une fois le plateau sur la table.
+  document.getElementById('alerte-prete').hidden =
+    ['prete', 'servie', 'annulee'].includes(commande.statut);
+
   if (commande.statut === 'annulee') {
     document.getElementById('suivi-etapes').hidden = true;
     const annulee = document.getElementById('suivi-annulee');
@@ -224,6 +229,60 @@ function texteFacture(f) {
     '',
     'Merci, et à bientôt au bord du bassin.',
   ].join('\n');
+}
+
+// --- « C'est prêt ! » --------------------------------------------------------
+// Le client n'a pas à surveiller son téléphone : quand la cuisine passe la
+// commande à « Prête », ça sonne et ça vibre. Le navigateur n'autorise le
+// son qu'après un geste — d'où le bouton, qui sert aussi d'essai.
+
+let alerteOuverte = false;
+let statutPrecedent = null;
+
+function sonnerPrete() {
+  if (navigator.vibrate) navigator.vibrate([180, 90, 180]);
+  if (!alerteOuverte) return;
+  const ctx = new AudioContext();
+  [0, 0.22, 0.44].forEach((depart, i) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.frequency.value = [880, 1108, 1318][i];
+    gain.gain.setValueAtTime(0.001, ctx.currentTime + depart);
+    gain.gain.exponentialRampToValueAtTime(0.35, ctx.currentTime + depart + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + depart + 0.4);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(ctx.currentTime + depart);
+    osc.stop(ctx.currentTime + depart + 0.45);
+  });
+  setTimeout(() => ctx.close(), 1500);
+}
+
+document.getElementById('alerte-prete').addEventListener('click', (e) => {
+  alerteOuverte = !alerteOuverte;
+  e.target.textContent = alerteOuverte
+    ? '🔔 Vous serez prévenu'
+    : '🔕 Alerte coupée';
+  e.target.setAttribute('aria-pressed', String(alerteOuverte));
+  if (alerteOuverte) {
+    sonnerPrete(); // essai, et déverrouillage du son
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+  }
+});
+
+/** Appelée à chaque rafraîchissement : ne sonne qu'au passage à « prête ». */
+function guetterPrete(statut) {
+  if (statut === 'prete' && statutPrecedent && statutPrecedent !== 'prete') {
+    sonnerPrete();
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification('La Paillote de Maël', {
+        body: 'Votre commande est prête — à récupérer au comptoir !',
+        icon: 'assets/apple-touch-icon.png',
+      });
+    }
+  }
+  statutPrecedent = statut;
 }
 
 // --- L'avis -----------------------------------------------------------------

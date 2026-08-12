@@ -311,9 +311,20 @@ async function chargerReglages() {
     }),
   ));
 
-  // 2. Happy hour.
+  // 2. Happy hour — heure mystère (tirée au sort) ou plage fixe.
   const hh = reglages.happy_hour || {};
   const hhActif = caseActif(hh.actif);
+  const hhMode = document.createElement('select');
+  for (const [valeur, libelle] of [
+    ['aleatoire', 'Heure mystère (1 h sur 6)'],
+    ['fixe', 'Plage fixe'],
+  ]) {
+    const option = document.createElement('option');
+    option.value = valeur;
+    option.textContent = libelle;
+    if ((hh.mode || 'fixe') === valeur) option.selected = true;
+    hhMode.append(option);
+  }
   const hhRayon = selectRayon(hh.rayon_slug);
   const hhDebut = document.createElement('input');
   hhDebut.type = 'time';
@@ -324,18 +335,88 @@ async function chargerReglages() {
   hhFin.value = hh.fin || '17:00';
   hhFin.required = true;
   const hhPct = entreeNombre(hh.pourcentage ?? 20, 1, 100);
+  const blocDebut = champ('De', hhDebut);
+  const blocFin = champ('À', hhFin);
+  // Les heures ne servent qu'au mode fixe : l'heure mystère se tire seule.
+  const majMode = () => {
+    const fixe = hhMode.value === 'fixe';
+    blocDebut.hidden = !fixe;
+    blocFin.hidden = !fixe;
+  };
+  hhMode.addEventListener('change', majMode);
+  majMode();
   hoteReglages.append(carteReglage(
-    'Happy hour',
-    'Un pourcentage sur tout un rayon, entre deux heures (heure de la paillote).',
-    [hhActif, champ('Rayon', hhRayon), champ('De', hhDebut), champ('À', hhFin), champ('Remise (%)', hhPct)],
+    'Heure mystère / happy hour',
+    "En mode mystère, une heure est tirée au sort dans chaque tranche de 6 h d'ouverture : ni vous ni le client ne savez laquelle à l'avance, et la carte l'annonce quand elle tombe.",
+    [hhActif, champ('Mode', hhMode), champ('Rayon', hhRayon), blocDebut, blocFin, champ('Remise (%)', hhPct)],
     () => rpc('admin_sauver_reglage', {
       p_cle: 'happy_hour',
       p_valeur: {
         actif: hhActif.entree.checked,
+        mode: hhMode.value,
         rayon_slug: hhRayon.value,
         debut: hhDebut.value,
         fin: hhFin.value,
         pourcentage: +hhPct.value,
+      },
+    }),
+  ));
+
+  // 2 bis. Les horaires du service.
+  const sv = reglages.service || {};
+  const svMode = document.createElement('select');
+  for (const [valeur, libelle] of [
+    ['auto', 'Suivre les horaires'],
+    ['ouvert', 'Ouvert (forcé)'],
+    ['ferme', 'Fermé (forcé)'],
+  ]) {
+    const option = document.createElement('option');
+    option.value = valeur;
+    option.textContent = libelle;
+    if ((sv.mode || 'auto') === valeur) option.selected = true;
+    svMode.append(option);
+  }
+  const svDebut = document.createElement('input');
+  svDebut.type = 'time';
+  svDebut.value = sv.debut || '11:00';
+  svDebut.required = true;
+  const svFin = document.createElement('input');
+  svFin.type = 'time';
+  svFin.value = sv.fin || '22:00';
+  svFin.required = true;
+  const JOURS = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
+  const svJours = document.createElement('div');
+  svJours.style.display = 'flex';
+  svJours.style.gap = '0.5rem';
+  svJours.style.flexWrap = 'wrap';
+  const ouverts = new Set(sv.jours || [0, 1, 2, 3, 4, 5, 6]);
+  JOURS.forEach((nom, i) => {
+    const bloc = document.createElement('label');
+    bloc.className = 'admin-dispo';
+    const e = document.createElement('input');
+    e.type = 'checkbox';
+    e.checked = ouverts.has(i);
+    e.dataset.jour = i;
+    bloc.append(e, document.createTextNode(` ${nom}`));
+    svJours.append(bloc);
+  });
+  const svMessage = entreeTexte(sv.message || '');
+  svMessage.placeholder = 'La paillote est fermée pour le moment…';
+  const blocMessage = champ('Message affiché quand c’est fermé', svMessage);
+  blocMessage.style.flex = '1';
+  blocMessage.style.minWidth = '18rem';
+  hoteReglages.append(carteReglage(
+    'Le service',
+    "Hors service, la carte reste consultable mais la commande est fermée — et le serveur refuse toute commande qui arriverait quand même.",
+    [champ('Mode', svMode), champ('Ouvre à', svDebut), champ('Ferme à', svFin),
+     champ('Jours', svJours), blocMessage],
+    () => rpc('admin_sauver_service', {
+      p_valeur: {
+        mode: svMode.value,
+        debut: svDebut.value,
+        fin: svFin.value,
+        jours: [...svJours.querySelectorAll('input:checked')].map((e) => +e.dataset.jour),
+        message: svMessage.value,
       },
     }),
   ));
@@ -428,6 +509,69 @@ async function chargerReglages() {
   hoteReglages.append(carteRoue);
 }
 
+// --- Les avis ----------------------------------------------------------------
+// Lecture et retrait. Rien d'autre : on ne réécrit pas la parole d'un client.
+
+async function chargerAvis() {
+  const avis = (await rpc('admin_avis')) || [];
+  const hoteAvis = document.getElementById('avis-admin');
+  document.getElementById('bloc-avis').hidden = false;
+  hoteAvis.textContent = '';
+  if (!avis.length) {
+    const rien = document.createElement('p');
+    rien.className = 'champ__aide';
+    rien.textContent = 'Aucun avis pour le moment.';
+    hoteAvis.append(rien);
+    return;
+  }
+  for (const a of avis) {
+    const ligne = document.createElement('div');
+    ligne.className = 'admin-article';
+    const rangee = document.createElement('div');
+    rangee.className = 'admin-article__colonnes';
+
+    const texte = document.createElement('div');
+    texte.style.flex = '1';
+    texte.style.minWidth = '14rem';
+    const etoiles = document.createElement('p');
+    etoiles.style.color = 'var(--abricot)';
+    etoiles.style.letterSpacing = '0.15em';
+    etoiles.textContent = '★★★★★'.slice(0, a.note) + '☆☆☆☆☆'.slice(0, 5 - a.note);
+    texte.append(etoiles);
+    if (a.commentaire) {
+      const mot = document.createElement('p');
+      mot.textContent = a.commentaire;
+      texte.append(mot);
+    }
+    const signature = document.createElement('p');
+    signature.className = 'champ__aide';
+    signature.textContent = `${a.prenom || 'Un client'} — ${new Date(a.quand).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}${
+      a.articles?.length ? ` · ${a.articles.join(', ')}` : ''
+    }`;
+    texte.append(signature);
+
+    const retirer = document.createElement('button');
+    retirer.type = 'button';
+    retirer.className = 'service__bouton';
+    retirer.textContent = 'Retirer';
+    retirer.addEventListener('click', async () => {
+      if (!confirm('Retirer cet avis ? C’est définitif.')) return;
+      try {
+        await rpc('admin_supprimer_avis', { p_id: a.id });
+        dire('Avis retiré.');
+        await chargerAvis();
+      } catch (err) {
+        console.error(err);
+        dire(err.message);
+      }
+    });
+
+    rangee.append(texte, retirer);
+    ligne.append(rangee);
+    hoteAvis.append(ligne);
+  }
+}
+
 // --- Chargement -------------------------------------------------------------
 
 async function charger() {
@@ -442,6 +586,7 @@ async function charger() {
         : 'Aucun rayon : créez le premier ci-dessous.',
     );
     await chargerReglages();
+    await chargerAvis();
   } catch (err) {
     console.error(err);
     dire('La base ne répond pas. Rechargez la page.');

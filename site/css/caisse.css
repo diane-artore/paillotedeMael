@@ -348,3 +348,30 @@
 #passees .ticket {
   opacity: 0.8;
 }
+
+/* --- Les ruptures ---------------------------------------------------------- */
+
+.ruptures__rayon {
+  padding-block: 0.25rem 1rem;
+}
+
+.rupture {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.2rem;
+  cursor: pointer;
+}
+
+.rupture input {
+  width: 1.3rem;
+  height: 1.3rem;
+  accent-color: var(--olive);
+  flex: none;
+}
+
+/* Un article en rupture se voit d'un coup d'œil. */
+.rupture[data-rupture='oui'] {
+  color: var(--gris);
+  text-decoration: line-through;
+}

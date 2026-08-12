@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chevalets de table — La Paillote de Maël</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/badge.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/site.css">
+<script src="js/badge.js" defer></script>
+<style>
+  /* Deux chevalets par feuille A4, à plier en deux dans la hauteur. */
+  body { background: var(--papier); }
+
+  .mode-emploi {
+    max-width: 40rem;
+    margin: 2rem auto;
+    padding-inline: 1.5rem;
+  }
+
+  .chevalet {
+    width: 210mm;
+    height: 148.5mm;
+    margin: 0 auto;
+    padding: 14mm 16mm;
+    display: flex;
+    align-items: center;
+    gap: 12mm;
+    background: var(--creme);
+    border-bottom: 1px dashed var(--pointille);
+    box-sizing: border-box;
+  }
+
+  .chevalet__texte { flex: 1; }
+
+  .chevalet__surtitre {
+    font-size: 10pt;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bassin);
+  }
+
+  .chevalet__titre {
+    font-family: var(--serif);
+    font-size: 30pt;
+    line-height: 1.05;
+    margin-block: 2mm 4mm;
+  }
+
+  .chevalet__table {
+    font-family: var(--serif);
+    font-size: 54pt;
+    line-height: 1;
+    color: var(--abricot-texte);
+  }
+
+  .chevalet__mode {
+    font-size: 11pt;
+    color: var(--texte);
+    margin-top: 4mm;
+  }
+
+  .chevalet__qr { width: 62mm; flex: none; }
+  .chevalet__qr svg { width: 100%; height: auto; display: block; }
+  .chevalet__badge { width: 18mm; margin-bottom: 4mm; }
+
+  @media print {
+    @page { size: A4 portrait; margin: 0; }
+    .mode-emploi { display: none; }
+    .chevalet { border-bottom: none; }
+    .chevalet:nth-child(2n) { page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+
+<div class="mode-emploi">
+  <h1 class="titre-section">Les chevalets de table</h1>
+  <p class="section__intro">
+    Imprimez cette page en A4, sans marges, avec les graphiques
+    d'arrière-plan. Chaque feuille porte deux chevalets : pliez dans la
+    largeur, posez sur la table. Le QR ouvre la carte avec le bon numéro
+    de table déjà rempli.
+  </p>
+  <p style="margin-top: 1.5rem;">
+    <button type="button" class="bouton" onclick="window.print()">Imprimer</button>
+  </p>
+</div>
+
+<section class="chevalet">
+  <div class="chevalet__texte">
+    <div class="cadre-badge chevalet__badge">
+      <svg class="badge" viewBox="0 0 200 200" aria-hidden="true"><use href="#badge" width="200" height="200"/></svg>
+    </div>
+    <p class="chevalet__surtitre">Commandez d'ici</p>
+    <p class="chevalet__titre">La Paillote<br><span class="italique">de Maël</span></p>
+    <p class="chevalet__table">Table 1</p>
+    <p class="chevalet__mode">
+      Scannez le QR avec l'appareil photo — la carte s'ouvre, votre table
+      est déjà reconnue. On vous apporte tout à table.
+    </p>
+  </div>
+  <div class="chevalet__qr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45 45"><path stroke="#17565c" d="M2 2.5h7m1 0h2m1 0h1m3 0h1m1 0h1m3 0h3m4 0h5m1 0h7m-41 1h1m5 0h1m1 0h2m1 0h2m1 0h2m1 0h1m2 0h5m2 0h1m1 0h1m4 0h1m5 0h1m-41 1h1m1 0h3m1 0h1m1 0h1m4 0h1m2 0h1m3 0h2m1 0h2m1 0h1m2 0h2m1 0h1m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m3 0h1m1 0h3m1 0h1m1 0h1m2 0h1m5 0h1m4 0h1m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m4 0h5m2 0h2m3 0h1m1 0h2m1 0h1m1 0h3m1 0h1m1 0h3m1 0h1m-41 1h1m5 0h1m1 0h1m1 0h1m1 0h2m1 0h2m3 0h2m1 0h1m1 0h1m1 0h2m1 0h1m3 0h1m5 0h1m-41 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-33 1h1m1 0h1m1 0h4m7 0h1m3 0h2m1 0h3m-31 1h3m1 0h1m1 0h6m1 0h2m5 0h2m2 0h2m1 0h1m1 0h5m2 0h3m-37 1h1m3 0h1m1 0h2m2 0h1m5 0h2m1 0h1m4 0h1m1 0h7m1 0h1m1 0h1m-41 1h2m2 0h5m1 0h2m5 0h1m3 0h1m3 0h3m1 0h1m2 0h1m1 0h2m3 0h1m-40 1h2m3 0h1m3 0h2m1 0h2m8 0h2m1 0h1m1 0h2m1 0h6m1 0h1m-36 1h1m3 0h1m4 0h3m1 0h2m1 0h3m2 0h1m5 0h1m1 0h2m1 0h1m2 0h2m-37 1h2m5 0h1m5 0h1m1 0h5m1 0h1m1 0h4m1 0h1m2 0h1m1 0h3m1 0h2m-41 1h3m1 0h1m1 0h1m1 0h1m3 0h2m4 0h4m1 0h3m6 0h2m1 0h3m-37 1h2m1 0h2m3 0h1m3 0h2m1 0h4m8 0h1m5 0h2m1 0h1m1 0h2m-39 1h2m1 0h3m2 0h5m1 0h2m1 0h3m2 0h1m4 0h2m1 0h2m1 0h1m2 0h1m1 0h1m-41 1h3m2 0h1m2 0h1m2 0h1m3 0h1m1 0h1m3 0h3m4 0h1m2 0h2m1 0h3m2 0h2m-38 1h2m1 0h1m1 0h1m2 0h1m1 0h1m1 0h2m3 0h2m1 0h1m1 0h4m1 0h1m2 0h1m2 0h2m-38 1h2m1 0h1m1 0h1m1 0h1m3 0h3m2 0h2m1 0h1m1 0h1m1 0h2m2 0h1m3 0h1m4 0h2m1 0h1m-39 1h1m1 0h4m1 0h2m4 0h2m1 0h2m2 0h1m2 0h1m2 0h1m2 0h1m5 0h3m-36 1h1m3 0h2m2 0h1m1 0h2m2 0h1m3 0h1m2 0h1m1 0h1m1 0h1m2 0h1m1 0h2m1 0h5m-40 1h1m2 0h1m1 0h1m2 0h2m1 0h1m5 0h1m1 0h1m1 0h3m1 0h3m1 0h1m2 0h1m2 0h2m-37 1h1m8 0h4m1 0h1m4 0h1m2 0h2m1 0h1m5 0h1m1 0h1m1 0h1m3 0h1m-41 1h1m2 0h8m1 0h1m1 0h1m1 0h1m1 0h1m3 0h1m2 0h3m1 0h1m1 0h1m5 0h2m1 0h1m-39 1h2m6 0h2m2 0h1m1 0h2m1 0h1m1 0h3m2 0h1m1 0h1m1 0h2m1 0h2m1 0h2m1 0h2m-35 1h2m2 0h2m1 0h3m1 0h2m3 0h1m2 0h1m1 0h1m4 0h2m2 0h1m-36 1h5m1 0h2m1 0h1m1 0h2m3 0h1m2 0h3m2 0h1m1 0h2m2 0h2m3 0h2m1 0h1m-40 1h3m3 0h2m4 0h2m2 0h1m3 0h1m1 0h3m3 0h2m1 0h1m1 0h1m3 0h2m1 0h1m-41 1h1m6 0h1m1 0h3m2 0h2m1 0h2m1 0h1m5 0h2m1 0h1m2 0h1m2 0h3m1 0h2m-41 1h1m4 0h4m3 0h2m1 0h3m2 0h2m4 0h4m1 0h1m1 0h4m2 0h1m-40 1h1m2 0h1m1 0h1m1 0h2m1 0h1m2 0h1m1 0h1m1 0h1m5 0h1m1 0h1m1 0h1m3 0h7m1 0h1m-40 1h1m1 0h6m1 0h1m1 0h1m1 0h3m2 0h2m3 0h3m1 0h1m1 0h1m1 0h6m1 0h1m1 0h1m-33 1h2m4 0h1m2 0h1m1 0h1m1 0h6m1 0h2m1 0h2m3 0h1m3 0h1m-41 1h7m4 0h2m2 0h4m1 0h1m4 0h3m1 0h1m1 0h2m1 0h1m1 0h1m-37 1h1m5 0h1m2 0h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1m2 0h10m3 0h2m2 0h1m-41 1h1m1 0h3m1 0h1m1 0h1m2 0h1m5 0h1m1 0h1m1 0h2m2 0h3m4 0h7m1 0h1m-41 1h1m1 0h3m1 0h1m1 0h3m1 0h3m1 0h2m2 0h2m1 0h1m1 0h1m2 0h4m1 0h1m1 0h1m3 0h2m-41 1h1m1 0h3m1 0h1m1 0h3m1 0h2m2 0h3m1 0h4m3 0h1m2 0h1m2 0h5m1 0h1m-40 1h1m5 0h1m5 0h3m2 0h1m5 0h3m6 0h1m3 0h1m2 0h1m-40 1h7m3 0h1m1 0h6m3 0h2m3 0h2m1 0h1m1 0h1m3 0h2"/></svg>
+</div>
+</section>
+
+<section class="chevalet">
+  <div class="chevalet__texte">
+    <div class="cadre-badge chevalet__badge">
+      <svg class="badge" viewBox="0 0 200 200" aria-hidden="true"><use href="#badge" width="200" height="200"/></svg>
+    </div>
+    <p class="chevalet__surtitre">Commandez d'ici</p>
+    <p class="chevalet__titre">La Paillote<br><span class="italique">de Maël</span></p>
+    <p class="chevalet__table">Table 2</p>
+    <p class="chevalet__mode">
+      Scannez le QR avec l'appareil photo — la carte s'ouvre, votre table
+      est déjà reconnue. On vous apporte tout à table.
+    </p>
+  </div>
+  <div class="chevalet__qr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45 45"><path stroke="#17565c" d="M2 2.5h7m2 0h1m1 0h1m3 0h1m1 0h1m3 0h3m4 0h5m1 0h7m-41 1h1m5 0h1m2 0h1m3 0h1m3 0h2m3 0h1m3 0h1m3 0h1m1 0h1m1 0h1m5 0h1m-41 1h1m1 0h3m1 0h1m3 0h1m1 0h2m1 0h1m1 0h1m1 0h2m1 0h2m1 0h5m1 0h2m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m3 0h1m1 0h1m3 0h3m8 0h1m4 0h1m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m1 0h3m2 0h1m3 0h1m1 0h4m1 0h2m1 0h3m1 0h1m2 0h1m1 0h3m1 0h1m-41 1h1m5 0h1m2 0h1m8 0h3m1 0h3m6 0h1m2 0h1m5 0h1m-41 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-33 1h4m1 0h1m3 0h2m1 0h2m2 0h1m1 0h1m1 0h2m1 0h1m-30 1h2m2 0h3m2 0h1m6 0h2m1 0h1m1 0h4m1 0h3m1 0h3m1 0h1m-37 1h1m7 0h1m1 0h2m2 0h1m5 0h2m1 0h1m4 0h1m1 0h7m1 0h1m1 0h1m-40 1h3m2 0h2m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m2 0h3m4 0h1m2 0h2m1 0h1m1 0h1m-36 1h3m1 0h1m7 0h2m1 0h2m1 0h1m1 0h2m7 0h1m2 0h2m2 0h2m-41 1h1m1 0h1m2 0h2m4 0h3m1 0h1m2 0h3m2 0h2m4 0h1m1 0h2m1 0h1m2 0h2m-39 1h2m3 0h1m2 0h1m2 0h2m1 0h1m4 0h1m3 0h3m2 0h2m2 0h1m4 0h2m1 0h1m-39 1h2m2 0h5m1 0h1m3 0h1m2 0h1m2 0h1m1 0h1m2 0h2m1 0h3m1 0h2m3 0h2m-40 1h2m1 0h2m3 0h1m1 0h5m1 0h4m2 0h2m3 0h1m5 0h2m1 0h1m1 0h2m-41 1h1m5 0h6m1 0h1m1 0h2m1 0h1m7 0h2m8 0h1m2 0h2m-39 1h4m1 0h2m1 0h4m2 0h1m1 0h2m1 0h1m1 0h3m1 0h1m2 0h1m1 0h2m1 0h1m1 0h1m-35 1h2m1 0h1m1 0h4m1 0h1m1 0h2m3 0h2m1 0h1m1 0h4m1 0h1m2 0h1m2 0h2m-37 1h2m4 0h2m1 0h1m2 0h4m1 0h3m1 0h1m6 0h5m1 0h1m1 0h2m-39 1h1m2 0h1m1 0h3m4 0h2m2 0h1m1 0h2m2 0h1m3 0h1m1 0h1m2 0h1m1 0h2m3 0h3m-39 1h2m3 0h1m2 0h2m1 0h1m3 0h2m2 0h2m1 0h1m3 0h1m2 0h1m1 0h2m1 0h5m-41 1h3m1 0h4m2 0h2m2 0h2m1 0h1m3 0h2m5 0h2m2 0h1m2 0h1m1 0h3m-40 1h1m2 0h2m3 0h2m1 0h1m4 0h1m1 0h6m1 0h4m1 0h4m3 0h1m1 0h1m-40 1h1m1 0h5m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m3 0h1m2 0h3m1 0h1m1 0h1m5 0h2m1 0h1m-41 1h1m3 0h2m2 0h3m1 0h1m2 0h2m1 0h3m1 0h1m1 0h1m2 0h3m1 0h2m1 0h2m1 0h2m1 0h1m-40 1h1m1 0h1m1 0h2m2 0h1m1 0h2m1 0h1m1 0h2m1 0h1m1 0h1m2 0h1m3 0h1m1 0h3m1 0h1m2 0h1m1 0h2m-41 1h6m1 0h2m1 0h1m1 0h2m3 0h1m2 0h3m2 0h1m1 0h2m2 0h2m3 0h2m1 0h1m-37 1h2m1 0h4m1 0h5m1 0h2m1 0h3m3 0h3m1 0h3m2 0h3m1 0h2m-38 1h3m5 0h5m1 0h1m1 0h4m1 0h3m1 0h8m-36 1h1m4 0h4m4 0h1m3 0h1m1 0h1m1 0h1m4 0h4m1 0h1m1 0h4m2 0h1m-38 1h1m4 0h1m1 0h6m3 0h1m2 0h1m2 0h3m2 0h3m2 0h1m2 0h2m-38 1h2m2 0h2m3 0h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h2m5 0h3m1 0h8m-32 1h2m3 0h2m2 0h1m1 0h1m1 0h4m1 0h1m1 0h2m1 0h2m3 0h1m3 0h1m-41 1h7m1 0h2m3 0h1m2 0h1m5 0h4m4 0h3m1 0h1m1 0h1m1 0h2m-40 1h1m5 0h1m2 0h6m1 0h1m1 0h4m1 0h1m1 0h2m2 0h1m2 0h1m3 0h1m2 0h1m-40 1h1m1 0h3m1 0h1m4 0h1m5 0h3m6 0h2m4 0h7m1 0h1m-41 1h1m1 0h3m1 0h1m1 0h1m2 0h1m1 0h4m5 0h1m1 0h2m1 0h2m2 0h2m3 0h1m1 0h1m1 0h1m-41 1h1m1 0h3m1 0h1m1 0h1m6 0h1m1 0h1m1 0h2m2 0h3m2 0h1m2 0h1m3 0h1m1 0h2m1 0h1m-41 1h1m5 0h1m5 0h3m2 0h1m5 0h3m6 0h1m3 0h1m2 0h1m-40 1h7m2 0h3m1 0h1m2 0h1m1 0h1m1 0h1m1 0h3m5 0h4m4 0h2"/></svg>
+</div>
+</section>
+
+<section class="chevalet">
+  <div class="chevalet__texte">
+    <div class="cadre-badge chevalet__badge">
+      <svg class="badge" viewBox="0 0 200 200" aria-hidden="true"><use href="#badge" width="200" height="200"/></svg>
+    </div>
+    <p class="chevalet__surtitre">Commandez d'ici</p>
+    <p class="chevalet__titre">La Paillote<br><span class="italique">de Maël</span></p>
+    <p class="chevalet__table">Table 3</p>
+    <p class="chevalet__mode">
+      Scannez le QR avec l'appareil photo — la carte s'ouvre, votre table
+      est déjà reconnue. On vous apporte tout à table.
+    </p>
+  </div>
+  <div class="chevalet__qr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45 45"><path stroke="#17565c" d="M2 2.5h7m1 0h1m2 0h1m3 0h1m1 0h1m3 0h3m4 0h5m1 0h7m-41 1h1m5 0h1m1 0h8m4 0h5m2 0h1m1 0h1m4 0h1m5 0h1m-41 1h1m1 0h3m1 0h1m1 0h1m4 0h2m1 0h2m2 0h2m1 0h2m1 0h1m2 0h2m1 0h1m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m5 0h2m2 0h1m10 0h1m4 0h1m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m3 0h6m2 0h2m3 0h1m1 0h2m1 0h1m1 0h3m1 0h1m1 0h3m1 0h1m-41 1h1m5 0h1m1 0h1m1 0h1m1 0h2m1 0h2m3 0h2m1 0h1m1 0h1m1 0h2m1 0h1m3 0h1m5 0h1m-41 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-33 1h1m1 0h1m1 0h4m7 0h1m3 0h2m1 0h3m-31 1h3m1 0h1m1 0h6m1 0h2m5 0h2m2 0h2m1 0h1m1 0h5m2 0h3m-37 1h1m3 0h1m1 0h2m2 0h1m5 0h2m1 0h1m4 0h1m1 0h7m1 0h1m1 0h1m-41 1h2m3 0h4m1 0h2m5 0h1m3 0h1m3 0h3m1 0h1m2 0h1m1 0h2m3 0h1m-39 1h1m7 0h2m1 0h2m8 0h2m1 0h1m1 0h2m1 0h6m1 0h1m-36 1h1m1 0h1m1 0h1m4 0h3m1 0h2m1 0h3m2 0h2m4 0h1m1 0h2m1 0h1m2 0h2m-38 1h3m1 0h1m3 0h1m6 0h6m1 0h1m1 0h4m1 0h1m2 0h1m1 0h3m1 0h2m-41 1h3m1 0h1m1 0h1m1 0h1m3 0h2m1 0h1m2 0h2m1 0h1m3 0h1m6 0h2m1 0h3m-37 1h2m1 0h2m3 0h1m1 0h1m1 0h2m2 0h3m4 0h1m3 0h1m5 0h2m1 0h1m1 0h2m-39 1h2m1 0h3m2 0h1m1 0h3m1 0h2m2 0h2m2 0h1m4 0h2m1 0h2m1 0h1m2 0h1m1 0h1m-41 1h3m2 0h1m2 0h1m2 0h1m3 0h1m5 0h3m4 0h1m2 0h2m1 0h3m2 0h2m-38 1h2m1 0h1m1 0h1m1 0h2m1 0h1m1 0h4m1 0h2m1 0h1m1 0h4m1 0h1m2 0h1m2 0h2m-38 1h2m1 0h1m1 0h1m1 0h1m1 0h5m2 0h1m1 0h2m1 0h7m3 0h1m4 0h2m1 0h1m-39 1h1m1 0h4m2 0h2m2 0h1m1 0h1m2 0h1m2 0h2m1 0h2m1 0h1m2 0h1m5 0h3m-37 1h2m3 0h1m2 0h2m1 0h2m2 0h1m3 0h2m1 0h1m1 0h1m1 0h1m2 0h1m1 0h2m1 0h5m-40 1h1m2 0h1m1 0h5m1 0h1m5 0h1m1 0h1m1 0h3m1 0h3m1 0h1m2 0h1m2 0h2m-37 1h3m4 0h1m1 0h4m1 0h1m4 0h1m2 0h2m1 0h1m5 0h1m1 0h1m1 0h1m3 0h1m-41 1h1m1 0h9m1 0h1m1 0h1m1 0h1m1 0h1m3 0h1m2 0h3m1 0h1m1 0h1m5 0h2m1 0h1m-39 1h3m5 0h2m2 0h1m1 0h2m1 0h1m1 0h3m2 0h1m1 0h1m1 0h2m1 0h2m1 0h2m1 0h2m-41 1h1m3 0h1m1 0h2m2 0h2m1 0h3m1 0h2m3 0h1m2 0h1m1 0h1m4 0h2m2 0h1m-35 1h2m3 0h2m1 0h1m1 0h2m3 0h1m2 0h3m2 0h1m1 0h2m2 0h2m3 0h2m1 0h1m-38 1h1m1 0h1m1 0h2m5 0h1m8 0h2m4 0h2m1 0h1m1 0h1m3 0h2m1 0h1m-41 1h1m6 0h1m1 0h4m1 0h2m1 0h2m4 0h1m2 0h2m1 0h1m2 0h1m2 0h3m1 0h2m-41 1h1m4 0h4m4 0h1m1 0h3m2 0h2m1 0h1m2 0h4m1 0h1m1 0h4m2 0h1m-40 1h1m2 0h1m1 0h1m1 0h2m1 0h1m2 0h1m2 0h2m1 0h2m2 0h1m1 0h1m1 0h1m3 0h7m1 0h1m-40 1h1m1 0h6m1 0h1m1 0h1m1 0h2m3 0h2m3 0h3m1 0h1m1 0h1m1 0h6m1 0h1m1 0h1m-33 1h2m3 0h2m4 0h1m1 0h4m1 0h1m1 0h2m1 0h2m3 0h1m3 0h1m-41 1h7m4 0h3m1 0h2m3 0h1m1 0h1m4 0h1m1 0h1m1 0h2m1 0h1m1 0h1m-37 1h1m5 0h1m4 0h1m3 0h1m1 0h2m1 0h6m1 0h6m3 0h2m2 0h1m-41 1h1m1 0h3m1 0h1m1 0h4m1 0h2m2 0h3m2 0h1m3 0h2m4 0h7m1 0h1m-41 1h1m1 0h3m1 0h1m1 0h3m1 0h3m1 0h3m1 0h2m1 0h1m1 0h1m2 0h4m1 0h1m1 0h1m3 0h2m-41 1h1m1 0h3m1 0h1m1 0h3m1 0h2m2 0h3m1 0h4m3 0h1m2 0h1m2 0h7m-40 1h1m5 0h1m5 0h3m2 0h1m5 0h3m6 0h1m3 0h1m2 0h1m-40 1h7m3 0h1m1 0h6m3 0h2m3 0h2m1 0h1m1 0h1m3 0h2"/></svg>
+</div>
+</section>
+
+<section class="chevalet">
+  <div class="chevalet__texte">
+    <div class="cadre-badge chevalet__badge">
+      <svg class="badge" viewBox="0 0 200 200" aria-hidden="true"><use href="#badge" width="200" height="200"/></svg>
+    </div>
+    <p class="chevalet__surtitre">Commandez d'ici</p>
+    <p class="chevalet__titre">La Paillote<br><span class="italique">de Maël</span></p>
+    <p class="chevalet__table">Table 4</p>
+    <p class="chevalet__mode">
+      Scannez le QR avec l'appareil photo — la carte s'ouvre, votre table
+      est déjà reconnue. On vous apporte tout à table.
+    </p>
+  </div>
+  <div class="chevalet__qr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45 45"><path stroke="#17565c" d="M2 2.5h7m4 0h1m1 0h2m2 0h1m1 0h2m1 0h2m1 0h6m3 0h7m-41 1h1m5 0h1m1 0h5m1 0h1m2 0h3m2 0h5m2 0h1m1 0h2m1 0h1m5 0h1m-41 1h1m1 0h3m1 0h1m2 0h1m1 0h4m3 0h1m1 0h3m3 0h1m1 0h1m3 0h1m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m2 0h1m1 0h1m2 0h1m3 0h1m2 0h1m1 0h2m2 0h4m1 0h1m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m2 0h4m5 0h1m1 0h4m3 0h2m1 0h1m3 0h1m1 0h3m1 0h1m-41 1h1m5 0h1m1 0h3m1 0h1m1 0h1m1 0h1m2 0h1m3 0h1m2 0h1m1 0h1m1 0h3m1 0h1m5 0h1m-41 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-33 1h1m2 0h1m1 0h6m3 0h1m1 0h1m2 0h1m1 0h1m1 0h2m-29 1h4m2 0h3m1 0h1m1 0h1m2 0h5m1 0h1m3 0h1m4 0h2m3 0h1m-40 1h4m3 0h1m1 0h3m1 0h1m1 0h1m3 0h1m3 0h1m1 0h4m1 0h1m3 0h4m1 0h2m-40 1h1m2 0h5m3 0h1m3 0h1m1 0h1m2 0h8m1 0h1m1 0h1m3 0h1m2 0h2m-41 1h1m3 0h2m3 0h1m1 0h1m1 0h1m2 0h3m5 0h2m1 0h1m1 0h1m1 0h3m2 0h2m2 0h1m-40 1h1m1 0h1m2 0h4m1 0h1m2 0h1m3 0h1m1 0h2m1 0h1m1 0h3m1 0h1m3 0h2m4 0h1m-39 1h1m3 0h1m1 0h2m3 0h4m1 0h2m1 0h1m2 0h1m4 0h1m1 0h3m2 0h2m1 0h1m1 0h1m-40 1h2m2 0h2m1 0h1m1 0h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h2m1 0h2m2 0h3m1 0h3m2 0h1m2 0h1m-41 1h3m6 0h7m4 0h1m1 0h3m4 0h2m5 0h2m1 0h1m-39 1h1m3 0h2m1 0h5m3 0h2m6 0h4m1 0h3m3 0h1m1 0h1m1 0h2m-41 1h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h2m4 0h5m1 0h4m4 0h6m1 0h1m-41 1h1m2 0h1m1 0h2m1 0h1m1 0h1m1 0h2m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m1 0h2m1 0h1m3 0h3m1 0h1m2 0h1m-40 1h1m1 0h2m2 0h1m1 0h1m9 0h1m2 0h1m2 0h7m2 0h2m1 0h1m1 0h2m-39 1h1m1 0h4m1 0h1m4 0h1m2 0h1m1 0h4m1 0h3m3 0h4m2 0h1m2 0h1m-39 1h2m4 0h1m1 0h1m1 0h1m2 0h2m1 0h1m1 0h2m3 0h5m3 0h1m1 0h1m1 0h1m3 0h1m-41 1h3m2 0h5m1 0h1m4 0h2m2 0h1m5 0h2m1 0h1m3 0h3m1 0h1m2 0h1m-41 1h3m1 0h2m7 0h1m1 0h4m1 0h1m1 0h1m3 0h1m1 0h3m1 0h1m2 0h1m-36 1h2m2 0h3m3 0h1m1 0h2m1 0h2m1 0h5m6 0h1m2 0h2m5 0h2m-40 1h1m5 0h5m1 0h1m1 0h3m2 0h1m1 0h2m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m-40 1h1m3 0h3m4 0h5m6 0h3m1 0h4m1 0h4m4 0h1m-41 1h1m1 0h2m1 0h1m1 0h2m2 0h1m1 0h1m2 0h1m1 0h1m1 0h2m1 0h3m1 0h1m1 0h4m1 0h2m1 0h1m1 0h2m-40 1h1m1 0h1m1 0h2m1 0h2m2 0h1m1 0h2m3 0h1m1 0h3m1 0h5m2 0h1m6 0h2m-41 1h1m1 0h2m4 0h1m1 0h1m1 0h2m3 0h2m1 0h2m2 0h2m3 0h1m1 0h1m1 0h1m1 0h2m1 0h1m1 0h1m-37 1h1m1 0h3m1 0h1m2 0h1m1 0h1m2 0h1m2 0h2m3 0h2m2 0h2m1 0h1m5 0h2m-38 1h2m2 0h2m3 0h2m2 0h1m1 0h3m1 0h1m1 0h2m1 0h7m3 0h1m1 0h2m-41 1h2m2 0h3m1 0h1m9 0h1m1 0h2m2 0h1m1 0h1m2 0h1m2 0h6m1 0h2m-33 1h1m4 0h1m1 0h1m1 0h1m2 0h6m1 0h3m2 0h1m3 0h5m-41 1h7m1 0h1m1 0h1m4 0h1m1 0h1m2 0h1m1 0h7m1 0h3m1 0h1m1 0h1m3 0h1m-41 1h1m5 0h1m1 0h1m3 0h5m1 0h1m1 0h2m3 0h3m3 0h2m3 0h2m-38 1h1m1 0h3m1 0h1m1 0h1m2 0h1m3 0h1m2 0h1m1 0h1m1 0h1m8 0h6m2 0h2m-41 1h1m1 0h3m1 0h1m5 0h1m2 0h5m2 0h2m2 0h5m1 0h1m2 0h1m2 0h1m1 0h1m-41 1h1m1 0h3m1 0h1m2 0h1m1 0h1m1 0h1m6 0h2m2 0h1m2 0h3m3 0h1m5 0h2m-41 1h1m5 0h1m3 0h2m1 0h2m1 0h1m1 0h1m3 0h1m2 0h1m2 0h3m1 0h1m1 0h2m3 0h2m-41 1h7m2 0h2m1 0h1m3 0h2m1 0h2m1 0h1m2 0h1m3 0h1m2 0h2m1 0h5"/></svg>
+</div>
+</section>
+
+<section class="chevalet">
+  <div class="chevalet__texte">
+    <div class="cadre-badge chevalet__badge">
+      <svg class="badge" viewBox="0 0 200 200" aria-hidden="true"><use href="#badge" width="200" height="200"/></svg>
+    </div>
+    <p class="chevalet__surtitre">Commandez d'ici</p>
+    <p class="chevalet__titre">La Paillote<br><span class="italique">de Maël</span></p>
+    <p class="chevalet__table">Table 5</p>
+    <p class="chevalet__mode">
+      Scannez le QR avec l'appareil photo — la carte s'ouvre, votre table
+      est déjà reconnue. On vous apporte tout à table.
+    </p>
+  </div>
+  <div class="chevalet__qr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45 45"><path stroke="#17565c" d="M2 2.5h7m1 0h4m2 0h1m1 0h2m2 0h1m2 0h1m2 0h2m1 0h3m2 0h7m-41 1h1m5 0h1m1 0h3m2 0h1m1 0h2m3 0h2m5 0h2m1 0h1m3 0h1m5 0h1m-41 1h1m1 0h3m1 0h1m2 0h1m1 0h1m3 0h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m1 0h2m1 0h1m2 0h1m1 0h2m1 0h1m1 0h5m1 0h1m1 0h4m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m1 0h5m5 0h1m1 0h2m1 0h1m3 0h2m1 0h1m3 0h1m1 0h3m1 0h1m-41 1h1m5 0h1m1 0h1m1 0h1m3 0h3m1 0h2m1 0h1m1 0h2m1 0h3m2 0h2m1 0h1m5 0h1m-41 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-30 1h1m1 0h6m3 0h1m1 0h1m2 0h1m1 0h1m1 0h2m-30 1h1m2 0h1m5 0h2m3 0h1m3 0h1m4 0h1m1 0h1m2 0h2m2 0h3m1 0h2m-41 1h2m2 0h2m1 0h2m1 0h1m1 0h3m2 0h5m2 0h2m2 0h2m2 0h3m2 0h2m1 0h1m-41 1h1m1 0h2m2 0h1m2 0h3m1 0h3m1 0h1m1 0h2m8 0h1m1 0h1m1 0h3m1 0h2m-38 1h2m2 0h1m1 0h4m3 0h1m3 0h3m1 0h3m1 0h3m4 0h4m1 0h1m-39 1h1m2 0h1m1 0h2m1 0h4m1 0h2m3 0h6m2 0h4m1 0h1m1 0h1m3 0h1m1 0h2m-41 1h1m1 0h4m3 0h3m3 0h1m3 0h1m1 0h7m1 0h1m3 0h2m2 0h1m1 0h1m-40 1h4m1 0h2m1 0h3m2 0h1m3 0h2m3 0h1m2 0h1m1 0h3m2 0h1m1 0h1m1 0h2m1 0h2m-41 1h1m1 0h1m1 0h1m2 0h1m1 0h1m1 0h1m2 0h1m1 0h1m2 0h1m4 0h2m2 0h4m2 0h1m1 0h1m2 0h2m-40 1h1m3 0h2m1 0h5m3 0h2m5 0h5m1 0h3m3 0h1m1 0h1m1 0h2m-36 1h1m1 0h1m1 0h1m1 0h5m2 0h9m1 0h1m1 0h1m3 0h2m1 0h4m-39 1h1m3 0h1m3 0h2m1 0h2m2 0h2m2 0h3m6 0h1m1 0h1m1 0h1m1 0h5m-40 1h1m1 0h2m2 0h1m1 0h1m7 0h3m2 0h1m3 0h6m2 0h2m1 0h1m1 0h2m-40 1h1m1 0h1m2 0h1m1 0h4m4 0h1m1 0h1m2 0h4m1 0h1m1 0h3m2 0h8m-41 1h2m1 0h1m1 0h1m1 0h2m3 0h1m1 0h1m4 0h1m1 0h1m1 0h1m1 0h2m1 0h3m2 0h3m2 0h3m-37 1h1m1 0h1m3 0h1m1 0h4m2 0h2m1 0h5m2 0h1m1 0h3m3 0h1m1 0h2m-40 1h1m1 0h2m4 0h1m1 0h2m2 0h2m2 0h2m3 0h1m1 0h1m4 0h2m2 0h1m2 0h2m1 0h1m-41 1h1m4 0h2m5 0h1m2 0h1m2 0h1m1 0h2m3 0h1m2 0h2m1 0h4m2 0h1m1 0h1m-40 1h1m1 0h4m6 0h1m1 0h1m3 0h2m1 0h1m2 0h1m1 0h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m-40 1h2m1 0h1m2 0h2m1 0h1m3 0h2m1 0h1m1 0h1m2 0h1m1 0h1m1 0h1m2 0h2m2 0h1m1 0h3m2 0h2m-39 1h2m4 0h1m1 0h2m6 0h7m2 0h4m1 0h1m2 0h1m3 0h1m-40 1h2m1 0h1m2 0h1m1 0h2m2 0h1m1 0h2m3 0h1m1 0h9m2 0h1m6 0h2m-40 1h2m2 0h1m2 0h3m1 0h2m2 0h2m5 0h1m1 0h1m1 0h1m1 0h3m3 0h1m2 0h3m-41 1h1m1 0h6m1 0h9m1 0h1m2 0h1m1 0h1m4 0h1m1 0h2m2 0h2m1 0h1m1 0h1m-38 1h2m2 0h2m3 0h2m1 0h1m2 0h1m1 0h1m1 0h1m1 0h2m1 0h7m3 0h1m1 0h2m-41 1h1m1 0h1m3 0h2m2 0h1m2 0h6m2 0h2m1 0h2m2 0h1m2 0h6m1 0h2m-32 1h2m1 0h4m2 0h2m3 0h1m2 0h2m1 0h1m1 0h1m1 0h1m3 0h2m2 0h1m-41 1h7m2 0h1m1 0h3m2 0h2m1 0h1m5 0h2m2 0h1m2 0h1m1 0h1m1 0h4m-40 1h1m5 0h1m3 0h3m1 0h2m3 0h1m2 0h2m1 0h5m2 0h1m3 0h1m1 0h1m1 0h1m-41 1h1m1 0h3m1 0h1m2 0h1m1 0h1m2 0h3m1 0h3m1 0h1m2 0h1m2 0h1m3 0h6m1 0h1m-40 1h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h1m6 0h3m1 0h3m4 0h1m1 0h2m1 0h2m1 0h1m-40 1h1m1 0h3m1 0h1m4 0h3m1 0h1m2 0h1m1 0h1m7 0h3m5 0h2m2 0h1m-41 1h1m5 0h1m4 0h1m2 0h1m3 0h2m9 0h4m2 0h1m1 0h1m1 0h1m-40 1h7m2 0h2m1 0h1m3 0h2m1 0h2m1 0h1m2 0h1m3 0h1m2 0h2m1 0h5"/></svg>
+</div>
+</section>
+
+<section class="chevalet">
+  <div class="chevalet__texte">
+    <div class="cadre-badge chevalet__badge">
+      <svg class="badge" viewBox="0 0 200 200" aria-hidden="true"><use href="#badge" width="200" height="200"/></svg>
+    </div>
+    <p class="chevalet__surtitre">Commandez d'ici</p>
+    <p class="chevalet__titre">La Paillote<br><span class="italique">de Maël</span></p>
+    <p class="chevalet__table">Table 6</p>
+    <p class="chevalet__mode">
+      Scannez le QR avec l'appareil photo — la carte s'ouvre, votre table
+      est déjà reconnue. On vous apporte tout à table.
+    </p>
+  </div>
+  <div class="chevalet__qr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45 45"><path stroke="#17565c" d="M2 2.5h7m2 0h1m1 0h1m1 0h2m2 0h1m1 0h2m1 0h2m1 0h6m3 0h7m-41 1h1m5 0h1m1 0h2m1 0h4m3 0h2m2 0h5m2 0h1m1 0h2m1 0h1m5 0h1m-41 1h1m1 0h3m1 0h1m2 0h1m1 0h3m3 0h2m1 0h3m3 0h1m1 0h1m3 0h1m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m2 0h3m11 0h2m2 0h4m1 0h1m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m2 0h1m1 0h2m5 0h1m1 0h4m3 0h2m1 0h1m3 0h1m1 0h3m1 0h1m-41 1h1m5 0h1m1 0h3m1 0h1m1 0h1m1 0h1m2 0h1m3 0h1m2 0h1m1 0h1m1 0h3m1 0h1m5 0h1m-41 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-33 1h1m2 0h1m1 0h6m3 0h1m1 0h1m2 0h1m1 0h1m1 0h2m-29 1h4m2 0h3m1 0h1m1 0h1m2 0h5m1 0h1m3 0h1m4 0h2m3 0h1m-40 1h4m3 0h1m1 0h3m1 0h1m1 0h1m3 0h1m3 0h1m1 0h4m1 0h1m3 0h4m1 0h2m-40 1h1m3 0h4m3 0h1m3 0h1m1 0h1m2 0h8m1 0h1m1 0h1m3 0h1m2 0h2m-37 1h1m4 0h1m1 0h1m1 0h1m2 0h3m5 0h2m1 0h1m1 0h1m1 0h3m2 0h2m2 0h1m-40 1h1m1 0h2m1 0h4m1 0h1m2 0h1m3 0h1m1 0h2m1 0h5m1 0h1m3 0h2m4 0h1m-33 1h2m3 0h3m1 0h3m1 0h1m2 0h1m4 0h1m1 0h3m2 0h2m1 0h1m1 0h1m-40 1h2m2 0h2m1 0h1m1 0h1m2 0h1m3 0h1m1 0h5m1 0h1m2 0h3m1 0h3m2 0h1m2 0h1m-41 1h3m6 0h2m1 0h5m3 0h1m1 0h2m5 0h2m5 0h2m1 0h1m-39 1h1m3 0h2m1 0h3m1 0h1m3 0h2m1 0h1m4 0h4m1 0h3m3 0h1m1 0h1m1 0h2m-41 1h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h2m2 0h1m1 0h5m1 0h4m4 0h6m1 0h1m-41 1h1m2 0h1m1 0h2m1 0h1m3 0h2m1 0h1m4 0h1m1 0h1m1 0h1m1 0h2m1 0h1m3 0h3m1 0h1m2 0h1m-40 1h1m1 0h2m2 0h1m2 0h1m6 0h3m7 0h5m2 0h2m1 0h1m1 0h2m-39 1h1m1 0h7m2 0h1m5 0h3m2 0h1m1 0h1m3 0h4m2 0h1m2 0h1m-39 1h1m5 0h5m2 0h2m1 0h1m1 0h2m1 0h1m1 0h5m3 0h1m1 0h1m1 0h1m3 0h1m-41 1h3m2 0h2m2 0h1m1 0h1m4 0h2m2 0h1m5 0h2m1 0h1m3 0h3m1 0h1m2 0h1m-41 1h2m1 0h3m2 0h1m4 0h1m1 0h4m1 0h1m1 0h1m3 0h1m1 0h3m1 0h1m2 0h1m-36 1h3m1 0h3m3 0h1m1 0h2m1 0h2m1 0h5m6 0h1m2 0h2m5 0h2m-40 1h1m2 0h1m2 0h5m1 0h1m1 0h3m2 0h1m1 0h2m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m-41 1h2m2 0h4m4 0h5m6 0h3m1 0h4m1 0h4m4 0h1m-41 1h5m2 0h2m2 0h1m1 0h1m2 0h1m1 0h1m1 0h2m1 0h3m1 0h1m1 0h4m1 0h2m1 0h1m1 0h2m-41 1h1m2 0h4m1 0h2m4 0h3m2 0h11m2 0h1m6 0h2m-41 1h1m1 0h2m4 0h1m1 0h1m2 0h1m3 0h2m2 0h1m1 0h3m3 0h1m1 0h1m1 0h1m1 0h2m1 0h1m1 0h1m-37 1h1m1 0h3m1 0h1m1 0h2m1 0h1m2 0h1m2 0h3m2 0h2m2 0h2m1 0h1m5 0h2m-38 1h2m2 0h2m3 0h2m1 0h1m2 0h1m3 0h1m1 0h2m1 0h7m3 0h1m1 0h2m-41 1h2m2 0h3m1 0h1m6 0h1m2 0h1m1 0h2m2 0h1m1 0h1m2 0h1m2 0h6m1 0h2m-33 1h1m6 0h1m4 0h5m2 0h3m2 0h1m3 0h5m-41 1h7m1 0h1m1 0h1m2 0h1m1 0h1m2 0h1m1 0h1m2 0h2m2 0h2m1 0h3m1 0h1m1 0h1m3 0h1m-41 1h1m5 0h1m1 0h2m2 0h1m1 0h5m1 0h1m1 0h1m2 0h1m1 0h1m3 0h2m3 0h2m-38 1h1m1 0h3m1 0h1m1 0h4m1 0h3m4 0h3m2 0h1m5 0h6m2 0h2m-41 1h1m1 0h3m1 0h1m5 0h1m2 0h3m1 0h1m2 0h2m2 0h5m1 0h1m2 0h1m2 0h1m1 0h1m-41 1h1m1 0h3m1 0h1m2 0h1m1 0h1m1 0h1m6 0h2m2 0h1m2 0h3m3 0h1m4 0h3m-41 1h1m5 0h1m3 0h2m1 0h2m1 0h1m1 0h1m3 0h1m2 0h1m2 0h3m1 0h1m1 0h2m3 0h2m-41 1h7m2 0h2m1 0h1m3 0h2m1 0h2m1 0h1m2 0h1m3 0h1m2 0h2m1 0h5"/></svg>
+</div>
+</section>
+
+<section class="chevalet">
+  <div class="chevalet__texte">
+    <div class="cadre-badge chevalet__badge">
+      <svg class="badge" viewBox="0 0 200 200" aria-hidden="true"><use href="#badge" width="200" height="200"/></svg>
+    </div>
+    <p class="chevalet__surtitre">Commandez d'ici</p>
+    <p class="chevalet__titre">La Paillote<br><span class="italique">de Maël</span></p>
+    <p class="chevalet__table">Table 7</p>
+    <p class="chevalet__mode">
+      Scannez le QR avec l'appareil photo — la carte s'ouvre, votre table
+      est déjà reconnue. On vous apporte tout à table.
+    </p>
+  </div>
+  <div class="chevalet__qr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45 45"><path stroke="#17565c" d="M2 2.5h7m1 0h2m1 0h1m3 0h1m1 0h1m3 0h3m4 0h5m1 0h7m-41 1h1m5 0h1m1 0h5m2 0h1m2 0h1m1 0h5m2 0h1m1 0h1m4 0h1m5 0h1m-41 1h1m1 0h3m1 0h1m1 0h1m1 0h1m3 0h1m1 0h1m1 0h1m1 0h2m1 0h2m1 0h1m2 0h2m1 0h1m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m2 0h2m1 0h2m2 0h1m5 0h1m4 0h1m4 0h1m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m4 0h5m2 0h2m3 0h1m1 0h2m1 0h1m1 0h3m1 0h1m1 0h3m1 0h1m-41 1h1m5 0h1m1 0h1m1 0h1m1 0h2m1 0h2m3 0h2m1 0h1m1 0h1m1 0h2m1 0h1m3 0h1m5 0h1m-41 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-33 1h1m1 0h1m1 0h4m7 0h1m3 0h2m1 0h3m-31 1h3m1 0h1m1 0h6m1 0h2m5 0h2m2 0h2m1 0h1m1 0h5m2 0h3m-37 1h1m3 0h1m1 0h2m2 0h1m5 0h2m1 0h1m4 0h1m1 0h7m1 0h1m1 0h1m-41 1h2m2 0h1m1 0h3m1 0h2m5 0h1m3 0h1m3 0h3m1 0h1m2 0h1m1 0h2m3 0h1m-31 1h2m1 0h2m8 0h2m1 0h1m1 0h2m1 0h6m1 0h1m-38 1h1m1 0h1m2 0h2m4 0h1m1 0h1m1 0h2m1 0h2m3 0h2m4 0h1m1 0h2m1 0h1m2 0h2m-38 1h3m1 0h1m3 0h1m2 0h1m4 0h3m1 0h1m3 0h4m1 0h1m2 0h1m1 0h3m1 0h2m-41 1h3m1 0h1m1 0h1m1 0h1m2 0h1m1 0h1m2 0h1m1 0h1m1 0h2m2 0h2m6 0h2m1 0h3m-37 1h2m1 0h2m3 0h1m1 0h4m2 0h2m4 0h2m3 0h1m5 0h2m1 0h1m1 0h2m-39 1h2m1 0h3m2 0h1m1 0h6m2 0h2m1 0h2m4 0h2m1 0h2m1 0h1m2 0h1m1 0h1m-41 1h3m2 0h1m2 0h2m1 0h1m3 0h1m1 0h1m3 0h3m4 0h1m2 0h2m1 0h3m2 0h2m-38 1h2m1 0h1m1 0h4m1 0h1m1 0h2m3 0h1m2 0h1m2 0h3m1 0h1m2 0h1m2 0h2m-38 1h2m1 0h1m1 0h1m1 0h1m3 0h2m3 0h4m2 0h4m1 0h1m3 0h1m4 0h2m1 0h1m-39 1h1m2 0h3m3 0h1m2 0h3m2 0h1m3 0h1m1 0h4m2 0h1m5 0h3m-37 1h2m6 0h2m1 0h2m2 0h2m2 0h2m1 0h1m1 0h1m1 0h1m2 0h1m1 0h2m1 0h5m-40 1h4m1 0h1m2 0h2m1 0h1m5 0h1m1 0h1m1 0h3m1 0h3m1 0h1m2 0h1m2 0h2m-37 1h2m4 0h2m1 0h4m1 0h1m4 0h1m2 0h2m1 0h1m5 0h1m1 0h1m1 0h1m3 0h1m-41 1h1m2 0h4m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m3 0h1m2 0h3m1 0h1m1 0h1m5 0h2m1 0h1m-39 1h3m5 0h2m2 0h1m1 0h2m1 0h1m1 0h3m2 0h1m1 0h1m1 0h2m1 0h2m1 0h2m1 0h2m-40 1h1m3 0h3m2 0h2m1 0h3m1 0h2m3 0h1m2 0h1m1 0h1m4 0h2m2 0h1m-37 1h1m1 0h3m2 0h2m1 0h1m1 0h2m3 0h1m2 0h3m2 0h1m1 0h2m2 0h2m3 0h2m1 0h1m-39 1h2m1 0h1m1 0h2m5 0h1m2 0h1m5 0h2m4 0h2m1 0h1m1 0h1m3 0h2m1 0h1m-41 1h1m4 0h1m1 0h1m1 0h2m1 0h1m1 0h1m1 0h4m4 0h1m1 0h2m1 0h1m2 0h1m2 0h3m1 0h2m-41 1h1m4 0h4m2 0h1m1 0h1m3 0h1m1 0h3m1 0h2m1 0h4m1 0h1m1 0h4m2 0h1m-40 1h1m2 0h1m1 0h1m1 0h2m1 0h2m1 0h1m3 0h1m1 0h1m3 0h1m1 0h1m1 0h1m3 0h7m1 0h1m-40 1h1m1 0h6m1 0h1m1 0h1m1 0h3m2 0h1m4 0h3m1 0h1m1 0h1m1 0h6m1 0h1m1 0h1m-33 1h2m3 0h2m2 0h1m1 0h1m2 0h5m1 0h2m1 0h2m3 0h1m3 0h1m-41 1h7m4 0h6m1 0h1m1 0h3m2 0h3m1 0h1m1 0h2m1 0h1m1 0h1m-37 1h1m5 0h1m2 0h3m3 0h1m1 0h2m1 0h2m1 0h2m1 0h7m3 0h2m2 0h1m-41 1h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h2m4 0h1m6 0h2m4 0h7m1 0h1m-41 1h1m1 0h3m1 0h1m1 0h3m1 0h2m2 0h2m2 0h2m1 0h1m1 0h2m1 0h4m1 0h1m1 0h1m1 0h1m1 0h2m-41 1h1m1 0h3m1 0h1m1 0h3m1 0h2m2 0h3m1 0h4m3 0h1m2 0h1m2 0h7m-40 1h1m5 0h1m5 0h3m2 0h1m5 0h3m6 0h1m3 0h1m2 0h1m-40 1h7m3 0h1m1 0h6m3 0h2m3 0h2m1 0h1m1 0h1m3 0h2"/></svg>
+</div>
+</section>
+
+<section class="chevalet">
+  <div class="chevalet__texte">
+    <div class="cadre-badge chevalet__badge">
+      <svg class="badge" viewBox="0 0 200 200" aria-hidden="true"><use href="#badge" width="200" height="200"/></svg>
+    </div>
+    <p class="chevalet__surtitre">Commandez d'ici</p>
+    <p class="chevalet__titre">La Paillote<br><span class="italique">de Maël</span></p>
+    <p class="chevalet__table">Table 8</p>
+    <p class="chevalet__mode">
+      Scannez le QR avec l'appareil photo — la carte s'ouvre, votre table
+      est déjà reconnue. On vous apporte tout à table.
+    </p>
+  </div>
+  <div class="chevalet__qr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45 45"><path stroke="#17565c" d="M2 2.5h7m1 0h4m1 0h2m1 0h1m3 0h1m2 0h1m2 0h2m1 0h3m2 0h7m-41 1h1m5 0h1m1 0h2m5 0h4m1 0h2m5 0h2m1 0h1m3 0h1m5 0h1m-41 1h1m1 0h3m1 0h1m4 0h1m3 0h1m1 0h1m2 0h3m1 0h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h2m1 0h1m1 0h2m1 0h1m1 0h3m1 0h1m1 0h4m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m1 0h5m5 0h1m1 0h4m3 0h2m1 0h1m3 0h1m1 0h3m1 0h1m-41 1h1m5 0h1m1 0h1m1 0h1m3 0h3m1 0h2m1 0h1m1 0h2m1 0h3m2 0h2m1 0h1m5 0h1m-41 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-30 1h1m1 0h6m3 0h1m1 0h1m2 0h1m1 0h1m1 0h2m-30 1h1m2 0h1m5 0h2m3 0h1m3 0h1m4 0h1m1 0h1m2 0h2m2 0h3m1 0h2m-40 1h1m2 0h2m1 0h2m1 0h1m1 0h3m2 0h5m2 0h2m2 0h2m2 0h3m2 0h2m1 0h1m-39 1h3m1 0h1m2 0h3m1 0h3m1 0h1m1 0h2m8 0h1m1 0h1m1 0h3m1 0h2m-39 1h1m1 0h1m1 0h1m2 0h4m3 0h1m3 0h3m1 0h3m1 0h3m4 0h4m1 0h1m-39 1h2m1 0h1m2 0h1m1 0h7m3 0h2m1 0h4m1 0h4m1 0h1m1 0h1m3 0h1m1 0h2m-41 1h1m1 0h3m4 0h2m1 0h1m3 0h1m3 0h8m1 0h1m3 0h2m2 0h1m1 0h1m-40 1h4m1 0h2m1 0h3m1 0h2m1 0h5m2 0h2m1 0h1m1 0h3m2 0h1m1 0h1m1 0h2m1 0h2m-41 1h1m1 0h1m1 0h1m2 0h1m1 0h1m4 0h1m1 0h1m2 0h1m3 0h1m1 0h1m2 0h4m2 0h1m1 0h1m2 0h2m-40 1h1m3 0h2m1 0h3m1 0h1m2 0h3m5 0h5m1 0h3m3 0h1m1 0h1m1 0h2m-36 1h1m1 0h1m1 0h1m1 0h5m2 0h3m1 0h5m1 0h1m1 0h1m3 0h2m1 0h4m-39 1h1m3 0h1m2 0h1m1 0h1m1 0h2m2 0h1m5 0h1m2 0h1m3 0h1m1 0h1m1 0h1m1 0h5m-40 1h1m1 0h2m2 0h1m1 0h2m3 0h1m4 0h1m1 0h1m5 0h5m2 0h2m1 0h1m1 0h2m-40 1h1m4 0h1m3 0h2m1 0h2m1 0h3m3 0h3m1 0h1m1 0h3m2 0h8m-41 1h3m2 0h1m2 0h1m1 0h1m1 0h1m5 0h2m1 0h1m1 0h1m1 0h1m2 0h3m2 0h3m2 0h3m-37 1h1m1 0h1m1 0h1m1 0h1m1 0h4m2 0h2m1 0h5m2 0h1m1 0h3m3 0h1m1 0h2m-40 1h1m1 0h2m3 0h1m2 0h2m2 0h2m2 0h2m3 0h1m1 0h1m4 0h2m2 0h1m2 0h2m1 0h1m-41 1h1m4 0h2m5 0h1m2 0h1m2 0h1m1 0h2m3 0h1m2 0h2m1 0h4m2 0h1m1 0h1m-38 1h2m1 0h1m6 0h1m1 0h1m3 0h2m1 0h1m2 0h1m1 0h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m-39 1h1m1 0h5m1 0h1m3 0h2m1 0h1m1 0h1m2 0h1m1 0h1m1 0h1m2 0h2m2 0h1m1 0h3m2 0h2m-41 1h1m1 0h2m4 0h1m1 0h2m6 0h7m2 0h4m1 0h1m2 0h1m3 0h1m-37 1h4m1 0h2m2 0h1m1 0h2m3 0h5m1 0h5m2 0h1m6 0h2m-39 1h1m2 0h1m2 0h6m1 0h3m1 0h2m2 0h1m1 0h1m1 0h1m1 0h3m3 0h1m2 0h3m-41 1h1m1 0h6m1 0h2m2 0h5m2 0h1m1 0h1m6 0h1m1 0h2m2 0h2m1 0h1m1 0h1m-38 1h2m2 0h2m2 0h1m1 0h1m1 0h1m2 0h2m2 0h4m1 0h7m3 0h1m1 0h2m-41 1h1m1 0h1m3 0h2m2 0h2m1 0h2m1 0h4m1 0h5m2 0h1m2 0h6m1 0h2m-32 1h2m1 0h2m1 0h1m3 0h1m2 0h2m2 0h2m1 0h1m1 0h1m1 0h1m3 0h2m2 0h1m-41 1h7m4 0h3m2 0h1m2 0h1m1 0h2m6 0h1m2 0h1m1 0h1m1 0h4m-40 1h1m5 0h1m3 0h3m2 0h1m1 0h1m1 0h1m1 0h3m2 0h4m2 0h1m3 0h1m1 0h1m1 0h1m-41 1h1m1 0h3m1 0h1m4 0h1m3 0h2m2 0h2m5 0h1m1 0h1m3 0h6m1 0h1m-40 1h1m1 0h3m1 0h1m1 0h4m1 0h1m6 0h3m1 0h2m5 0h1m1 0h2m1 0h1m1 0h2m-40 1h1m1 0h3m1 0h1m4 0h3m1 0h1m2 0h1m1 0h1m7 0h3m5 0h1m3 0h1m-41 1h1m5 0h1m4 0h1m2 0h1m3 0h2m9 0h4m2 0h1m1 0h1m1 0h1m-40 1h7m2 0h2m1 0h1m3 0h2m1 0h2m1 0h1m2 0h1m3 0h1m2 0h2m1 0h5"/></svg>
+</div>
+</section>
+
+<section class="chevalet">
+  <div class="chevalet__texte">
+    <div class="cadre-badge chevalet__badge">
+      <svg class="badge" viewBox="0 0 200 200" aria-hidden="true"><use href="#badge" width="200" height="200"/></svg>
+    </div>
+    <p class="chevalet__surtitre">Commandez d'ici</p>
+    <p class="chevalet__titre">La Paillote<br><span class="italique">de Maël</span></p>
+    <p class="chevalet__table">Table 9</p>
+    <p class="chevalet__mode">
+      Scannez le QR avec l'appareil photo — la carte s'ouvre, votre table
+      est déjà reconnue. On vous apporte tout à table.
+    </p>
+  </div>
+  <div class="chevalet__qr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45 45"><path stroke="#17565c" d="M2 2.5h7m1 0h1m1 0h2m1 0h2m1 0h1m3 0h1m2 0h1m2 0h2m1 0h3m2 0h7m-41 1h1m5 0h1m1 0h1m1 0h1m4 0h4m1 0h2m5 0h2m1 0h1m3 0h1m5 0h1m-41 1h1m1 0h3m1 0h1m2 0h1m1 0h1m1 0h3m1 0h2m1 0h3m1 0h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m1 0h4m2 0h1m1 0h2m1 0h1m1 0h1m1 0h3m1 0h1m1 0h4m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m1 0h5m5 0h1m1 0h2m1 0h1m3 0h2m1 0h1m3 0h1m1 0h3m1 0h1m-41 1h1m5 0h1m1 0h1m1 0h1m3 0h3m1 0h2m1 0h1m1 0h2m1 0h3m2 0h2m1 0h1m5 0h1m-41 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-30 1h1m1 0h6m3 0h1m1 0h1m2 0h1m1 0h1m1 0h2m-30 1h1m2 0h1m5 0h2m3 0h1m3 0h1m4 0h1m1 0h1m2 0h2m2 0h3m1 0h2m-41 1h2m3 0h1m1 0h2m1 0h1m1 0h3m2 0h5m2 0h2m2 0h2m2 0h3m2 0h2m1 0h1m-39 1h3m1 0h1m2 0h3m1 0h3m1 0h1m1 0h2m8 0h1m1 0h1m1 0h3m1 0h2m-37 1h1m1 0h2m1 0h4m3 0h1m3 0h3m1 0h3m1 0h3m4 0h4m1 0h1m-38 1h1m1 0h4m1 0h7m1 0h1m1 0h2m1 0h4m1 0h4m1 0h1m1 0h1m3 0h1m1 0h2m-41 1h1m1 0h4m3 0h2m1 0h1m2 0h1m4 0h3m1 0h4m1 0h1m3 0h2m2 0h1m1 0h1m-40 1h4m1 0h2m1 0h3m2 0h1m1 0h4m3 0h2m1 0h1m1 0h3m2 0h1m1 0h1m1 0h2m1 0h2m-41 1h1m1 0h1m1 0h1m2 0h1m1 0h1m2 0h1m1 0h3m2 0h2m4 0h1m2 0h4m2 0h1m1 0h1m2 0h2m-40 1h1m3 0h2m1 0h3m1 0h1m2 0h3m6 0h4m1 0h3m3 0h1m1 0h1m1 0h2m-36 1h1m1 0h1m3 0h5m2 0h9m1 0h1m1 0h1m3 0h2m1 0h4m-39 1h1m3 0h1m4 0h1m1 0h2m3 0h1m4 0h1m2 0h1m3 0h1m1 0h1m1 0h1m1 0h5m-40 1h1m1 0h2m2 0h1m1 0h2m3 0h1m2 0h3m1 0h1m3 0h1m1 0h5m2 0h2m1 0h1m1 0h2m-40 1h1m1 0h1m2 0h1m3 0h2m2 0h1m1 0h2m5 0h2m3 0h3m2 0h8m-41 1h3m2 0h1m2 0h1m1 0h1m1 0h1m1 0h1m4 0h1m1 0h1m1 0h1m1 0h2m1 0h3m2 0h3m2 0h3m-38 1h2m1 0h1m1 0h1m1 0h1m1 0h4m2 0h2m1 0h5m2 0h1m1 0h3m3 0h1m1 0h2m-40 1h1m9 0h2m2 0h2m2 0h2m3 0h1m1 0h1m4 0h2m2 0h1m2 0h2m1 0h1m-41 1h1m4 0h3m4 0h1m2 0h1m2 0h1m1 0h2m3 0h1m2 0h2m1 0h4m2 0h1m1 0h1m-38 1h2m1 0h1m6 0h1m1 0h1m3 0h2m1 0h1m2 0h1m1 0h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m-39 1h1m1 0h2m1 0h2m1 0h1m3 0h2m1 0h1m1 0h1m2 0h1m1 0h1m1 0h1m2 0h2m2 0h1m1 0h3m2 0h2m-40 1h5m2 0h1m1 0h2m6 0h7m2 0h4m1 0h1m2 0h1m3 0h1m-40 1h1m2 0h2m1 0h1m1 0h2m2 0h1m1 0h2m3 0h11m2 0h1m6 0h2m-40 1h2m5 0h4m1 0h1m3 0h1m1 0h1m5 0h1m1 0h1m1 0h3m3 0h1m2 0h3m-41 1h1m1 0h6m1 0h2m2 0h2m2 0h1m1 0h1m2 0h2m5 0h1m1 0h2m2 0h2m1 0h1m1 0h1m-38 1h2m2 0h2m2 0h1m1 0h1m2 0h1m1 0h1m3 0h4m1 0h7m3 0h1m1 0h2m-41 1h1m1 0h1m3 0h2m2 0h1m2 0h6m2 0h2m1 0h2m2 0h1m2 0h6m1 0h2m-32 1h2m1 0h2m1 0h1m2 0h2m2 0h2m2 0h2m1 0h1m1 0h1m1 0h1m3 0h2m2 0h1m-41 1h7m4 0h4m1 0h4m2 0h1m2 0h2m2 0h1m2 0h1m1 0h1m1 0h4m-40 1h1m5 0h1m3 0h3m1 0h2m2 0h2m2 0h2m1 0h1m1 0h3m2 0h1m3 0h1m1 0h1m1 0h1m-41 1h1m1 0h3m1 0h1m2 0h3m1 0h4m2 0h2m1 0h1m3 0h1m1 0h1m3 0h6m1 0h1m-40 1h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h2m5 0h2m2 0h3m4 0h1m1 0h2m1 0h1m1 0h2m-40 1h1m1 0h3m1 0h1m4 0h3m1 0h1m2 0h1m1 0h1m7 0h3m5 0h2m2 0h1m-41 1h1m5 0h1m4 0h1m2 0h1m3 0h2m9 0h4m2 0h1m1 0h1m1 0h1m-40 1h7m2 0h2m1 0h1m3 0h2m1 0h2m1 0h1m2 0h1m3 0h1m2 0h2m1 0h5"/></svg>
+</div>
+</section>
+
+<section class="chevalet">
+  <div class="chevalet__texte">
+    <div class="cadre-badge chevalet__badge">
+      <svg class="badge" viewBox="0 0 200 200" aria-hidden="true"><use href="#badge" width="200" height="200"/></svg>
+    </div>
+    <p class="chevalet__surtitre">Commandez d'ici</p>
+    <p class="chevalet__titre">La Paillote<br><span class="italique">de Maël</span></p>
+    <p class="chevalet__table">Table 10</p>
+    <p class="chevalet__mode">
+      Scannez le QR avec l'appareil photo — la carte s'ouvre, votre table
+      est déjà reconnue. On vous apporte tout à table.
+    </p>
+  </div>
+  <div class="chevalet__qr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45 45"><path stroke="#17565c" d="M2 2.5h7m1 0h1m1 0h2m2 0h1m1 0h2m2 0h1m2 0h1m1 0h3m2 0h2m2 0h7m-41 1h1m5 0h1m2 0h2m2 0h1m1 0h1m3 0h4m3 0h2m1 0h1m1 0h1m2 0h1m5 0h1m-41 1h1m1 0h3m1 0h1m6 0h3m1 0h1m3 0h1m1 0h6m5 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m1 0h2m1 0h1m4 0h2m1 0h1m3 0h5m1 0h1m1 0h2m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m4 0h2m3 0h2m1 0h3m1 0h1m2 0h2m3 0h1m2 0h1m1 0h3m1 0h1m-41 1h1m5 0h1m4 0h1m1 0h1m1 0h2m2 0h2m1 0h1m1 0h1m2 0h3m1 0h1m2 0h1m5 0h1m-41 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-30 1h1m2 0h2m1 0h3m1 0h1m2 0h1m2 0h3m2 0h1m-31 1h1m1 0h3m1 0h1m1 0h3m3 0h2m2 0h1m1 0h2m1 0h2m1 0h2m1 0h1m1 0h1m3 0h1m2 0h1m-41 1h2m3 0h1m1 0h2m2 0h1m1 0h1m3 0h2m2 0h1m2 0h3m1 0h2m2 0h3m2 0h2m1 0h1m-41 1h1m1 0h6m1 0h1m1 0h1m2 0h1m1 0h2m1 0h2m1 0h1m1 0h2m2 0h2m4 0h2m2 0h1m1 0h1m-41 1h2m2 0h1m2 0h1m1 0h3m5 0h2m1 0h1m1 0h1m1 0h1m2 0h3m2 0h2m2 0h1m-37 1h1m2 0h1m1 0h2m1 0h4m1 0h4m1 0h1m2 0h3m2 0h2m1 0h1m1 0h2m1 0h1m2 0h1m1 0h2m-40 1h3m1 0h1m1 0h1m1 0h1m2 0h2m1 0h1m4 0h2m1 0h1m2 0h2m1 0h1m1 0h3m5 0h2m-41 1h2m1 0h1m1 0h2m2 0h2m2 0h2m3 0h3m1 0h1m1 0h3m4 0h2m1 0h7m-39 1h1m1 0h2m1 0h1m1 0h1m1 0h1m2 0h1m4 0h1m3 0h1m1 0h1m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m2 0h2m-35 1h4m2 0h2m3 0h1m1 0h1m2 0h1m1 0h1m1 0h1m1 0h4m2 0h2m3 0h1m-38 1h1m2 0h1m1 0h1m4 0h2m1 0h1m1 0h3m1 0h2m1 0h2m2 0h1m1 0h1m1 0h1m1 0h1m2 0h1m1 0h2m-35 1h2m3 0h1m1 0h2m2 0h2m2 0h3m5 0h1m2 0h1m1 0h1m1 0h5m-38 1h1m6 0h1m2 0h1m2 0h3m2 0h2m2 0h3m7 0h1m3 0h1m-39 1h1m3 0h4m4 0h2m1 0h2m2 0h3m1 0h1m1 0h1m1 0h1m3 0h3m1 0h2m1 0h2m-41 1h3m2 0h1m1 0h2m3 0h1m1 0h1m3 0h2m3 0h1m1 0h1m2 0h2m3 0h3m2 0h3m-40 1h1m1 0h1m2 0h1m3 0h1m1 0h1m1 0h4m5 0h3m4 0h1m1 0h1m1 0h1m1 0h5m-41 1h1m2 0h1m1 0h1m1 0h4m4 0h1m3 0h3m3 0h2m2 0h4m1 0h2m1 0h1m1 0h1m-40 1h1m1 0h1m2 0h2m6 0h1m1 0h2m1 0h1m5 0h1m3 0h2m1 0h4m2 0h1m2 0h1m-40 1h5m1 0h1m4 0h5m2 0h4m2 0h2m1 0h2m3 0h3m3 0h2m-39 1h2m1 0h5m1 0h1m1 0h1m2 0h4m1 0h1m3 0h2m1 0h1m4 0h1m2 0h1m1 0h3m-40 1h5m2 0h1m1 0h2m6 0h5m4 0h4m1 0h4m3 0h1m-40 1h1m2 0h1m2 0h10m4 0h2m1 0h2m1 0h4m1 0h1m1 0h1m3 0h1m1 0h1m-39 1h1m2 0h2m3 0h3m1 0h2m1 0h1m2 0h2m4 0h4m1 0h2m1 0h1m5 0h2m-41 1h1m1 0h3m1 0h2m1 0h2m1 0h6m2 0h1m1 0h3m2 0h3m5 0h2m1 0h1m1 0h1m-40 1h1m1 0h3m2 0h1m1 0h2m3 0h1m2 0h2m4 0h1m3 0h4m1 0h2m4 0h1m-40 1h1m5 0h3m1 0h2m1 0h1m2 0h1m1 0h5m1 0h6m2 0h5m2 0h1m-32 1h2m1 0h4m2 0h2m3 0h1m3 0h1m1 0h3m1 0h1m3 0h2m2 0h1m-41 1h7m2 0h1m1 0h2m1 0h1m2 0h2m2 0h1m4 0h1m1 0h1m1 0h3m1 0h1m1 0h1m1 0h3m-41 1h1m5 0h1m1 0h1m1 0h1m1 0h1m2 0h1m2 0h3m1 0h1m2 0h1m1 0h4m1 0h1m3 0h1m3 0h1m-41 1h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h1m1 0h7m4 0h1m1 0h1m1 0h1m1 0h6m1 0h1m-40 1h1m1 0h3m1 0h1m4 0h1m4 0h1m1 0h3m3 0h2m2 0h1m1 0h1m2 0h1m2 0h2m2 0h1m-41 1h1m1 0h3m1 0h1m1 0h1m1 0h1m1 0h1m2 0h1m2 0h1m4 0h1m1 0h2m1 0h1m1 0h1m1 0h1m2 0h4m1 0h1m-41 1h1m5 0h1m3 0h2m1 0h1m3 0h1m1 0h1m2 0h1m3 0h1m2 0h4m2 0h1m1 0h1m1 0h1m-40 1h7m2 0h2m1 0h2m6 0h1m1 0h1m2 0h2m1 0h2m1 0h7m1 0h2"/></svg>
+</div>
+</section>
+
+<section class="chevalet">
+  <div class="chevalet__texte">
+    <div class="cadre-badge chevalet__badge">
+      <svg class="badge" viewBox="0 0 200 200" aria-hidden="true"><use href="#badge" width="200" height="200"/></svg>
+    </div>
+    <p class="chevalet__surtitre">Commandez d'ici</p>
+    <p class="chevalet__titre">La Paillote<br><span class="italique">de Maël</span></p>
+    <p class="chevalet__table">Table 11</p>
+    <p class="chevalet__mode">
+      Scannez le QR avec l'appareil photo — la carte s'ouvre, votre table
+      est déjà reconnue. On vous apporte tout à table.
+    </p>
+  </div>
+  <div class="chevalet__qr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45 45"><path stroke="#17565c" d="M2 2.5h7m4 0h1m1 0h2m4 0h5m2 0h3m1 0h1m3 0h7m-41 1h1m5 0h1m1 0h5m5 0h2m3 0h2m5 0h3m1 0h1m5 0h1m-41 1h1m1 0h3m1 0h1m4 0h2m5 0h1m1 0h3m2 0h1m2 0h3m1 0h1m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m2 0h1m1 0h1m2 0h1m7 0h3m1 0h4m2 0h1m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m3 0h4m3 0h2m1 0h4m1 0h4m5 0h1m1 0h3m1 0h1m-41 1h1m5 0h1m1 0h2m2 0h3m1 0h4m1 0h3m2 0h1m1 0h1m1 0h3m1 0h1m5 0h1m-41 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-33 1h1m1 0h2m1 0h6m2 0h2m1 0h2m1 0h1m1 0h1m1 0h2m-29 1h4m3 0h3m3 0h1m1 0h2m2 0h1m2 0h1m2 0h1m4 0h2m3 0h1m-40 1h4m3 0h1m1 0h1m2 0h4m4 0h1m2 0h1m1 0h1m1 0h2m1 0h1m3 0h4m1 0h2m-40 1h1m3 0h4m3 0h1m2 0h2m1 0h2m1 0h3m1 0h4m1 0h1m1 0h3m1 0h1m2 0h2m-36 1h1m3 0h1m1 0h1m1 0h1m2 0h5m3 0h2m1 0h1m1 0h1m1 0h4m1 0h2m2 0h1m-38 1h1m1 0h5m1 0h1m2 0h3m1 0h4m1 0h7m2 0h1m6 0h1m-40 1h2m3 0h1m1 0h2m2 0h1m1 0h2m2 0h2m11 0h2m3 0h2m1 0h1m1 0h1m-40 1h2m3 0h1m1 0h1m1 0h1m2 0h1m1 0h3m2 0h6m1 0h1m1 0h3m1 0h2m2 0h1m2 0h1m-40 1h2m2 0h1m3 0h2m1 0h4m3 0h1m2 0h3m2 0h6m3 0h2m1 0h1m-39 1h1m2 0h1m1 0h1m1 0h3m1 0h1m2 0h3m1 0h1m3 0h4m2 0h2m4 0h1m1 0h1m1 0h2m-41 1h1m2 0h1m3 0h2m2 0h1m1 0h2m2 0h1m1 0h2m1 0h2m1 0h5m3 0h6m1 0h1m-41 1h1m1 0h2m1 0h5m2 0h4m1 0h1m2 0h2m2 0h4m2 0h1m2 0h3m1 0h1m2 0h1m-40 1h1m1 0h2m2 0h1m2 0h1m2 0h2m3 0h2m1 0h2m4 0h2m2 0h1m2 0h2m1 0h1m1 0h2m-37 1h3m6 0h1m4 0h4m2 0h1m1 0h1m4 0h3m2 0h1m2 0h1m-39 1h1m5 0h1m1 0h3m3 0h1m1 0h5m2 0h2m1 0h2m1 0h1m1 0h1m1 0h1m1 0h1m3 0h1m-41 1h2m1 0h1m1 0h3m1 0h3m4 0h1m1 0h1m1 0h2m3 0h3m1 0h1m3 0h2m2 0h1m2 0h1m-41 1h2m2 0h2m1 0h3m3 0h1m1 0h2m3 0h3m3 0h1m1 0h3m1 0h1m2 0h1m3 0h2m-41 1h2m2 0h3m3 0h1m4 0h1m2 0h2m2 0h1m1 0h2m3 0h1m2 0h2m-34 1h2m2 0h1m2 0h3m1 0h1m1 0h1m2 0h4m2 0h4m1 0h2m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m-41 1h2m2 0h4m4 0h5m2 0h2m2 0h3m1 0h4m1 0h1m2 0h1m4 0h1m-40 1h5m1 0h2m2 0h1m1 0h1m2 0h1m1 0h1m1 0h2m3 0h1m1 0h1m1 0h5m1 0h1m1 0h1m1 0h2m-41 1h2m1 0h4m1 0h2m1 0h1m2 0h3m2 0h5m1 0h3m1 0h1m3 0h2m4 0h2m-41 1h6m2 0h1m1 0h1m2 0h1m1 0h4m1 0h2m3 0h1m2 0h2m1 0h2m2 0h2m1 0h1m1 0h1m-37 1h5m1 0h1m2 0h1m2 0h1m1 0h6m2 0h1m1 0h1m1 0h1m1 0h2m5 0h2m-38 1h1m1 0h1m1 0h2m2 0h3m4 0h1m1 0h1m1 0h1m2 0h1m3 0h2m2 0h1m3 0h1m1 0h2m-41 1h2m2 0h1m1 0h1m1 0h1m9 0h4m1 0h2m1 0h2m1 0h1m1 0h7m1 0h2m-33 1h2m5 0h1m1 0h1m2 0h1m1 0h4m1 0h2m3 0h1m3 0h5m-41 1h7m1 0h1m1 0h1m2 0h1m1 0h1m2 0h1m1 0h1m2 0h2m2 0h3m1 0h2m1 0h1m1 0h1m3 0h1m-41 1h1m5 0h1m1 0h3m1 0h1m1 0h3m1 0h1m1 0h2m3 0h3m1 0h4m3 0h2m-38 1h1m1 0h3m1 0h1m1 0h1m2 0h1m1 0h3m2 0h1m1 0h3m2 0h2m3 0h7m2 0h2m-41 1h1m1 0h3m1 0h1m2 0h1m2 0h1m2 0h5m1 0h3m1 0h1m1 0h3m2 0h1m2 0h1m1 0h4m-41 1h1m1 0h3m1 0h1m2 0h3m2 0h1m2 0h1m2 0h2m2 0h2m1 0h3m3 0h1m3 0h1m1 0h2m-41 1h1m5 0h1m4 0h1m4 0h2m7 0h2m1 0h3m1 0h1m1 0h2m3 0h2m-41 1h7m2 0h1m2 0h1m3 0h1m2 0h2m5 0h1m2 0h1m2 0h2m1 0h2m2 0h1"/></svg>
+</div>
+</section>
+
+<section class="chevalet">
+  <div class="chevalet__texte">
+    <div class="cadre-badge chevalet__badge">
+      <svg class="badge" viewBox="0 0 200 200" aria-hidden="true"><use href="#badge" width="200" height="200"/></svg>
+    </div>
+    <p class="chevalet__surtitre">Commandez d'ici</p>
+    <p class="chevalet__titre">La Paillote<br><span class="italique">de Maël</span></p>
+    <p class="chevalet__table">Table 12</p>
+    <p class="chevalet__mode">
+      Scannez le QR avec l'appareil photo — la carte s'ouvre, votre table
+      est déjà reconnue. On vous apporte tout à table.
+    </p>
+  </div>
+  <div class="chevalet__qr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 45 45"><path stroke="#17565c" d="M2 2.5h7m1 0h1m1 0h2m1 0h2m1 0h2m2 0h2m1 0h1m1 0h3m2 0h2m2 0h7m-41 1h1m5 0h1m1 0h3m3 0h3m1 0h1m1 0h1m4 0h5m4 0h1m5 0h1m-41 1h1m1 0h3m1 0h1m2 0h3m2 0h2m1 0h2m1 0h1m3 0h2m1 0h3m2 0h1m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m1 0h2m1 0h1m2 0h1m1 0h1m2 0h1m2 0h6m1 0h1m1 0h2m1 0h1m1 0h3m1 0h1m-41 1h1m1 0h3m1 0h1m1 0h1m1 0h4m3 0h2m1 0h2m1 0h1m1 0h4m5 0h1m1 0h3m1 0h1m-41 1h1m5 0h1m1 0h1m4 0h5m1 0h1m2 0h3m1 0h3m2 0h2m1 0h1m5 0h1m-41 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-31 1h2m1 0h6m2 0h2m1 0h2m1 0h1m1 0h1m1 0h2m-30 1h1m2 0h1m3 0h1m1 0h1m1 0h1m1 0h1m5 0h1m2 0h1m2 0h1m2 0h2m2 0h3m1 0h2m-40 1h1m2 0h2m1 0h2m2 0h1m1 0h1m3 0h2m2 0h1m2 0h3m1 0h2m2 0h3m2 0h2m1 0h1m-41 1h5m1 0h1m2 0h3m1 0h2m2 0h1m2 0h1m3 0h1m4 0h1m1 0h1m3 0h1m1 0h2m-39 1h3m1 0h2m1 0h4m3 0h1m3 0h1m3 0h3m1 0h3m4 0h1m1 0h2m1 0h1m-39 1h1m2 0h2m1 0h1m1 0h4m1 0h3m2 0h1m1 0h5m1 0h2m1 0h1m1 0h2m1 0h1m2 0h1m1 0h2m-40 1h5m3 0h2m1 0h1m8 0h2m1 0h6m2 0h3m2 0h1m1 0h1m-40 1h4m2 0h1m1 0h6m1 0h4m3 0h2m1 0h1m3 0h1m1 0h1m2 0h1m1 0h2m1 0h2m-39 1h1m1 0h2m1 0h1m1 0h1m2 0h1m1 0h3m3 0h1m4 0h1m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m2 0h2m-40 1h1m2 0h1m1 0h1m1 0h5m2 0h3m5 0h4m2 0h2m4 0h1m1 0h1m1 0h2m-34 1h2m2 0h2m1 0h2m2 0h3m1 0h5m1 0h3m3 0h2m1 0h4m-35 1h2m1 0h1m1 0h1m2 0h1m2 0h1m5 0h1m1 0h2m2 0h1m2 0h1m1 0h1m1 0h5m-40 1h1m1 0h2m2 0h1m2 0h1m2 0h2m2 0h3m1 0h1m4 0h3m2 0h1m2 0h2m1 0h1m1 0h2m-40 1h3m2 0h6m1 0h2m1 0h2m3 0h6m1 0h2m3 0h8m-41 1h4m1 0h1m4 0h1m1 0h1m1 0h1m4 0h1m3 0h1m1 0h1m2 0h2m3 0h3m2 0h3m-38 1h2m1 0h1m5 0h4m1 0h1m1 0h1m2 0h3m3 0h1m1 0h3m5 0h2m-40 1h1m2 0h1m4 0h4m2 0h2m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m4 0h2m2 0h1m2 0h3m-40 1h1m4 0h2m6 0h1m1 0h2m1 0h1m5 0h1m3 0h2m1 0h4m2 0h1m2 0h1m-41 1h1m1 0h4m4 0h1m1 0h1m1 0h2m4 0h2m4 0h1m2 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m-40 1h1m2 0h1m1 0h3m1 0h1m3 0h2m1 0h1m1 0h4m1 0h1m1 0h1m2 0h2m2 0h2m1 0h2m2 0h2m-40 1h3m4 0h1m1 0h2m6 0h5m4 0h4m1 0h4m3 0h1m-40 1h2m1 0h1m2 0h1m1 0h2m1 0h1m2 0h3m2 0h1m1 0h3m1 0h3m1 0h1m3 0h2m4 0h2m-40 1h2m1 0h1m3 0h6m2 0h2m1 0h1m5 0h1m1 0h7m1 0h1m2 0h3m-41 1h1m1 0h3m1 0h2m1 0h2m1 0h6m2 0h1m1 0h3m2 0h3m5 0h2m1 0h1m1 0h1m-38 1h1m1 0h1m1 0h2m2 0h1m1 0h1m1 0h1m2 0h2m2 0h1m1 0h2m3 0h2m2 0h1m3 0h1m1 0h2m-41 1h1m1 0h1m2 0h3m2 0h2m1 0h6m2 0h2m1 0h2m1 0h2m3 0h5m1 0h2m-32 1h1m2 0h4m3 0h1m3 0h1m3 0h1m1 0h3m1 0h1m3 0h2m2 0h1m-41 1h7m3 0h3m3 0h4m1 0h2m3 0h1m3 0h1m1 0h1m1 0h1m1 0h4m-40 1h1m5 0h1m3 0h3m1 0h2m3 0h1m1 0h3m2 0h3m1 0h1m1 0h1m3 0h1m1 0h1m1 0h1m-41 1h1m1 0h3m1 0h1m2 0h1m1 0h1m3 0h2m1 0h3m1 0h1m2 0h1m2 0h1m1 0h1m1 0h6m1 0h1m-40 1h1m1 0h3m1 0h1m1 0h1m2 0h1m1 0h2m5 0h1m3 0h1m1 0h1m3 0h2m1 0h2m1 0h1m-37 1h1m1 0h3m1 0h1m3 0h3m1 0h2m1 0h2m1 0h1m4 0h1m2 0h3m5 0h2m2 0h1m-41 1h1m5 0h1m3 0h2m1 0h1m3 0h1m1 0h1m2 0h1m3 0h1m2 0h4m2 0h1m1 0h1m1 0h1m-40 1h7m2 0h1m2 0h1m3 0h1m2 0h2m5 0h1m2 0h1m2 0h2m1 0h2m2 0h1"/></svg>
+</div>
+</section>
+
+
+</body>
+</html>
