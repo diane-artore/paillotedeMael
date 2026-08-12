@@ -243,7 +243,13 @@ function ouvrirComposition(article) {
       : RAYONS_FORMULE_DEFAUT;
     for (const slug of slugs) {
       const rayon = rayonsCharges.find((r) => r.slug === slug);
-      const noms = (rayon?.articles || []).map((a) => a.nom);
+      // Un article à variantes se déplie : « Glace — Vanille », « Glace —
+      // Magnum Classic »… Le goût se choisit donc aussi dans une formule.
+      const noms = (rayon?.articles || []).flatMap((a) =>
+        a.variantes?.valeurs?.length
+          ? a.variantes.valeurs.map((v) => `${a.nom} — ${v}`)
+          : [a.nom],
+      );
       // Un rayon vide ne bloque pas la formule : le champ n'apparaît pas.
       if (noms.length) {
         champs.append(champDeroulant(LIBELLES_RAYON[slug] || rayon.nom, noms));
