@@ -1033,3 +1033,74 @@ select:focus-visible {
   border-top: 1.1rem solid var(--encre);
   z-index: 1;
 }
+
+/* --- Les avis -------------------------------------------------------------- */
+/* Le dépôt (étoiles) vit sur la page de suivi ; les cartes, sur avis.html. */
+
+.avis-etoiles {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.avis-etoiles button {
+  font-size: 2rem;
+  line-height: 1;
+  padding: 0.15rem;
+  background: none;
+  border: none;
+  color: var(--filet);
+  cursor: pointer;
+  transition: color 0.1s, transform 0.1s;
+}
+
+.avis-etoiles button:hover {
+  transform: scale(1.15);
+}
+
+.avis-etoiles button.avis-etoiles--pleine {
+  color: var(--abricot);
+}
+
+.avis-bloc {
+  margin-top: 2.5rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--creme);
+  border-inline-start: 3px solid var(--olive);
+}
+
+.avis-liste {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.avis-carte {
+  background: var(--creme);
+  padding: 1.1rem 1.25rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.avis-carte__etoiles {
+  color: var(--abricot);
+  letter-spacing: 0.15em;
+}
+
+.avis-carte__mot {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  line-height: 1.35;
+}
+
+.avis-carte__signature {
+  color: var(--gris);
+  font-size: 0.9rem;
+}
+
+.avis-carte__commande {
+  color: var(--gris);
+  font-size: 0.85rem;
+  border-top: 1px dashed var(--pointille);
+  padding-top: 0.5rem;
+}

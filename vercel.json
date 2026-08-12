@@ -5,6 +5,7 @@
     { "source": "/suivi", "destination": "/site/suivi.html" },
     { "source": "/cuisine", "destination": "/site/cuisine.html" },
     { "source": "/admin", "destination": "/site/admin.html" },
+    { "source": "/avis", "destination": "/site/avis.html" },
     { "source": "/site", "destination": "/site/index.html" },
     { "source": "/charte", "destination": "/charte/index.html" },
     { "source": "/:chemin*", "destination": "/site/:chemin*" }

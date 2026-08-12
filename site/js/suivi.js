@@ -69,6 +69,7 @@ function afficher(commande) {
     hote.append(li);
   });
 
+  if (commande.statut === 'servie') proposerAvis();
   return commande.statut === 'servie';
 }
 
@@ -224,6 +225,69 @@ function texteFacture(f) {
     'Merci, et à bientôt au bord du bassin.',
   ].join('\n');
 }
+
+// --- L'avis -----------------------------------------------------------------
+// Proposé une fois la commande servie. Le jeton sert de droit d'écrire :
+// c'est la base qui vérifie (servie, un seul avis, dans la journée).
+
+let noteChoisie = 0;
+let avisPropose = false;
+
+const cleAvisDonne = () => `paillote.avis.${jeton}`;
+
+function proposerAvis() {
+  if (avisPropose || !jeton) return;
+  avisPropose = true;
+  const bloc = document.getElementById('avis-bloc');
+  bloc.hidden = false;
+  let deja = false;
+  try {
+    deja = !!localStorage.getItem(cleAvisDonne());
+  } catch {
+    /* rien */
+  }
+  if (deja) {
+    document.getElementById('avis-formulaire').hidden = true;
+    document.getElementById('avis-merci').hidden = false;
+  }
+}
+
+document.getElementById('avis-etoiles').addEventListener('click', (e) => {
+  const bouton = e.target.closest('[data-note]');
+  if (!bouton) return;
+  noteChoisie = +bouton.dataset.note;
+  for (const b of document.querySelectorAll('#avis-etoiles [data-note]')) {
+    b.classList.toggle('avis-etoiles--pleine', +b.dataset.note <= noteChoisie);
+  }
+  document.getElementById('avis-envoyer').disabled = noteChoisie === 0;
+});
+
+document.getElementById('avis-formulaire').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!noteChoisie) return;
+  const bouton = document.getElementById('avis-envoyer');
+  const erreur = document.getElementById('avis-erreur');
+  bouton.disabled = true;
+  erreur.hidden = true;
+  try {
+    await rpcPublic('avis_deposer', {
+      p_jeton: jeton,
+      p_note: noteChoisie,
+      p_commentaire: document.getElementById('avis-commentaire').value,
+    });
+    try {
+      localStorage.setItem(cleAvisDonne(), '1');
+    } catch {
+      /* rien */
+    }
+    document.getElementById('avis-formulaire').hidden = true;
+    document.getElementById('avis-merci').hidden = false;
+  } catch (err) {
+    erreur.textContent = err.message;
+    erreur.hidden = false;
+    bouton.disabled = false;
+  }
+});
 
 // --- Fidélité et roue -------------------------------------------------------
 // Le téléphone donné à la commande est retenu sur l'appareil : il suffit à

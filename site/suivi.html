@@ -62,6 +62,34 @@
         </button>
       </div>
 
+      <!-- L'avis : proposé une fois la commande servie, un seul par commande.
+           Géré par js/suivi.js. -->
+      <div class="avis-bloc" id="avis-bloc" hidden>
+        <p class="surtitre">Votre avis</p>
+        <form id="avis-formulaire" class="formulaire" style="gap: 0.9rem;">
+          <p class="champ__aide">C'était comment ? Dites-le en une étoile ou cinq.</p>
+          <div class="avis-etoiles" id="avis-etoiles" role="radiogroup" aria-label="Votre note">
+            <button type="button" data-note="1" aria-label="1 étoile">★</button>
+            <button type="button" data-note="2" aria-label="2 étoiles">★</button>
+            <button type="button" data-note="3" aria-label="3 étoiles">★</button>
+            <button type="button" data-note="4" aria-label="4 étoiles">★</button>
+            <button type="button" data-note="5" aria-label="5 étoiles">★</button>
+          </div>
+          <div class="champ">
+            <label class="champ__label" for="avis-commentaire">Un mot (facultatif)</label>
+            <textarea id="avis-commentaire" maxlength="300"
+                      placeholder="Les frites, franchement…"></textarea>
+          </div>
+          <p class="message message--erreur" id="avis-erreur" hidden></p>
+          <div>
+            <button type="submit" class="bouton" id="avis-envoyer" disabled>Envoyer l'avis</button>
+          </div>
+        </form>
+        <p class="message message--succes" id="avis-merci" hidden>
+          Merci ! Votre avis est en ligne — <a href="avis.html">le lire avec les autres</a>.
+        </p>
+      </div>
+
       <!-- La facture : remplie par js/suivi.js dès que la commande est lue. -->
       <div class="facture-choix" id="facture-choix" hidden>
         <p class="surtitre">Votre facture</p>

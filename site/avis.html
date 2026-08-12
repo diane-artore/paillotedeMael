@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Les avis — La Paillote de Maël</title>
+<meta name="description" content="Ce que les clients de La Paillote de Maël ont pensé de leur commande — notes et petits mots, laissés une fois servis.">
+<link rel="icon" href="assets/badge.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="css/site.css">
+<script src="js/badge.js" defer></script>
+<script type="module" src="js/avis.js"></script>
+</head>
+<body>
+
+<a class="saut" href="#avis">Aller aux avis</a>
+
+<header class="entete">
+  <div class="contenu entete__barre">
+    <a class="marque" href="index.html">
+      <span class="cadre-badge marque__badge"><svg class="badge" viewBox="0 0 200 200" aria-hidden="true"><use href="#badge" width="200" height="200"/></svg></span>
+      <span class="marque__nom">La Paillote<br><span class="italique">de Maël</span></span>
+    </a>
+    <nav class="nav" aria-label="Principale">
+      <a href="index.html">La maison</a>
+      <a href="carte.html">La carte</a>
+      <a href="avis.html" aria-current="page">Les avis</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="rayures"></div>
+
+  <div class="contenu">
+    <div class="section" style="padding-bottom: 1.5rem;">
+      <p class="surtitre">Ils ont goûté</p>
+      <h1 class="titre-section">Les avis</h1>
+      <p class="section__intro">
+        Chaque avis vient d'une vraie commande, laissé une fois l'assiette
+        servie — pas d'avis fantôme ici.
+      </p>
+    </div>
+
+    <p class="message" id="avis-etat">Chargement des avis…</p>
+
+    <div class="avis-liste" id="avis" style="padding-block: 1.5rem 3rem;"></div>
+  </div>
+</main>
+
+<footer class="pied">
+  <div class="contenu pied__barre">
+    <p>La Paillote de Maël — fruits, bières, snacks.</p>
+    <p><a href="carte.html">La carte</a> · <a href="https://paillotedemael.blogspot.com/" rel="noopener">Le blog</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
