@@ -131,9 +131,10 @@ function carteTicket(c, active) {
   pied.append(paiement);
   ticket.append(pied);
 
+  const actions = document.createElement('div');
+  actions.className = 'ticket__actions';
+
   if (active) {
-    const actions = document.createElement('div');
-    actions.className = 'ticket__actions';
     const [prochain, libelle] = SUIVANT[c.statut];
     const bouton = document.createElement('button');
     bouton.type = 'button';
@@ -154,8 +155,26 @@ function carteTicket(c, active) {
       }
     });
     actions.append(annuler);
-    ticket.append(actions);
   }
+
+  // Supprimer efface pour de bon — commande d'essai, doublon, erreur de
+  // saisie. Annuler garde une trace dans l'historique du jour ; Supprimer
+  // n'en laisse aucune.
+  const supprimer = document.createElement('button');
+  supprimer.type = 'button';
+  supprimer.className = 'ticket__supprimer';
+  supprimer.textContent = 'Supprimer';
+  supprimer.addEventListener('click', () => {
+    if (
+      confirm(
+        `Supprimer la commande n° ${c.numero_jour} ? Elle disparaîtra pour de bon, sans passer par l'historique.`,
+      )
+    ) {
+      agir('cuisine_supprimer', { p_id: c.id });
+    }
+  });
+  actions.append(supprimer);
+  ticket.append(actions);
 
   return ticket;
 }

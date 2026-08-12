@@ -48,6 +48,23 @@
         Cette commande a été annulée. Voyez avec nous au comptoir.
       </p>
 
+      <!-- La facture : remplie par js/suivi.js dès que la commande est lue. -->
+      <div class="facture-choix" id="facture-choix" hidden>
+        <p class="surtitre">Votre facture</p>
+        <div class="facture-choix__boutons">
+          <button type="button" class="bouton bouton--creux" id="facture-imprimer">
+            Imprimer
+          </button>
+          <button type="button" class="bouton bouton--creux" id="facture-email">
+            Recevoir par e-mail
+          </button>
+        </div>
+        <p class="champ__aide" style="margin-top: 0.75rem;">
+          « Recevoir par e-mail » ouvre votre messagerie avec la facture déjà
+          écrite — envoyez-la à l'adresse de votre choix.
+        </p>
+      </div>
+
       <p style="margin-top: 3rem;">
         <a class="bouton bouton--creux" href="carte.html">Commander autre chose</a>
       </p>
@@ -65,6 +82,10 @@
     </nav>
   </div>
 </main>
+
+<!-- Le gabarit imprimable : invisible à l'écran, seul visible à l'impression.
+     Rempli par js/suivi.js au moment d'imprimer. -->
+<div class="facture" id="facture" aria-hidden="true"></div>
 
 <footer class="pied">
   <div class="contenu pied__barre">

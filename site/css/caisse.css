@@ -184,6 +184,24 @@
   color: var(--pasteque-texte);
 }
 
+/* Supprimer efface pour de bon : discret comme Annuler, mais seul dans sa
+   ligne sur les tickets de l'historique, poussé à droite sur les actifs. */
+.ticket__supprimer {
+  font: inherit;
+  font-size: 0.85rem;
+  background: none;
+  border: none;
+  color: var(--gris);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  margin-inline-start: auto;
+}
+
+.ticket__supprimer:hover {
+  color: var(--pasteque-texte);
+}
+
 /* --- Historique du jour --------------------------------------------------- */
 
 .historique {

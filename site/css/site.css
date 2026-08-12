@@ -915,3 +915,66 @@ select:focus-visible {
 .suivi__autres-liste a {
   color: var(--bassin);
 }
+
+/* --- La facture ----------------------------------------------------------- */
+/* Le choix (imprimer / e-mail) vit sur la page de suivi ; le gabarit
+   .facture n'existe qu'à l'impression : l'écran ne le montre jamais. */
+
+.facture-choix {
+  margin-top: 2.5rem;
+}
+
+.facture-choix__boutons {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+
+.facture {
+  display: none;
+}
+
+@media print {
+  /* À l'impression, la facture est la page entière. */
+  .entete,
+  main,
+  .pied {
+    display: none !important;
+  }
+
+  .facture {
+    display: block;
+    font-family: var(--sans, sans-serif);
+    color: #000;
+    max-width: 34rem;
+  }
+
+  .facture h1 {
+    font-family: var(--serif, serif);
+    font-size: 18pt;
+    margin-bottom: 2pt;
+  }
+
+  .facture table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-block: 10pt;
+  }
+
+  .facture td {
+    padding: 3pt 0;
+    border-bottom: 0.5pt solid #bbb;
+  }
+
+  .facture td:last-child {
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .facture .facture__total td {
+    font-weight: 600;
+    border-bottom: none;
+    border-top: 1.5pt solid #000;
+  }
+}
