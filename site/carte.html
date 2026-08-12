@@ -94,6 +94,15 @@
       </div>
 
       <div class="champ">
+        <label class="champ__label" for="client_tel">Téléphone (facultatif)</label>
+        <input type="tel" id="client_tel" name="client_tel" maxlength="30"
+               autocomplete="tel" inputmode="tel" placeholder="06 12 34 56 78">
+        <p class="champ__aide">
+          Il cumule vos points de fidélité — et à 50 points, la roue tourne.
+        </p>
+      </div>
+
+      <div class="champ">
         <label class="champ__label" for="note">Un mot pour la cuisine</label>
         <textarea id="note" name="note" maxlength="200"
                   placeholder="Sans oignons, bien cuit, une paille en plus…"></textarea>
@@ -113,27 +122,16 @@
   </div>
 </dialog>
 
-<!-- Composer une formule : rempli et ouvert par js/carte.js quand on
-     ajoute un article « Formule … ». -->
+<!-- Composer un article à choix (formule, parfum d'une glace…) : les menus
+     déroulants sont construits par js/carte.js selon l'article ajouté. -->
 <dialog class="dialogue" id="dialogue-formule" aria-labelledby="formule-titre">
   <div class="dialogue__corps">
-    <h2 class="dialogue__titre" id="formule-titre">Composer la formule</h2>
+    <h2 class="dialogue__titre" id="formule-titre">Composer</h2>
     <form class="formulaire" id="formulaire-formule">
-      <div class="champ">
-        <label class="champ__label" for="formule-entree">Entrée</label>
-        <select id="formule-entree" required></select>
-      </div>
-      <div class="champ">
-        <label class="champ__label" for="formule-plat">Plat</label>
-        <select id="formule-plat" required></select>
-      </div>
-      <div class="champ">
-        <label class="champ__label" for="formule-dessert">Dessert</label>
-        <select id="formule-dessert" required></select>
-      </div>
+      <div id="formule-champs" class="formulaire" style="gap: 1.25rem;"></div>
       <div class="formulaire__actions">
         <button type="button" class="bouton bouton--creux" data-fermer>Annuler</button>
-        <button type="submit" class="bouton">Ajouter la formule</button>
+        <button type="submit" class="bouton" id="formule-ajouter">Ajouter</button>
       </div>
     </form>
   </div>

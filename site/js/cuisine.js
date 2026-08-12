@@ -113,6 +113,13 @@ function carteTicket(c, active) {
   const total = document.createElement('span');
   total.className = 'ticket__total';
   total.textContent = euros(c.total_cents);
+  if (c.remise_cents > 0) {
+    const remise = document.createElement('small');
+    remise.className = 'ticket__remise';
+    remise.title = c.remise_detail || '';
+    remise.textContent = ` (remise −${euros(c.remise_cents)} déjà comptée)`;
+    total.append(remise);
+  }
   pied.append(total);
 
   const paiement = document.createElement('button');

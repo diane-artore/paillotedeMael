@@ -50,6 +50,18 @@
         Cette commande a été annulée. Voyez avec nous au comptoir.
       </p>
 
+      <!-- Fidélité : points, avoirs, et la roue quand le seuil est atteint.
+           Rempli par js/suivi.js si un téléphone est connu sur cet appareil. -->
+      <div class="fidelite" id="fidelite" hidden>
+        <p class="surtitre">Vos points</p>
+        <p class="fidelite__points"><span id="fidelite-points">0</span> points</p>
+        <p class="champ__aide" id="fidelite-detail"></p>
+        <ul class="fidelite__avoirs" id="fidelite-avoirs"></ul>
+        <button type="button" class="bouton" id="fidelite-roue" hidden>
+          🎡 Tourner la roue !
+        </button>
+      </div>
+
       <!-- La facture : remplie par js/suivi.js dès que la commande est lue. -->
       <div class="facture-choix" id="facture-choix" hidden>
         <p class="surtitre">Votre facture</p>
@@ -84,6 +96,23 @@
     </nav>
   </div>
 </main>
+
+<!-- La roue : dessinée par js/suivi.js, un segment par lot. Le gagnant est
+     tiré par la base — la roue ne fait qu'atterrir dessus. -->
+<dialog class="dialogue" id="dialogue-roue" aria-labelledby="roue-titre">
+  <div class="dialogue__corps" style="align-items: center; text-align: center;">
+    <h2 class="dialogue__titre" id="roue-titre">La roue de la paillote</h2>
+    <div class="roue">
+      <div class="roue__fleche" aria-hidden="true"></div>
+      <svg class="roue__disque" id="roue-disque" viewBox="0 0 200 200" aria-hidden="true"></svg>
+    </div>
+    <p class="message" id="roue-resultat" hidden></p>
+    <div class="formulaire__actions">
+      <button type="button" class="bouton bouton--creux" data-fermer>Fermer</button>
+      <button type="button" class="bouton" id="roue-lancer">Lancer</button>
+    </div>
+  </div>
+</dialog>
 
 <!-- Le gabarit imprimable : invisible à l'écran, seul visible à l'impression.
      Rempli par js/suivi.js au moment d'imprimer. -->

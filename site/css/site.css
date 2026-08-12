@@ -985,3 +985,51 @@ select:focus-visible {
   font-size: 0.85rem;
   color: var(--gris);
 }
+
+/* --- Fidélité et roue ------------------------------------------------------ */
+
+.fidelite {
+  margin-top: 2.5rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--creme);
+  border-inline-start: 3px solid var(--abricot);
+  display: grid;
+  gap: 0.5rem;
+  justify-items: start;
+}
+
+.fidelite__points {
+  font-family: var(--serif);
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.fidelite__avoirs {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.roue {
+  position: relative;
+  width: min(18rem, 70vw);
+}
+
+.roue__disque {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.roue__fleche {
+  position: absolute;
+  top: -0.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-inline: 0.7rem solid transparent;
+  border-top: 1.1rem solid var(--encre);
+  z-index: 1;
+}

@@ -184,44 +184,81 @@ function redessiner() {
   }
 }
 
-// --- Composer une formule ----------------------------------------------------
-// Trois menus déroulants — entrée, plat, dessert — nourris par les rayons de
-// la carte. Le choix devient la clé de panier `id|Entrée · Plat · Dessert` :
-// il s'affiche au récapitulatif, part avec la commande, et finit sur le
-// ticket de cuisine et la facture. Le prix reste celui de la formule.
+// --- Composer un article -----------------------------------------------------
+// Le même dialogue sert deux cas :
+//   · une formule — trois menus déroulants (entrée, plat, dessert) nourris
+//     par les rayons de la carte ;
+//   · un article à variantes — un menu déroulant (le parfum d'une glace…),
+//     déclaré dans l'admin.
+// Le choix devient la clé de panier `id|…` : il s'affiche au récapitulatif,
+// part avec la commande, et finit sur le ticket de cuisine et la facture.
+// Le prix reste celui de l'article.
 
-const RAYONS_FORMULE = [
-  ['formule-entree', ['entrees', 'a-grignoter']],
-  ['formule-plat', ['plats', 'faim-de-loup']],
-  ['formule-dessert', ['desserts']],
-];
+// Composition par défaut d'une formule ; une formule peut la remplacer via
+// variantes.rayons (réglé en base, ex. la formule à 25 € ajoute la boisson).
+const RAYONS_FORMULE_DEFAUT = ['a-grignoter', 'faim-de-loup', 'desserts'];
+
+// Le libellé au-dessus de chaque menu déroulant, plus parlant que le nom du
+// rayon quand on compose un repas.
+const LIBELLES_RAYON = {
+  'a-grignoter': 'Entrée',
+  entrees: 'Entrée',
+  'faim-de-loup': 'Plat',
+  plats: 'Plat',
+  desserts: 'Dessert',
+  'se-rafraichir': 'Boisson',
+};
 
 let formuleEnCours = null;
 
-function ouvrirFormule(article) {
+function champDeroulant(libelle, valeurs) {
+  const bloc = document.createElement('div');
+  bloc.className = 'champ';
+  const label = document.createElement('label');
+  label.className = 'champ__label';
+  label.textContent = libelle;
+  const select = document.createElement('select');
+  select.required = true;
+  label.append(select);
+  for (const valeur of valeurs) {
+    const option = document.createElement('option');
+    option.value = valeur;
+    option.textContent = valeur;
+    select.append(option);
+  }
+  bloc.append(label);
+  return bloc;
+}
+
+function ouvrirComposition(article) {
   const dialogue = document.getElementById('dialogue-formule');
+  const champs = document.getElementById('formule-champs');
   formuleEnCours = article;
   document.getElementById('formule-titre').textContent = article.nom;
+  champs.textContent = '';
 
-  for (const [champId, slugs] of RAYONS_FORMULE) {
-    const select = document.getElementById(champId);
-    select.textContent = '';
-    const rayon = slugs
-      .map((slug) => rayonsCharges.find((r) => r.slug === slug))
-      .find(Boolean);
-    for (const plat of rayon?.articles || []) {
-      const option = document.createElement('option');
-      option.value = plat.nom;
-      option.textContent = plat.nom;
-      select.append(option);
+  if (estFormule(article)) {
+    const slugs = Array.isArray(article.variantes?.rayons)
+      ? article.variantes.rayons
+      : RAYONS_FORMULE_DEFAUT;
+    for (const slug of slugs) {
+      const rayon = rayonsCharges.find((r) => r.slug === slug);
+      const noms = (rayon?.articles || []).map((a) => a.nom);
+      // Un rayon vide ne bloque pas la formule : le champ n'apparaît pas.
+      if (noms.length) {
+        champs.append(champDeroulant(LIBELLES_RAYON[slug] || rayon.nom, noms));
+      }
     }
-    // Un rayon vide ne bloque pas la formule : le champ disparaît.
-    select.closest('.champ').hidden = !select.options.length;
+    document.getElementById('formule-ajouter').textContent = 'Ajouter la formule';
+  } else {
+    const v = article.variantes;
+    champs.append(champDeroulant(v.titre || 'Choix', v.valeurs));
+    document.getElementById('formule-ajouter').textContent = 'Ajouter';
   }
   dialogue.showModal();
 }
 
-function brancherFormule() {
+function brancherComposition() {
   const dialogue = document.getElementById('dialogue-formule');
   dialogue.querySelector('[data-fermer]').addEventListener('click', () =>
     dialogue.close()
@@ -229,10 +266,9 @@ function brancherFormule() {
   document.getElementById('formulaire-formule').addEventListener('submit', (e) => {
     e.preventDefault();
     if (!formuleEnCours) return;
-    const morceaux = RAYONS_FORMULE.map(([champId]) => {
-      const select = document.getElementById(champId);
-      return select.closest('.champ').hidden ? null : select.value;
-    }).filter(Boolean);
+    const morceaux = [
+      ...document.querySelectorAll('#formule-champs select'),
+    ].map((s) => s.value);
     // La barre verticale sépare l'id du choix dans la clé : elle ne doit
     // donc jamais entrer dans le choix lui-même.
     const choix = morceaux.join(' · ').replaceAll('|', '/');
@@ -240,6 +276,10 @@ function brancherFormule() {
     dialogue.close();
   });
 }
+
+/** L'article demande-t-il un choix au moment de l'ajouter ? */
+const seCompose = (article) =>
+  estFormule(article) || (article.variantes?.valeurs?.length > 0);
 
 // --- Envoi de la commande ----------------------------------------------------
 
@@ -270,8 +310,17 @@ async function envoyer(evenement) {
     });
 
     // Le jeton est la seule clé de suivi : on le retient pour cet appareil
-    // (voir js/commandes.js et l'onglet « Vos commandes en cours »).
+    // (voir js/commandes.js et l'onglet « Vos commandes en cours »). Le
+    // téléphone aussi : c'est lui qui porte les points et la roue.
     retenirCommande(commande);
+    const tel = donnees.get('client_tel');
+    try {
+      if (tel && String(tel).replace(/\D/g, '').length >= 9) {
+        localStorage.setItem('paillote.telephone', String(tel));
+      }
+    } catch {
+      /* sans stockage, le suivi n'affichera simplement pas les points */
+    }
     try {
       sessionStorage.removeItem(CLE_PANIER);
     } catch {
@@ -295,7 +344,7 @@ async function demarrer() {
 
   try {
     const rayons = await lire(
-      'rayons?select=slug,nom,position,articles(id,nom,description,prix_cents,position,disponible)' +
+      'rayons?select=slug,nom,position,articles(id,nom,description,prix_cents,position,disponible,variantes)' +
         '&order=position.asc'
     );
 
@@ -338,9 +387,9 @@ async function demarrer() {
     const article = catalogue.get(id);
     const plus = bouton.dataset.action === 'plus';
 
-    if (article && estFormule(article)) {
+    if (article && seCompose(article)) {
       if (plus) {
-        ouvrirFormule(article);
+        ouvrirComposition(article);
       } else {
         // On retire la dernière formule ajoutée pour cet article.
         const cles = [...panier.keys()].filter((cle) => idDe(cle) === id);
@@ -351,7 +400,7 @@ async function demarrer() {
     ajuster(id, plus ? 1 : -1);
   });
 
-  brancherFormule();
+  brancherComposition();
 
   const dialogue = document.getElementById('dialogue-commande');
   document.getElementById('ouvrir-commande').addEventListener('click', () => {
@@ -371,6 +420,14 @@ async function demarrer() {
     }
   });
   formulaire.addEventListener('submit', envoyer);
+
+  // Le téléphone déjà donné une fois se représente tout seul.
+  try {
+    const tel = localStorage.getItem('paillote.telephone');
+    if (tel) document.getElementById('client_tel').value = tel;
+  } catch {
+    /* rien */
+  }
 }
 
 demarrer();

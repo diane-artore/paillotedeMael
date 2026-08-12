@@ -321,3 +321,10 @@
   border-top: 2px solid var(--bassin);
   padding-block: 1.25rem 3rem;
 }
+
+/* La remise, déjà déduite du total : la cuisine encaisse ce qui est écrit. */
+.ticket__remise {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--gris);
+}
