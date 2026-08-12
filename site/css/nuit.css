@@ -1,0 +1,360 @@
+/* ==========================================================================
+   La Paillote de Maël — variante « by night »
+   Un calque posé PAR-DESSUS site.css (et caisse.css) : mêmes pages, mêmes
+   classes, tout autre climat — nuit bleue, néons de fête, verre fumé,
+   coins ronds. Retirer le <link> suffit à revenir au style du jour.
+   Tout vit sous @media screen : la facture s'imprime comme avant.
+   ========================================================================== */
+
+@media screen {
+
+:root {
+  --n-nuit: #0b1422;        /* le ciel une fois le soleil parti */
+  --n-nuit-2: #101d31;      /* un cran au-dessus, pour les panneaux */
+  --n-verre: rgb(255 255 255 / 0.055);
+  --n-verre-fort: rgb(255 255 255 / 0.09);
+  --n-bord: rgb(255 255 255 / 0.13);
+  --n-texte: #eef2f7;
+  --n-texte-doux: #9fb0c3;
+  --n-corail: #ff6b6b;      /* les néons du bar */
+  --n-mangue: #ffb347;
+  --n-lagon: #3ee0c8;
+  --n-rose: #ff4d6d;
+  --n-degrade: linear-gradient(100deg, var(--n-corail), var(--n-mangue));
+  --n-rond: 18px;
+}
+
+/* --- Le fond et la lumière ------------------------------------------------ */
+
+body {
+  background:
+    radial-gradient(60rem 40rem at 85% -10%, rgb(255 107 107 / 0.14), transparent 60%),
+    radial-gradient(50rem 36rem at -10% 30%, rgb(62 224 200 / 0.10), transparent 55%),
+    var(--n-nuit);
+  color: var(--n-texte);
+}
+
+.surtitre { color: var(--n-lagon); }
+.titre-section { color: var(--n-texte); }
+.italique { color: var(--n-mangue); }
+
+/* Les rayures du parasol deviennent le néon du comptoir. */
+.rayures {
+  background: var(--n-degrade);
+  height: 4px;
+  box-shadow: 0 0 18px rgb(255 107 107 / 0.55);
+}
+
+/* --- Boutons : pilules lumineuses ---------------------------------------- */
+
+.bouton {
+  background: var(--n-degrade);
+  border: none;
+  border-radius: 999px;
+  color: #221208;
+  font-weight: 600;
+  box-shadow: 0 6px 24px rgb(255 107 107 / 0.35);
+}
+
+.bouton:hover:not(:disabled) {
+  background: linear-gradient(100deg, var(--n-mangue), var(--n-corail));
+  color: #221208;
+  transform: translateY(-1px);
+}
+
+.bouton--creux {
+  background: transparent;
+  border: 1px solid var(--n-bord);
+  color: var(--n-texte);
+  box-shadow: none;
+}
+
+.bouton--creux:hover {
+  background: var(--n-verre-fort);
+  border-color: var(--n-lagon);
+  color: var(--n-lagon);
+}
+
+/* --- L'en-tête : verre fumé, collé en haut -------------------------------- */
+
+.entete {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgb(11 20 34 / 0.8);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--n-bord);
+}
+
+.marque__nom { color: var(--n-texte); }
+.nav a { color: var(--n-texte-doux); }
+
+.nav a:hover,
+.nav a[aria-current='page'] {
+  color: var(--n-lagon);
+  text-decoration-color: var(--n-lagon);
+}
+
+/* --- L'accueil ------------------------------------------------------------ */
+
+.accroche__titre {
+  background: var(--n-degrade);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.accroche__filet { background: var(--n-degrade); height: 3px; border: none; }
+.accroche__texte { color: var(--n-texte-doux); }
+
+.accroche {
+  background:
+    radial-gradient(40rem 26rem at 80% 20%, rgb(255 107 107 / 0.12), transparent 60%),
+    var(--n-nuit-2);
+  color: var(--n-texte);
+}
+
+.section--creme,
+.section--bassin {
+  background: var(--n-nuit-2);
+  color: var(--n-texte);
+}
+
+.section--bassin { background: linear-gradient(160deg, #0e2233, #101d31); }
+.section--bassin .surtitre { color: var(--n-lagon); }
+.section--bassin a { color: var(--n-mangue); }
+.section__intro, .section--bassin .section__intro { color: var(--n-texte-doux); }
+.chapo { color: var(--n-texte-doux); }
+
+.principe {
+  background: var(--n-verre);
+  border: 1px solid var(--n-bord);
+  border-top: 3px solid var(--n-lagon);
+  border-radius: var(--n-rond);
+  backdrop-filter: blur(6px);
+}
+
+.section--creme .principe { background: var(--n-verre); }
+.principe--abricot { border-top-color: var(--n-mangue); }
+.principe--pasteque { border-top-color: var(--n-rose); }
+.principe__titre { color: var(--n-lagon); }
+.principe--abricot .principe__titre { color: var(--n-mangue); }
+.principe--pasteque .principe__titre { color: var(--n-rose); }
+.principe__texte { color: var(--n-texte-doux); }
+
+.info__titre { color: var(--n-lagon); }
+
+.pied {
+  background: #070d18;
+  color: var(--n-texte-doux);
+}
+
+.pied a { color: var(--n-lagon); }
+
+/* --- Messages, champs, dialogues ------------------------------------------ */
+
+.message {
+  background: var(--n-verre);
+  border: 1px solid var(--n-bord);
+  border-radius: var(--n-rond);
+  color: var(--n-texte);
+}
+
+.message--erreur { border-color: var(--n-rose); color: #ffb3c1; }
+.message--succes { border-color: var(--n-lagon); color: var(--n-lagon); }
+
+.champ__label { color: var(--n-lagon); }
+.champ__aide { color: var(--n-texte-doux); }
+
+input[type='text'],
+input[type='tel'],
+input[type='email'],
+input[type='password'],
+input[type='number'],
+input[type='time'],
+textarea,
+select {
+  background: var(--n-verre);
+  border: 1px solid var(--n-bord);
+  border-radius: 12px;
+  color: var(--n-texte);
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  border-color: var(--n-lagon);
+  outline-color: var(--n-lagon);
+}
+
+select option { background: var(--n-nuit-2); color: var(--n-texte); }
+
+.dialogue {
+  background: var(--n-nuit-2);
+  color: var(--n-texte);
+  border: 1px solid var(--n-bord);
+  border-radius: calc(var(--n-rond) + 6px);
+}
+
+.dialogue::backdrop {
+  background: rgb(4 8 15 / 0.7);
+  backdrop-filter: blur(4px);
+}
+
+.dialogue__titre { color: var(--n-texte); }
+
+/* --- La carte ------------------------------------------------------------- */
+
+.sommaire {
+  background: transparent;
+}
+
+.sommaire__lien {
+  background: var(--n-verre);
+  border: 1px solid var(--n-bord);
+  border-radius: 999px;
+  color: var(--n-texte-doux);
+}
+
+.sommaire__lien:hover {
+  border-color: var(--n-lagon);
+  color: var(--n-lagon);
+  background: var(--n-verre-fort);
+}
+
+.rayon__titre {
+  color: var(--n-texte);
+  border-bottom: 1px solid var(--n-bord);
+}
+
+.plat {
+  background: var(--n-verre);
+  border: 1px solid var(--n-bord);
+  border-radius: var(--n-rond);
+  padding-inline: 1rem;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.plat:hover { border-color: rgb(255 255 255 / 0.28); }
+.plat--choisi { border-color: var(--n-mangue); background: rgb(255 179 71 / 0.08); }
+.plat__nom { color: var(--n-texte); }
+.plat__description { color: var(--n-texte-doux); }
+.plat__prix { color: var(--n-mangue); }
+
+.compteur__bouton {
+  background: var(--n-verre-fort);
+  border: 1px solid var(--n-bord);
+  border-radius: 999px;
+  color: var(--n-texte);
+}
+
+.compteur__bouton--plus {
+  background: var(--n-degrade);
+  border: none;
+  color: #221208;
+}
+
+.compteur__valeur { color: var(--n-mangue); }
+
+.barre-panier {
+  background: rgb(16 29 49 / 0.92);
+  backdrop-filter: blur(14px);
+  border-top: 1px solid var(--n-bord);
+  box-shadow: 0 -10px 40px rgb(0 0 0 / 0.5);
+}
+
+.barre-panier__total { color: var(--n-mangue); }
+
+.recap__ligne { border-bottom: 1px dashed var(--n-bord); }
+.recap__prix, .recap__total { color: var(--n-mangue); }
+.recap__choix { color: var(--n-texte-doux); }
+
+/* --- Suivi, fidélité, roue ------------------------------------------------ */
+
+.suivi__numero {
+  background: var(--n-degrade);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.suivi__etape { color: var(--n-texte-doux); }
+.suivi__etape[data-passee] { color: var(--n-lagon); }
+
+.suivi__etape[data-actuelle] {
+  color: var(--n-texte);
+  background: var(--n-verre);
+  border: 1px solid var(--n-lagon);
+  border-radius: 999px;
+  box-shadow: 0 0 16px rgb(62 224 200 / 0.35);
+}
+
+.fidelite {
+  background: var(--n-verre);
+  border: 1px solid var(--n-bord);
+  border-inline-start: 3px solid var(--n-mangue);
+  border-radius: var(--n-rond);
+}
+
+.fidelite__points { color: var(--n-mangue); }
+
+.suivi__autres {
+  background: var(--n-verre);
+  border: 1px solid var(--n-bord);
+  border-radius: var(--n-rond);
+}
+
+/* --- Cuisine et admin (caisse.css) ---------------------------------------- */
+
+.porte-pin { background: var(--n-nuit); }
+
+.service__bouton {
+  background: var(--n-verre);
+  border: 1px solid var(--n-bord);
+  border-radius: 999px;
+  color: var(--n-texte);
+}
+
+.service__bouton:hover { border-color: var(--n-mangue); color: var(--n-mangue); }
+.service__etat { color: var(--n-texte-doux); }
+
+.ticket,
+.admin-article {
+  background: var(--n-nuit-2);
+  border: 1px solid var(--n-bord);
+  border-radius: var(--n-rond);
+}
+
+.ticket { border-top-width: 5px; }
+.ticket[data-statut='recue'] { border-top-color: var(--n-mangue); }
+.ticket[data-statut='en_preparation'] { border-top-color: var(--n-lagon); }
+.ticket[data-statut='prete'] { border-top-color: #9be36b; }
+.ticket__quantite { color: var(--n-lagon); }
+.ticket__heure, .ticket__remise { color: var(--n-texte-doux); }
+
+.ticket__note {
+  background: var(--n-verre);
+  border-inline-start: 3px solid var(--n-mangue);
+  color: var(--n-texte);
+}
+
+.ticket__suivant {
+  background: var(--n-degrade);
+  border-radius: 999px;
+  color: #221208;
+  font-weight: 600;
+}
+
+.ticket__suivant:hover { background: linear-gradient(100deg, var(--n-mangue), var(--n-corail)); }
+.ticket__paiement { border-radius: 999px; color: var(--n-rose); border-color: var(--n-bord); }
+.ticket__paiement[data-paye] { color: var(--n-lagon); border-color: var(--n-lagon); }
+.ticket__annuler, .ticket__supprimer { color: var(--n-texte-doux); }
+.ticket__annuler:hover, .ticket__supprimer:hover { color: var(--n-rose); }
+
+.historique summary { color: var(--n-texte-doux); }
+.admin-rayon { border-top-color: var(--n-bord); }
+.admin-nouveau-rayon { border-top-color: var(--n-bord); }
+.admin-dispo input { accent-color: var(--n-lagon); }
+
+} /* @media screen */
