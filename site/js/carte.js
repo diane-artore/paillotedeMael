@@ -11,10 +11,31 @@ import { retenirCommande } from './commandes.js';
 
 const CLE_PANIER = 'paillote.panier';
 
-/** @type {Map<string, number>} id d'article → quantité */
+/**
+ * @type {Map<string, number>} clé de panier → quantité
+ *
+ * La clé est l'id de l'article, ou `id|composition` pour une formule : deux
+ * formules composées différemment font deux lignes, deux identiques
+ * s'additionnent. La composition est du texte d'affichage — le prix vient
+ * toujours de l'article, jamais de la clé.
+ */
 let panier = new Map();
 /** @type {Map<string, object>} id d'article → article */
 let catalogue = new Map();
+/** @type {Array<object>} les rayons chargés, pour composer les formules */
+let rayonsCharges = [];
+
+const idDe = (cle) => cle.split('|', 1)[0];
+const choixDe = (cle) => {
+  const i = cle.indexOf('|');
+  return i === -1 ? null : cle.slice(i + 1);
+};
+
+/** Une formule se compose ; le reste s'ajoute tel quel. */
+const estFormule = (article) => /^formule/i.test(article.nom);
+
+const quantiteArticle = (articleId) =>
+  [...panier].reduce((s, [cle, q]) => (idDe(cle) === articleId ? s + q : s), 0);
 
 // --- Panier -----------------------------------------------------------------
 
@@ -53,14 +74,14 @@ const totalArticles = () => [...panier.values()].reduce((s, q) => s + q, 0);
 
 const totalCents = () =>
   [...panier].reduce(
-    (s, [id, q]) => s + (catalogue.get(id)?.prix_cents || 0) * q,
+    (s, [cle, q]) => s + (catalogue.get(idDe(cle))?.prix_cents || 0) * q,
     0
   );
 
 // --- Rendu de la carte -------------------------------------------------------
 
 function ligneArticle(article) {
-  const quantite = panier.get(article.id) || 0;
+  const quantite = quantiteArticle(article.id);
   const li = document.createElement('li');
   li.className = 'plat';
   li.dataset.article = article.id;
@@ -120,7 +141,7 @@ function dessinerCarte(rayons) {
 /** Met à jour les compteurs et le récapitulatif sans redessiner la carte. */
 function redessiner() {
   for (const li of document.querySelectorAll('.plat')) {
-    const quantite = panier.get(li.dataset.article) || 0;
+    const quantite = quantiteArticle(li.dataset.article);
     const compteur = li.querySelector('.compteur');
     compteur.dataset.quantite = quantite;
     compteur.querySelector('.compteur__valeur').textContent = quantite;
@@ -139,13 +160,20 @@ function redessiner() {
   const recap = document.getElementById('recap-lignes');
   if (recap) {
     recap.textContent = '';
-    for (const [id, quantite] of panier) {
-      const article = catalogue.get(id);
+    for (const [cle, quantite] of panier) {
+      const article = catalogue.get(idDe(cle));
       if (!article) continue;
       const li = document.createElement('li');
       li.className = 'recap__ligne';
       const nom = document.createElement('span');
       nom.textContent = `${quantite} × ${article.nom}`;
+      const choix = choixDe(cle);
+      if (choix) {
+        const detail = document.createElement('small');
+        detail.className = 'recap__choix';
+        detail.textContent = choix;
+        nom.append(detail);
+      }
       const prix = document.createElement('span');
       prix.className = 'recap__prix';
       prix.textContent = euros(article.prix_cents * quantite);
@@ -154,6 +182,63 @@ function redessiner() {
     }
     document.getElementById('recap-total').textContent = euros(totalCents());
   }
+}
+
+// --- Composer une formule ----------------------------------------------------
+// Trois menus déroulants — entrée, plat, dessert — nourris par les rayons de
+// la carte. Le choix devient la clé de panier `id|Entrée · Plat · Dessert` :
+// il s'affiche au récapitulatif, part avec la commande, et finit sur le
+// ticket de cuisine et la facture. Le prix reste celui de la formule.
+
+const RAYONS_FORMULE = [
+  ['formule-entree', ['entrees', 'a-grignoter']],
+  ['formule-plat', ['plats', 'faim-de-loup']],
+  ['formule-dessert', ['desserts']],
+];
+
+let formuleEnCours = null;
+
+function ouvrirFormule(article) {
+  const dialogue = document.getElementById('dialogue-formule');
+  formuleEnCours = article;
+  document.getElementById('formule-titre').textContent = article.nom;
+
+  for (const [champId, slugs] of RAYONS_FORMULE) {
+    const select = document.getElementById(champId);
+    select.textContent = '';
+    const rayon = slugs
+      .map((slug) => rayonsCharges.find((r) => r.slug === slug))
+      .find(Boolean);
+    for (const plat of rayon?.articles || []) {
+      const option = document.createElement('option');
+      option.value = plat.nom;
+      option.textContent = plat.nom;
+      select.append(option);
+    }
+    // Un rayon vide ne bloque pas la formule : le champ disparaît.
+    select.closest('.champ').hidden = !select.options.length;
+  }
+  dialogue.showModal();
+}
+
+function brancherFormule() {
+  const dialogue = document.getElementById('dialogue-formule');
+  dialogue.querySelector('[data-fermer]').addEventListener('click', () =>
+    dialogue.close()
+  );
+  document.getElementById('formulaire-formule').addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!formuleEnCours) return;
+    const morceaux = RAYONS_FORMULE.map(([champId]) => {
+      const select = document.getElementById(champId);
+      return select.closest('.champ').hidden ? null : select.value;
+    }).filter(Boolean);
+    // La barre verticale sépare l'id du choix dans la clé : elle ne doit
+    // donc jamais entrer dans le choix lui-même.
+    const choix = morceaux.join(' · ').replaceAll('|', '/');
+    ajuster(`${formuleEnCours.id}|${choix}`, 1);
+    dialogue.close();
+  });
 }
 
 // --- Envoi de la commande ----------------------------------------------------
@@ -173,7 +258,11 @@ async function envoyer(evenement) {
 
   try {
     const commande = await appeler('commander', {
-      lignes: [...panier].map(([article_id, quantite]) => ({ article_id, quantite })),
+      lignes: [...panier].map(([cle, quantite]) => ({
+        article_id: idDe(cle),
+        quantite,
+        choix: choixDe(cle),
+      })),
       mode: donnees.get('mode') || 'sur_place',
       table_numero: donnees.get('table_numero'),
       client_nom: donnees.get('client_nom'),
@@ -216,11 +305,12 @@ async function demarrer() {
         .sort((a, b) => a.position - b.position);
       for (const article of rayon.articles) catalogue.set(article.id, article);
     }
+    rayonsCharges = rayons;
 
     // Un article retiré de la carte depuis la dernière visite ne doit pas
     // rester dans le panier : il serait refusé à l'envoi.
-    for (const id of [...panier.keys()]) {
-      if (!catalogue.has(id)) panier.delete(id);
+    for (const cle of [...panier.keys()]) {
+      if (!catalogue.has(idDe(cle))) panier.delete(cle);
     }
     ranger();
 
@@ -245,8 +335,23 @@ async function demarrer() {
     const bouton = e.target.closest('[data-action]');
     if (!bouton) return;
     const id = bouton.closest('.plat').dataset.article;
-    ajuster(id, bouton.dataset.action === 'plus' ? 1 : -1);
+    const article = catalogue.get(id);
+    const plus = bouton.dataset.action === 'plus';
+
+    if (article && estFormule(article)) {
+      if (plus) {
+        ouvrirFormule(article);
+      } else {
+        // On retire la dernière formule ajoutée pour cet article.
+        const cles = [...panier.keys()].filter((cle) => idDe(cle) === id);
+        if (cles.length) ajuster(cles[cles.length - 1], -1);
+      }
+      return;
+    }
+    ajuster(id, plus ? 1 : -1);
   });
+
+  brancherFormule();
 
   const dialogue = document.getElementById('dialogue-commande');
   document.getElementById('ouvrir-commande').addEventListener('click', () => {

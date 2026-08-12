@@ -978,3 +978,10 @@ select:focus-visible {
     border-top: 1.5pt solid #000;
   }
 }
+
+/* Le détail d'une formule au récapitulatif : sous le nom, discret. */
+.recap__choix {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--gris);
+}
