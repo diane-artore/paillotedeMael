@@ -328,3 +328,23 @@
   font-weight: 400;
   color: var(--gris);
 }
+
+/* --- Les services précédents ---------------------------------------------- */
+
+.passees__jour {
+  padding-block: 0.5rem 1rem;
+}
+
+.passees__titre {
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--bassin);
+  padding-block: 0.75rem 0.25rem;
+  border-top: 1px solid var(--filet);
+}
+
+/* Un service passé se relit ; il ne se travaille plus. */
+#passees .ticket {
+  opacity: 0.8;
+}

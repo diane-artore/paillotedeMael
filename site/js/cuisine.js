@@ -218,6 +218,80 @@ function afficher(commandes) {
   numerosConnus = numeros;
 }
 
+// --- Les services précédents ------------------------------------------------
+// L'écran repart à zéro chaque jour à 1 h du matin (le jour de service va de
+// 1 h à 1 h : une commande de minuit et demi appartient encore à la soirée).
+// Rien n'est effacé — tout se relit ici, groupé par journée, à la demande.
+
+let passeesChargees = false;
+
+function titreDuJour(cle) {
+  const [an, mois, jour] = cle.split('-').map(Number);
+  const date = new Date(an, mois - 1, jour);
+  const aujourdhui = new Date();
+  const hier = new Date(aujourdhui);
+  hier.setDate(hier.getDate() - 1);
+  const memeJour = (a, b) =>
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate();
+  if (memeJour(date, hier)) return 'Hier';
+  return date.toLocaleDateString('fr-FR', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  });
+}
+
+async function chargerPassees() {
+  if (passeesChargees) return;
+  passeesChargees = true;
+  const etat = document.getElementById('passees-etat');
+  const corps = document.getElementById('passees-corps');
+  etat.textContent = 'Chargement…';
+  try {
+    const commandes = (await rpc('cuisine_passees')) || [];
+    corps.textContent = '';
+    if (!commandes.length) {
+      etat.textContent = "Rien avant aujourd'hui : c'est le premier service.";
+      return;
+    }
+    etat.hidden = true;
+
+    // Un groupe par journée, le plus récent en tête.
+    const journees = new Map();
+    for (const c of commandes) {
+      if (!journees.has(c.jour)) journees.set(c.jour, []);
+      journees.get(c.jour).push(c);
+    }
+    for (const [jour, duJour] of journees) {
+      const bloc = document.createElement('section');
+      bloc.className = 'passees__jour';
+      const titre = document.createElement('h2');
+      titre.className = 'passees__titre';
+      const recette = duJour
+        .filter((c) => c.statut !== 'annulee')
+        .reduce((s, c) => s + c.total_cents, 0);
+      titre.textContent = `${titreDuJour(jour)} — ${duJour.length} commande${
+        duJour.length > 1 ? 's' : ''
+      }, ${euros(recette)}`;
+      const tickets = document.createElement('div');
+      tickets.className = 'tickets';
+      for (const c of duJour) tickets.append(carteTicket(c, false));
+      bloc.append(titre, tickets);
+      corps.append(bloc);
+    }
+  } catch (e) {
+    console.error(e);
+    passeesChargees = false; // on pourra réessayer en refermant/rouvrant
+    etat.textContent = 'Les services précédents ne répondent pas.';
+  }
+}
+
+document.getElementById('passees').addEventListener('toggle', (e) => {
+  if (e.currentTarget.open) chargerPassees();
+});
+
 // --- Boucle ----------------------------------------------------------------
 
 async function rafraichir() {
@@ -238,6 +312,13 @@ async function agir(fonction, corps) {
   try {
     await rpc(fonction, corps);
     await rafraichir();
+    // Le geste peut porter sur un ticket d'un service précédent : la
+    // rubrique se relit alors elle aussi.
+    const passees = document.getElementById('passees');
+    if (passees.open) {
+      passeesChargees = false;
+      await chargerPassees();
+    }
   } catch (e) {
     console.error(e);
     alert("Le changement n'a pas été enregistré. Réessayez.");
