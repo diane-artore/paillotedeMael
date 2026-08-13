@@ -11,6 +11,10 @@
 <link rel="stylesheet" href="css/site.css">
 <script src="js/badge.js" defer></script>
 <script type="module" src="js/carte.js"></script>
+<script type="module">
+  import { garnirLePied } from './js/pied.js';
+  garnirLePied(document.getElementById('pied-infos'));
+</script>
 </head>
 <body>
 
@@ -143,9 +147,17 @@
 </dialog>
 
 <footer class="pied">
+  <!-- Les horaires sont écrits ici en clair : si la base ne répond pas, le
+       pied reste juste. js/pied.js ne fait qu'ajouter la pastille. -->
+  <div class="contenu pied__infos" id="pied-infos">
+    <span class="pied__pastille" data-pastille hidden></span>
+    <span data-horaires>Tous les jours, de 12 h à 22 h</span>
+    <span>Sandiade, Chemin des Hubacs, 83210 Solliès-Toucas</span>
+    <span>Paiement en espèces, au comptoir</span>
+  </div>
   <div class="contenu pied__barre">
     <p>La Paillote de Maël — fruits, bières, snacks.</p>
-    <p><a href="index.html#infos">Nous trouver</a> · <a href="https://paillotedemael.blogspot.com/" rel="noopener">Le blog</a></p>
+    <p><a href="index.html#infos">Nous trouver</a> · <a href="avis.html">Les avis</a> · <a href="https://paillotedemael.blogspot.com/" rel="noopener">Le blog</a></p>
   </div>
 </footer>
 

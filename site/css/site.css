@@ -1141,3 +1141,44 @@ select:focus-visible {
   border-color: var(--abricot);
   color: var(--abricot-texte);
 }
+
+/* --- Le bandeau d'infos du pied -------------------------------------------- */
+
+.pied__infos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.25rem;
+  padding-block: 1.25rem;
+  border-bottom: 1px solid rgb(247 240 228 / 0.15);
+  font-size: 0.9rem;
+  color: var(--eau-claire);
+}
+
+/* Un point de séparation entre les mentions, jamais avant la première. */
+.pied__infos > span + span::before {
+  content: '·';
+  margin-inline-end: 1.25rem;
+  opacity: 0.5;
+}
+
+.pied__pastille {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 500;
+}
+
+.pied__pastille::before {
+  content: '';
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.pied__pastille[data-ouvert='oui'] { color: #9be36b; }
+.pied__pastille[data-ouvert='non'] { color: var(--abricot); }
+
+/* La pastille ouvre la ligne : pas de point avant elle. */
+.pied__infos > .pied__pastille + span::before { content: none; }

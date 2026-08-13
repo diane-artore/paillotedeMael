@@ -11,6 +11,10 @@
 <link rel="stylesheet" href="css/site.css">
 <script src="js/badge.js" defer></script>
 <script type="module" src="js/commandes.js"></script>
+<script type="module">
+  import { garnirLePied } from './js/pied.js';
+  garnirLePied(document.getElementById('pied-infos'));
+</script>
 </head>
 <body>
 
@@ -135,9 +139,9 @@
 
       <div class="infos">
         <div class="info">
-          <h3 class="info__titre">Saison</h3>
+          <h3 class="info__titre">Horaires</h3>
+          <p>Tous les jours, de 12 h à 22 h.</p>
           <p>Du printemps à la fin de l'été.</p>
-          <p>Ouvert jusqu'à la nuit tombée.</p>
         </div>
         <div class="info">
           <h3 class="info__titre">Où</h3>
@@ -153,8 +157,11 @@
       </div>
 
       <p class="section__intro" style="margin-top: 2.5rem;">
-        <!-- À compléter : horaires, téléphone, réseaux. -->
-        Les horaires précis sont à compléter.
+        <!-- Ces horaires doublent le réglage « Le service » de l'admin, qui
+             seul décide si la commande est ouverte. En changer un sans
+             l'autre ferait mentir la page : les deux vont ensemble. -->
+        La carte s'ouvre et se ferme avec nous : hors de ces horaires, elle
+        reste consultable, mais la commande attend le lendemain.
       </p>
     </div>
   </section>
@@ -162,9 +169,17 @@
 </main>
 
 <footer class="pied">
+  <!-- Les horaires sont écrits ici en clair : si la base ne répond pas, le
+       pied reste juste. js/pied.js ne fait qu'ajouter la pastille. -->
+  <div class="contenu pied__infos" id="pied-infos">
+    <span class="pied__pastille" data-pastille hidden></span>
+    <span data-horaires>Tous les jours, de 12 h à 22 h</span>
+    <span>Sandiade, Chemin des Hubacs, 83210 Solliès-Toucas</span>
+    <span>Paiement en espèces, au comptoir</span>
+  </div>
   <div class="contenu pied__barre">
     <p>La Paillote de Maël — fruits, bières, snacks.</p>
-    <p><a href="carte.html">La carte</a> · <a href="https://paillotedemael.blogspot.com/" rel="noopener">Le blog</a></p>
+    <p><a href="carte.html">La carte</a> · <a href="avis.html">Les avis</a> · <a href="https://paillotedemael.blogspot.com/" rel="noopener">Le blog</a></p>
   </div>
 </footer>
 
