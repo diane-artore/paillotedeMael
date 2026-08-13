@@ -15,9 +15,15 @@ const ETAPES = [
   ['servie', 'Servie'],
 ];
 
+// Tous les statuts de la base ont leur phrase : `commander` enregistre
+// « non_paye », qui manquait ici — la ligne restait donc vide, et le client
+// ne lisait jamais qu'il devait passer au comptoir.
 const PAIEMENT = {
+  non_paye: 'À régler au comptoir, en espèces.',
   a_regler_sur_place: 'À régler au comptoir, en espèces.',
+  en_cours: 'Règlement en cours…',
   paye: 'Réglée. Merci !',
+  rembourse: 'Remboursée.',
 };
 
 const jeton =
