@@ -55,7 +55,7 @@ export async function afficherHoraires(conteneur) {
   try {
     const etat = await serviceEtat();
 
-    jours.textContent = resumerJours(etat.jours);
+    jours.textContent = etat.note_saison || resumerJours(etat.jours);
     plage.textContent = etat.debut && etat.fin
       ? `${heureCourte(etat.debut)} – ${heureCourte(etat.fin)}`
       : 'Ouvert jusqu\u2019à la nuit tombée';
