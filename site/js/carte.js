@@ -49,9 +49,39 @@ const choixDe = (cle) => {
 /** Une formule se compose ; le reste s'ajoute tel quel. */
 const estFormule = (article) => /^formule/i.test(article.nom);
 
-/** Cet article est-il un lot déjà gagné, donc offert ? */
-const estOffert = (article) =>
-  !!article?.debloque_par_roue && articlesGagnes.has(article.id);
+/**
+ * Dans un rayon couvert par un lot, c'est l'article le plus cher du panier
+ * qui est offert — même règle que `commander`, pour que l'écran ne promette
+ * rien d'autre que l'addition. Tant que le panier est vide de ce rayon, tout
+ * le rayon est candidat.
+ */
+function eluDuRayon(slug) {
+  let elu = null;
+  for (const [cle] of panier) {
+    const article = catalogue.get(idDe(cle));
+    if (!article || rayonDeLArticle.get(article.id) !== slug) continue;
+    if (!elu || article.prix_cents > elu.prix_cents) elu = article;
+  }
+  return elu;
+}
+
+/** Cet article est-il offert par un lot gagné ? */
+function estOffert(article) {
+  if (!article) return false;
+  if (article.debloque_par_roue) return articlesGagnes.has(article.id);
+  const slug = rayonDeLArticle.get(article.id);
+  if (!slug || !rayonsOfferts.has(slug)) return false;
+  // Rien de choisi dans ce rayon : personne n'est encore « offert », tout
+  // le rayon est candidat (voir estCandidat) et garde son prix affiché.
+  const elu = eluDuRayon(slug);
+  return !!elu && elu.id === article.id;
+}
+
+/** Un article candidat, dans un rayon où rien n'est encore choisi. */
+function estCandidat(article) {
+  const slug = rayonDeLArticle.get(article?.id);
+  return !!slug && rayonsOfferts.has(slug) && !eluDuRayon(slug);
+}
 
 const quantiteArticle = (articleId) =>
   [...panier].reduce((s, [cle, q]) => (idDe(cle) === articleId ? s + q : s), 0);
@@ -94,8 +124,10 @@ const totalArticles = () => [...panier.values()].reduce((s, q) => s + q, 0);
 const totalCents = () =>
   [...panier].reduce((s, [cle, q]) => {
     const article = catalogue.get(idDe(cle));
-    if (!article || estOffert(article)) return s;
-    return s + (article.prix_cents || 0) * q;
+    if (!article) return s;
+    const paye = estOffert(article) ? Math.max(0, q - 1) : q;
+    // Un lot n'offre qu'une unité : le reste se paie.
+    return s + (article.prix_cents || 0) * (article.debloque_par_roue ? 0 : paye);
   }, 0);
 
 // --- Rendu de la carte -------------------------------------------------------
@@ -123,14 +155,19 @@ function ligneArticle(article) {
   const desc = li.querySelector('.plat__description');
   if (article.description) desc.textContent = article.description;
   else desc.remove();
-  const prix = li.querySelector('.plat__prix');
-  if (estOffert(article)) {
-    li.classList.add('plat--offert');
-    prix.textContent = 'Offert 🎁';
-  } else {
-    prix.textContent = euros(article.prix_cents);
-  }
+  peindreLePrix(li, article);
   return li;
+}
+
+/** Le prix d'une ligne : offert, candidat au lot, ou payant. */
+function peindreLePrix(li, article) {
+  const prix = li.querySelector('.plat__prix');
+  const offert = estOffert(article);
+  const candidat = !offert && estCandidat(article);
+  li.classList.toggle('plat--offert', offert || candidat);
+  if (offert) prix.textContent = 'Offert 🎁';
+  else if (candidat) prix.textContent = `${euros(article.prix_cents)} · offert 🎁`;
+  else prix.textContent = euros(article.prix_cents);
 }
 
 function dessinerCarte(rayons) {
@@ -178,8 +215,11 @@ function redessiner() {
     // Un lot ne se prend qu'une fois : `commander` refuse le second, mais
     // il vaut mieux éteindre le bouton que refuser l'addition à l'envoi.
     const article = catalogue.get(li.dataset.article);
-    if (article && estOffert(article)) {
-      compteur.querySelector('.compteur__bouton--plus').disabled = quantite >= 1;
+    if (article) {
+      peindreLePrix(li, article);
+      if (article.debloque_par_roue && estOffert(article)) {
+        compteur.querySelector('.compteur__bouton--plus').disabled = quantite >= 1;
+      }
     }
   }
 
@@ -340,6 +380,10 @@ const seCompose = (article) =>
 let serviceOuvert = true;
 /** Les articles que la roue a débloqués pour ce téléphone. */
 let articlesGagnes = new Set();
+/** Les rayons dont un article est offert par un lot (« une boisson offerte »). */
+let rayonsOfferts = new Set();
+/** Le rayon d'un article, pour savoir à quel lot il se rattache. */
+let rayonDeLArticle = new Map();
 
 function fermerLaCommande(message, longue) {
   serviceOuvert = false;
@@ -393,6 +437,7 @@ async function reclamerSesLots() {
   if (!avoirs.length) return;
 
   articlesGagnes = new Set(avoirs.map((a) => a.article_id).filter(Boolean));
+  rayonsOfferts = new Set(avoirs.map((a) => a.rayon_slug).filter(Boolean));
 
   const bandeau = document.getElementById('bandeau-lot');
   const titres = avoirs.map((a) => a.titre);
@@ -503,7 +548,10 @@ async function demarrer() {
         // pas commander.
         .filter((a) => !a.debloque_par_roue || articlesGagnes.has(a.id))
         .sort((a, b) => a.position - b.position);
-      for (const article of rayon.articles) catalogue.set(article.id, article);
+      for (const article of rayon.articles) {
+        catalogue.set(article.id, article);
+        rayonDeLArticle.set(article.id, rayon.slug);
+      }
     }
     rayonsCharges = rayons;
 
