@@ -464,6 +464,30 @@ a:hover {
   color: var(--eau-claire);
 }
 
+.pied__infos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 0.6rem;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(247, 240, 228, 0.15);
+  font-size: 0.85rem;
+  color: var(--eau-claire);
+}
+
+.pied__infos .horaires__badge--ouvert {
+  color: #9fd6a0;
+}
+
+.pied__infos .horaires__badge--ferme {
+  color: #e79a9a;
+}
+
+.pied__infos-separateur {
+  opacity: 0.5;
+}
+
 /* --- Messages ------------------------------------------------------------ */
 
 .message {

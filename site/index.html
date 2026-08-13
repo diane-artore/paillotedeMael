@@ -14,6 +14,7 @@
 <script type="module">
   import { afficherHoraires } from './js/horaires.js';
   afficherHoraires(document.getElementById('horaires'));
+  afficherHoraires(document.getElementById('pied-horaires'));
 </script>
 </head>
 <body>
@@ -163,6 +164,17 @@
 </main>
 
 <footer class="pied">
+  <div class="contenu pied__infos" id="pied-horaires">
+    <span class="horaires__badge" data-horaires-badge>…</span>
+    <span class="pied__infos-separateur">·</span>
+    <span data-horaires-jours>Du printemps à la fin de l'été</span>
+    <span class="pied__infos-separateur">·</span>
+    <span data-horaires-plage>Ouvert jusqu'à la nuit tombée.</span>
+    <span class="pied__infos-separateur">·</span>
+    <span>Sandiade, Chemin des Hubacs, 83210 Solliès-Toucas</span>
+    <span class="pied__infos-separateur">·</span>
+    <span>Paiement en espèces, au comptoir</span>
+  </div>
   <div class="contenu pied__barre">
     <p>La Paillote de Maël — fruits, bières, snacks.</p>
     <p><a href="carte.html">La carte</a> · <a href="https://paillotedemael.blogspot.com/" rel="noopener">Le blog</a></p>
