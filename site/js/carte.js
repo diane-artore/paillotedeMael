@@ -327,6 +327,16 @@ function fermerLaCommande(message) {
   }
 }
 
+function rouvrirLaCommande() {
+  if (serviceOuvert) return;
+  serviceOuvert = true;
+  document.getElementById('bandeau-ferme').hidden = true;
+  for (const bouton of document.querySelectorAll('.compteur__bouton')) {
+    bouton.disabled = false;
+  }
+  redessiner();
+}
+
 function annoncerHeureMystere(hh) {
   const bandeau = document.getElementById('bandeau-heure');
   const fin = new Date(hh.jusqu_a);
@@ -358,6 +368,8 @@ async function verifierLeService() {
       fermerLaCommande(
         service.message || 'La paillote est fermée pour le moment.',
       );
+    } else {
+      rouvrirLaCommande();
     }
     if (hh?.actif) annoncerHeureMystere(hh);
   } catch (e) {
@@ -535,6 +547,9 @@ async function demarrer() {
   }
 
   verifierLeService();
+  // On revérifie de temps en temps : un client peut garder la page ouverte
+  // pendant que le service passe de fermé à ouvert (ou l'inverse).
+  setInterval(verifierLeService, 60000);
 }
 
 demarrer();
