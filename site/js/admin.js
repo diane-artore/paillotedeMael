@@ -402,14 +402,39 @@ async function chargerReglages() {
   });
   const svMessage = entreeTexte(sv.message || '');
   svMessage.placeholder = 'La paillote est fermée pour le moment…';
-  const blocMessage = champ('Message affiché quand c’est fermé', svMessage);
+  svMessage.maxLength = 300;
+  const blocMessage = champ('Message du soir (fermeture ordinaire)', svMessage);
   blocMessage.style.flex = '1';
   blocMessage.style.minWidth = '18rem';
+
+  // La fermeture longue : fin de saison, congés. Elle ne parle que si
+  // l'équipe a fermé à la main — un « fermé » d'une heure pour cause
+  // d'orage garde le message du soir.
+  const svSaison = entreeTexte(sv.message_saison || '');
+  svSaison.placeholder = 'Fermé ! Nous serons de retour en avril.';
+  svSaison.maxLength = 300;
+  const blocSaison = champ('Message de fermeture longue (fin de saison, congés)', svSaison);
+  blocSaison.style.flex = '1';
+  blocSaison.style.minWidth = '18rem';
+
+  const rappelSaison = document.createElement('p');
+  rappelSaison.className = 'champ__aide';
+  rappelSaison.style.width = '100%';
+  const majSaison = () => {
+    rappelSaison.textContent =
+      svMode.value === 'ferme' && svSaison.value.trim()
+        ? '→ C’est ce message-là qui s’affiche en ce moment, en grand sur l’accueil et sur la carte.'
+        : 'Ce message ne s’affiche que si le mode est « Fermé (forcé) ». Sinon, c’est le message du soir qui parle.';
+  };
+  svMode.addEventListener('change', majSaison);
+  svSaison.addEventListener('input', majSaison);
+  majSaison();
+
   hoteReglages.append(carteReglage(
     'Le service',
     "Hors service, la carte reste consultable mais la commande est fermée — et le serveur refuse toute commande qui arriverait quand même.",
     [champ('Mode', svMode), champ('Ouvre à', svDebut), champ('Ferme à', svFin),
-     champ('Jours', svJours), blocMessage],
+     champ('Jours', svJours), blocMessage, blocSaison, rappelSaison],
     () => rpc('admin_sauver_service', {
       p_valeur: {
         mode: svMode.value,
@@ -417,6 +442,7 @@ async function chargerReglages() {
         fin: svFin.value,
         jours: [...svJours.querySelectorAll('input:checked')].map((e) => +e.dataset.jour),
         message: svMessage.value,
+        message_saison: svSaison.value,
       },
     }),
   ));

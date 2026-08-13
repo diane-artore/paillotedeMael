@@ -1182,3 +1182,14 @@ select:focus-visible {
 
 /* La pastille ouvre la ligne : pas de point avant elle. */
 .pied__infos > .pied__pastille + span::before { content: none; }
+
+/* Une fermeture longue (fin de saison, congés) se lit de loin : ce n'est
+   pas « revenez demain », c'est « revenez dans six mois ». */
+.bandeau--saison {
+  font-family: var(--serif);
+  font-size: clamp(1.25rem, 3.5vw, 1.75rem);
+  line-height: 1.25;
+  padding: 1.5rem 1.5rem;
+  border-inline-start-width: 5px;
+  background: var(--creme);
+}

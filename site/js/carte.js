@@ -316,10 +316,12 @@ const seCompose = (article) =>
 
 let serviceOuvert = true;
 
-function fermerLaCommande(message) {
+function fermerLaCommande(message, longue) {
   serviceOuvert = false;
   const bandeau = document.getElementById('bandeau-ferme');
   bandeau.textContent = message;
+  // Une fermeture de saison se lit plus fort qu'un « fermé ce soir ».
+  bandeau.classList.toggle('bandeau--saison', !!longue);
   bandeau.hidden = false;
   document.getElementById('barre-panier').hidden = true;
   for (const bouton of document.querySelectorAll('.compteur__bouton')) {
@@ -357,6 +359,7 @@ async function verifierLeService() {
     if (service && service.ouvert === false) {
       fermerLaCommande(
         service.message || 'La paillote est fermée pour le moment.',
+        service.fermeture_longue,
       );
     }
     if (hh?.actif) annoncerHeureMystere(hh);

@@ -63,6 +63,15 @@ export async function garnirLePied(pied) {
     pastille.textContent = etat.ouvert ? 'Ouvert maintenant' : 'Fermé pour le moment';
     pastille.dataset.ouvert = etat.ouvert ? 'oui' : 'non';
     pastille.hidden = false;
+
+    // L'annonce de fermeture, si la page en prévoit une. Une fermeture
+    // longue se dit plus fort : c'est la première chose à savoir.
+    const bandeau = document.getElementById('bandeau-service');
+    if (bandeau && !etat.ouvert && etat.message) {
+      bandeau.textContent = etat.message;
+      bandeau.classList.toggle('bandeau--saison', !!etat.fermeture_longue);
+      bandeau.hidden = false;
+    }
   } catch {
     // Le texte écrit dans la page fait déjà le travail : on se contente
     // de retirer la pastille, qui serait un mensonge sans la base.
