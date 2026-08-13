@@ -11,11 +11,6 @@
 <link rel="stylesheet" href="css/site.css">
 <script src="js/badge.js" defer></script>
 <script type="module" src="js/commandes.js"></script>
-<script type="module">
-  import { afficherHoraires } from './js/horaires.js';
-  afficherHoraires(document.getElementById('horaires'));
-  afficherHoraires(document.getElementById('pied-horaires'));
-</script>
 </head>
 <body>
 
@@ -139,11 +134,10 @@
       <h2 class="titre-section">Nous trouver</h2>
 
       <div class="infos">
-        <div class="info" id="horaires">
-          <h3 class="info__titre">Horaires</h3>
-          <p><span class="horaires__badge" data-horaires-badge>…</span></p>
-          <p><span data-horaires-jours>Du printemps à la fin de l'été</span><br>
-             <span data-horaires-plage>Ouvert jusqu'à la nuit tombée.</span></p>
+        <div class="info">
+          <h3 class="info__titre">Saison</h3>
+          <p>Du printemps à la fin de l'été.</p>
+          <p>Ouvert jusqu'à la nuit tombée.</p>
         </div>
         <div class="info">
           <h3 class="info__titre">Où</h3>
@@ -158,23 +152,16 @@
         </div>
       </div>
 
+      <p class="section__intro" style="margin-top: 2.5rem;">
+        <!-- À compléter : horaires, téléphone, réseaux. -->
+        Les horaires précis sont à compléter.
+      </p>
     </div>
   </section>
 
 </main>
 
 <footer class="pied">
-  <div class="contenu pied__infos" id="pied-horaires">
-    <span class="horaires__badge" data-horaires-badge>…</span>
-    <span class="pied__infos-separateur">·</span>
-    <span data-horaires-jours>Du printemps à la fin de l'été</span>
-    <span class="pied__infos-separateur">·</span>
-    <span data-horaires-plage>Ouvert jusqu'à la nuit tombée.</span>
-    <span class="pied__infos-separateur">·</span>
-    <span>Sandiade, Chemin des Hubacs, 83210 Solliès-Toucas</span>
-    <span class="pied__infos-separateur">·</span>
-    <span>Paiement en espèces, au comptoir</span>
-  </div>
   <div class="contenu pied__barre">
     <p>La Paillote de Maël — fruits, bières, snacks.</p>
     <p><a href="carte.html">La carte</a> · <a href="https://paillotedemael.blogspot.com/" rel="noopener">Le blog</a></p>

@@ -405,17 +405,11 @@ async function chargerReglages() {
   const blocMessage = champ('Message affiché quand c’est fermé', svMessage);
   blocMessage.style.flex = '1';
   blocMessage.style.minWidth = '18rem';
-  const svNoteSaison = entreeTexte(sv.note_saison || '');
-  svNoteSaison.placeholder = 'Du printemps à la fin de l’été';
-  svNoteSaison.maxLength = 80;
-  const blocNoteSaison = champ('Phrase de saison (page d’accueil)', svNoteSaison);
-  blocNoteSaison.style.flex = '1';
-  blocNoteSaison.style.minWidth = '18rem';
   hoteReglages.append(carteReglage(
     'Le service',
     "Hors service, la carte reste consultable mais la commande est fermée — et le serveur refuse toute commande qui arriverait quand même.",
     [champ('Mode', svMode), champ('Ouvre à', svDebut), champ('Ferme à', svFin),
-     champ('Jours', svJours), blocMessage, blocNoteSaison],
+     champ('Jours', svJours), blocMessage],
     () => rpc('admin_sauver_service', {
       p_valeur: {
         mode: svMode.value,
@@ -423,7 +417,6 @@ async function chargerReglages() {
         fin: svFin.value,
         jours: [...svJours.querySelectorAll('input:checked')].map((e) => +e.dataset.jour),
         message: svMessage.value,
-        note_saison: svNoteSaison.value,
       },
     }),
   ));
