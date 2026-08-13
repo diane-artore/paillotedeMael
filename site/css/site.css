@@ -1238,3 +1238,11 @@ select:focus-visible {
 .choix-lot__options input {
   accent-color: var(--pasteque);
 }
+
+/* Un lot qui ne trouve pas à s'appliquer : on le dit, sans crier. */
+.bandeau--lot[data-applicable='non'] {
+  border-inline-start-color: var(--gris);
+  background: var(--creme);
+  color: var(--texte);
+  font-weight: 400;
+}

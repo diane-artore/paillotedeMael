@@ -324,6 +324,7 @@ function redessiner() {
   }
 
   dessinerLeChoixDuLot();
+  direLeBandeauDuLot();
 }
 
 // --- Composer un article -----------------------------------------------------
@@ -442,6 +443,8 @@ let articlesGagnes = new Set();
 let rayonsOfferts = new Set();
 /** Le lot en attente qui vise un rayon, s'il y en a un. */
 let lotDuRayon = null;
+/** Tous les lots en attente, pour ce que le bandeau doit annoncer. */
+let lotsEnAttente = [];
 /** L'article sur lequel le client a choisi d'appliquer son lot. */
 let lotSur = null;
 /** Le rayon d'un article, pour savoir à quel lot il se rattache. */
@@ -502,12 +505,44 @@ async function reclamerSesLots() {
   rayonsOfferts = new Set(avoirs.map((a) => a.rayon_slug).filter(Boolean));
   lotDuRayon = avoirs.find((a) => a.rayon_slug && !a.article_id) || null;
 
+  lotsEnAttente = avoirs;
+  direLeBandeauDuLot();
+}
+
+/**
+ * Le bandeau dit ce qui va réellement se passer. Un lot qui ne trouve rien
+ * à offrir dans le panier n'est pas perdu — il reste en attente — mais il
+ * ne faut pas promettre une déduction qui n'arrivera pas. C'est le cas
+ * d'une formule : son dessert est un texte dans la ligne, pas un article
+ * du rayon « desserts ».
+ */
+function direLeBandeauDuLot() {
   const bandeau = document.getElementById('bandeau-lot');
-  const titres = avoirs.map((a) => a.titre);
-  bandeau.textContent =
-    titres.length === 1
-      ? `🎁 Vous avez gagné : ${titres[0]} — c'est déduit de cette commande.`
-      : `🎁 Vos lots : ${titres.join(', ')} — un seul par commande, le plus ancien d'abord.`;
+  if (!bandeau || !lotsEnAttente.length) return;
+
+  const lot = lotsEnAttente[0];
+  const suite = lotsEnAttente.length > 1
+    ? ` (${lotsEnAttente.length - 1} autre${lotsEnAttente.length > 2 ? 's' : ''} en réserve)`
+    : '';
+
+  let applicable;
+  let commentFaire = '';
+  if (lot.article_id) {
+    applicable = quantiteArticle(lot.article_id) > 0;
+    commentFaire = ` Ajoutez « ${lot.article_nom} » à votre commande pour en profiter.`;
+  } else if (lot.rayon_slug) {
+    applicable = candidatsDuLot().length > 0;
+    const ou = lot.rayon_nom ? ` du rayon « ${lot.rayon_nom} »` : '';
+    commentFaire = ` Ajoutez un article${ou} à la carte pour en profiter — une formule ne compte pas, son contenu est déjà inclus.`;
+  } else {
+    applicable = panier.size > 0;
+    commentFaire = ' Il s’appliquera dès que vous aurez choisi quelque chose.';
+  }
+
+  bandeau.textContent = applicable
+    ? `🎁 Vous avez gagné : ${lot.titre} — c'est déduit de cette commande${suite}.`
+    : `🎁 Vous avez gagné : ${lot.titre}${suite}.${commentFaire}`;
+  bandeau.dataset.applicable = applicable ? 'oui' : 'non';
   bandeau.hidden = false;
 }
 
