@@ -10,7 +10,7 @@ import { lire, appeler, euros, SUPABASE_URL, SUPABASE_CLE_PUBLIABLE } from './co
 import { retenirCommande } from './commandes.js';
 
 /** Une fonction de la base, en lecture publique. */
-async function rpcPublic(fonction) {
+async function rpcPublic(fonction, corps = {}) {
   const reponse = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fonction}`, {
     method: 'POST',
     headers: {
@@ -18,7 +18,7 @@ async function rpcPublic(fonction) {
       Authorization: `Bearer ${SUPABASE_CLE_PUBLIABLE}`,
       'Content-Type': 'application/json',
     },
-    body: '{}',
+    body: JSON.stringify(corps),
   });
   if (!reponse.ok) throw new Error(`La base a répondu ${reponse.status}.`);
   return reponse.json();
@@ -315,6 +315,8 @@ const seCompose = (article) =>
 // l'intérêt d'une remise surprise.
 
 let serviceOuvert = true;
+/** Les articles que la roue a débloqués pour ce téléphone. */
+let articlesGagnes = new Set();
 
 function fermerLaCommande(message, longue) {
   serviceOuvert = false;
@@ -348,6 +350,34 @@ function annoncerHeureMystere(hh) {
   };
   if (!dire()) return;
   setInterval(dire, 30000);
+}
+
+/**
+ * Les lots gagnés à la roue, s'il y en a : le bandeau les rappelle, et les
+ * articles qu'ils débloquent entrent dans la carte. C'est `commander` qui
+ * tranche vraiment — ici on ne fait que montrer.
+ */
+async function reclamerSesLots() {
+  let tel = null;
+  try {
+    tel = localStorage.getItem('paillote.telephone');
+  } catch {
+    return;
+  }
+  if (!tel) return;
+  const solde = await rpcPublic('fidelite_solde', { p_telephone: tel }).catch(() => null);
+  const avoirs = solde?.avoirs || [];
+  if (!avoirs.length) return;
+
+  articlesGagnes = new Set(avoirs.map((a) => a.article_id).filter(Boolean));
+
+  const bandeau = document.getElementById('bandeau-lot');
+  const titres = avoirs.map((a) => a.titre);
+  bandeau.textContent =
+    titres.length === 1
+      ? `🎁 Vous avez gagné : ${titres[0]} — c'est déduit de cette commande.`
+      : `🎁 Vos lots : ${titres.join(', ')} — un seul par commande, le plus ancien d'abord.`;
+  bandeau.hidden = false;
 }
 
 async function verifierLeService() {
@@ -434,15 +464,21 @@ async function demarrer() {
   charger();
   const etat = document.getElementById('carte-etat');
 
+  await reclamerSesLots();
+
   try {
     const rayons = await lire(
-      'rayons?select=slug,nom,position,articles(id,nom,description,prix_cents,position,disponible,variantes)' +
+      'rayons?select=slug,nom,position,articles(id,nom,description,prix_cents,position,disponible,variantes,debloque_par_roue)' +
         '&order=position.asc'
     );
 
     for (const rayon of rayons) {
       rayon.articles = (rayon.articles || [])
         .filter((a) => a.disponible)
+        // Un article qui se gagne à la roue n'apparaît que pour qui l'a
+        // gagné : les autres n'ont pas à lire un plat qu'ils ne peuvent
+        // pas commander.
+        .filter((a) => !a.debloque_par_roue || articlesGagnes.has(a.id))
         .sort((a, b) => a.position - b.position);
       for (const article of rayon.articles) catalogue.set(article.id, article);
     }

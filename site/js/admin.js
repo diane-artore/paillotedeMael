@@ -68,6 +68,16 @@ function ligneArticle(article, rayonId) {
   dispoBloc.className = 'admin-dispo';
   dispoBloc.append(dispo, document.createTextNode(' En vente'));
 
+  // Un article qui se gagne ne figure pas dans la carte publique : seul
+  // celui qui l'a tiré à la roue le voit, et peut le commander.
+  const verrou = document.createElement('input');
+  verrou.type = 'checkbox';
+  verrou.checked = article.debloque_par_roue === true;
+  const verrouBloc = document.createElement('label');
+  verrouBloc.className = 'admin-dispo';
+  verrouBloc.title = "L'article n'apparaît qu'à qui l'a gagné à la roue.";
+  verrouBloc.append(verrou, document.createTextNode(' 🎁 Se gagne à la roue'));
+
   const enregistrer = document.createElement('button');
   enregistrer.type = 'submit';
   enregistrer.className = 'bouton admin-bouton';
@@ -96,6 +106,7 @@ function ligneArticle(article, rayonId) {
         p_disponible: dispo.checked,
         p_position: article.position ?? 0,
         p_variantes: ligne.recolterVariantes(),
+        p_debloque_par_roue: verrou.checked,
       });
       dire(`« ${nom.value.trim()} » enregistré.`);
       await charger();
@@ -152,6 +163,7 @@ function ligneArticle(article, rayonId) {
     champ('Nom', nom),
     champ('Prix (€)', prix),
     dispoBloc,
+    verrouBloc,
     enregistrer,
     supprimer,
   );
@@ -500,16 +512,34 @@ async function chargerReglages() {
     const montant = entreePrix(lot.remise_cents ?? 400);
     montant.required = true;
     const poids = entreeNombre(lot.poids ?? 1, 1, 100, '4.5rem');
+    // Un lot peut donner droit à un article précis — souvent un article
+    // « se gagne à la roue », qui n'existe que pour le gagnant.
+    const article = document.createElement('select');
+    const aucun = document.createElement('option');
+    aucun.value = '';
+    aucun.textContent = '— une remise, sans article —';
+    article.append(aucun);
+    for (const r of derniersRayons) {
+      for (const a of r.articles || []) {
+        const option = document.createElement('option');
+        option.value = a.id;
+        option.textContent = a.debloque_par_roue ? `🎁 ${a.nom}` : a.nom;
+        if (a.id === lot.article_id) option.selected = true;
+        article.append(option);
+      }
+    }
     const retirer = document.createElement('button');
     retirer.type = 'button';
     retirer.className = 'service__bouton';
     retirer.textContent = 'Retirer';
     retirer.addEventListener('click', () => rangee.remove());
-    rangee.append(blocTitre, champ('Vaut (€)', montant), champ('Poids', poids), retirer);
+    rangee.append(blocTitre, champ('Article offert', article),
+                  champ('Vaut (€)', montant), champ('Poids', poids), retirer);
     rangee.recolter = () => ({
       titre: titre.value.trim(),
       remise_cents: Math.round(parseFloat(montant.value.replace(',', '.')) * 100),
       poids: +poids.value,
+      article_id: article.value || null,
     });
     return rangee;
   };

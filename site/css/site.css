@@ -1193,3 +1193,12 @@ select:focus-visible {
   border-inline-start-width: 5px;
   background: var(--creme);
 }
+
+/* Le lot gagné à la roue : le seul bandeau rouge du site, pour qu'on ne
+   passe pas à côté de ce qu'on a gagné. */
+.bandeau--lot {
+  border-inline-start-color: var(--pasteque);
+  background: color-mix(in srgb, var(--pasteque) 8%, var(--creme));
+  color: var(--pasteque-texte);
+  font-weight: 500;
+}
