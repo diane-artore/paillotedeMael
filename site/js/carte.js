@@ -174,6 +174,13 @@ function redessiner() {
     compteur.querySelector('[data-action="moins"]').hidden = quantite === 0;
     compteur.querySelector('.compteur__valeur').hidden = quantite === 0;
     li.classList.toggle('plat--choisi', quantite > 0);
+
+    // Un lot ne se prend qu'une fois : `commander` refuse le second, mais
+    // il vaut mieux éteindre le bouton que refuser l'addition à l'envoi.
+    const article = catalogue.get(li.dataset.article);
+    if (article && estOffert(article)) {
+      compteur.querySelector('.compteur__bouton--plus').disabled = quantite >= 1;
+    }
   }
 
   const n = totalArticles();
