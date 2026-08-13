@@ -11,6 +11,41 @@ travailler sur une branche et laisser Diane décider.
 
 ---
 
+## ⚠️ La base contient des données réelles — on n'en efface aucune
+
+Le plugin Supabase donne un accès direct à la base **de production**. Il
+passe outre le RLS et toutes les protections décrites plus bas : ce qui
+suit ne tient donc qu'à la discipline de qui tient le clavier.
+
+Dans cette base vivent des choses qui n'existent qu'ici, et que personne ne
+peut retrouver si elles disparaissent :
+
+| Table | Ce qu'on perdrait |
+|---|---|
+| `avis` | La parole des clients. Aucune sauvegarde, aucun moyen de la leur redemander. |
+| `fidelite`, `avoirs` | Les points et les lots gagnés. Un client qui perd ses 48 points le voit. |
+| `commandes`, `lignes_commande` | Le service en cours et l'historique. |
+| `reglages` | Horaires, remises, roue — les réglages faits par Diane. |
+
+**Interdit, sans exception :**
+- `delete`, `truncate`, `drop table` sur ces tables ;
+- `update` en masse (sans `where` précis) ;
+- « nettoyer », « remettre à zéro », « repartir propre » — même si ça
+  paraît anodin, même pour déboguer, même si une ligne semble être un test.
+
+**Ce qui est permis :** lire, ajouter des fonctions, faire évoluer un schéma
+par migration. Pour retirer un avis déplacé, il existe un bouton dans
+l'admin (`admin_supprimer_avis`) : c'est le seul chemin.
+
+**Pour essayer quelque chose**, créer ses propres lignes, les reconnaître
+(`client_nom = 'TEST'`) et n'effacer que celles-là, en visant l'`id`. Jamais
+« tout ce qui ressemble à un test ».
+
+En cas de doute sur une requête qui écrit : **ne pas la lancer, demander**.
+Il y a déjà eu des avis clients perdus. On ne recommence pas.
+
+---
+
 ## Les règles qui ne se discutent pas
 
 **1. Le navigateur ne décide de rien.**
@@ -116,6 +151,11 @@ les effacer ensuite : elles apparaissent sur l'écran de la cuisine.
 Migrations via Supabase (`apply_migration`), une par intention, nommée en
 `snake_case`. Réglages métier (horaires, remises, fidélité, roue) dans la
 table `reglages`, modifiables depuis l'admin — **pas en dur dans le code**.
+
+`execute_sql` sert à **lire** et à vérifier. Tout ce qui change le schéma
+passe par une migration, qui laisse une trace ; une suppression faite à la
+main n'en laisse aucune, et c'est précisément ce qui rend une donnée perdue
+impossible à expliquer. Voir l'avertissement en tête de ce fichier.
 
 Deux mécaniques valent la peine d'être comprises avant d'y toucher :
 
