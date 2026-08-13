@@ -1202,3 +1202,14 @@ select:focus-visible {
   color: var(--pasteque-texte);
   font-weight: 500;
 }
+
+/* Ce qui est offert se voit : même rouge que le bandeau du lot. */
+.plat--offert {
+  background: color-mix(in srgb, var(--pasteque) 6%, transparent);
+}
+
+.plat--offert .plat__prix,
+.recap__prix--offert {
+  color: var(--pasteque-texte);
+  font-weight: 600;
+}

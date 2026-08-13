@@ -49,6 +49,10 @@ const choixDe = (cle) => {
 /** Une formule se compose ; le reste s'ajoute tel quel. */
 const estFormule = (article) => /^formule/i.test(article.nom);
 
+/** Cet article est-il un lot déjà gagné, donc offert ? */
+const estOffert = (article) =>
+  !!article?.debloque_par_roue && articlesGagnes.has(article.id);
+
 const quantiteArticle = (articleId) =>
   [...panier].reduce((s, [cle, q]) => (idDe(cle) === articleId ? s + q : s), 0);
 
@@ -88,10 +92,11 @@ function ajuster(id, delta) {
 const totalArticles = () => [...panier.values()].reduce((s, q) => s + q, 0);
 
 const totalCents = () =>
-  [...panier].reduce(
-    (s, [cle, q]) => s + (catalogue.get(idDe(cle))?.prix_cents || 0) * q,
-    0
-  );
+  [...panier].reduce((s, [cle, q]) => {
+    const article = catalogue.get(idDe(cle));
+    if (!article || estOffert(article)) return s;
+    return s + (article.prix_cents || 0) * q;
+  }, 0);
 
 // --- Rendu de la carte -------------------------------------------------------
 
@@ -118,7 +123,13 @@ function ligneArticle(article) {
   const desc = li.querySelector('.plat__description');
   if (article.description) desc.textContent = article.description;
   else desc.remove();
-  li.querySelector('.plat__prix').textContent = euros(article.prix_cents);
+  const prix = li.querySelector('.plat__prix');
+  if (estOffert(article)) {
+    li.classList.add('plat--offert');
+    prix.textContent = 'Offert 🎁';
+  } else {
+    prix.textContent = euros(article.prix_cents);
+  }
   return li;
 }
 
@@ -197,7 +208,12 @@ function redessiner() {
       }
       const prix = document.createElement('span');
       prix.className = 'recap__prix';
-      prix.textContent = euros(article.prix_cents * quantite);
+      if (estOffert(article)) {
+        prix.classList.add('recap__prix--offert');
+        prix.textContent = 'Offert';
+      } else {
+        prix.textContent = euros(article.prix_cents * quantite);
+      }
       li.append(nom, prix);
       recap.append(li);
     }
