@@ -1219,3 +1219,22 @@ select:focus-visible {
   color: var(--gris);
   font-size: 0.9rem;
 }
+
+/* Le choix de l'article sur lequel appliquer son lot. */
+.choix-lot__options {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.choix-lot__options label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.7rem;
+  background: color-mix(in srgb, var(--pasteque) 6%, var(--creme));
+  cursor: pointer;
+}
+
+.choix-lot__options input {
+  accent-color: var(--pasteque);
+}

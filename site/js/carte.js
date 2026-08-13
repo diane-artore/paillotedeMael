@@ -56,6 +56,15 @@ const estFormule = (article) => /^formule/i.test(article.nom);
  * le rayon est candidat.
  */
 function eluDuRayon(slug) {
+  // Le client a désigné son article : c'est lui, et rien d'autre.
+  if (lotSur) {
+    const choisi = catalogue.get(lotSur);
+    if (choisi && rayonDeLArticle.get(choisi.id) === slug && quantiteArticle(choisi.id) > 0) {
+      return choisi;
+    }
+  }
+  // Sinon, le plus cher du rayon présent dans le panier — même règle que
+  // `commander` quand aucun choix n'est transmis.
   let elu = null;
   for (const [cle] of panier) {
     const article = catalogue.get(idDe(cle));
@@ -63,6 +72,53 @@ function eluDuRayon(slug) {
     if (!elu || article.prix_cents > elu.prix_cents) elu = article;
   }
   return elu;
+}
+
+/** Les articles du panier sur lesquels le lot de rayon peut s'appliquer. */
+function candidatsDuLot() {
+  if (!lotDuRayon) return [];
+  const vus = new Set();
+  const liste = [];
+  for (const [cle] of panier) {
+    const article = catalogue.get(idDe(cle));
+    if (!article || vus.has(article.id)) continue;
+    if (rayonDeLArticle.get(article.id) !== lotDuRayon.rayon_slug) continue;
+    vus.add(article.id);
+    liste.push(article);
+  }
+  return liste.sort((a, b) => b.prix_cents - a.prix_cents);
+}
+
+/** Le choix du lot : une case par article candidat, dans le récapitulatif. */
+function dessinerLeChoixDuLot() {
+  const bloc = document.getElementById('choix-lot');
+  if (!bloc) return;
+  const candidats = candidatsDuLot();
+  // Un seul candidat : le choix n'a pas lieu d'être posé.
+  if (candidats.length < 2) {
+    bloc.hidden = true;
+    return;
+  }
+  document.getElementById('choix-lot-titre').textContent =
+    `Appliquer « ${lotDuRayon.titre} » sur`;
+  const options = document.getElementById('choix-lot-options');
+  const elu = eluDuRayon(lotDuRayon.rayon_slug);
+  options.textContent = '';
+  for (const article of candidats) {
+    const label = document.createElement('label');
+    const radio = document.createElement('input');
+    radio.type = 'radio';
+    radio.name = 'lot-sur';
+    radio.value = article.id;
+    radio.checked = elu?.id === article.id;
+    radio.addEventListener('change', () => {
+      lotSur = article.id;
+      redessiner();
+    });
+    label.append(radio, document.createTextNode(` ${article.nom} — ${euros(article.prix_cents)}`));
+    options.append(label);
+  }
+  bloc.hidden = false;
 }
 
 /** Cet article est-il offert par un lot gagné ? */
@@ -266,6 +322,8 @@ function redessiner() {
     }
     document.getElementById('recap-total').textContent = euros(totalCents());
   }
+
+  dessinerLeChoixDuLot();
 }
 
 // --- Composer un article -----------------------------------------------------
@@ -382,6 +440,10 @@ let serviceOuvert = true;
 let articlesGagnes = new Set();
 /** Les rayons dont un article est offert par un lot (« une boisson offerte »). */
 let rayonsOfferts = new Set();
+/** Le lot en attente qui vise un rayon, s'il y en a un. */
+let lotDuRayon = null;
+/** L'article sur lequel le client a choisi d'appliquer son lot. */
+let lotSur = null;
 /** Le rayon d'un article, pour savoir à quel lot il se rattache. */
 let rayonDeLArticle = new Map();
 
@@ -438,6 +500,7 @@ async function reclamerSesLots() {
 
   articlesGagnes = new Set(avoirs.map((a) => a.article_id).filter(Boolean));
   rayonsOfferts = new Set(avoirs.map((a) => a.rayon_slug).filter(Boolean));
+  lotDuRayon = avoirs.find((a) => a.rayon_slug && !a.article_id) || null;
 
   const bandeau = document.getElementById('bandeau-lot');
   const titres = avoirs.map((a) => a.titre);
@@ -496,6 +559,8 @@ async function envoyer(evenement) {
       // Sans lui, la fidélité ne s'accroche à personne : c'est le
       // téléphone qui porte les points, la roue et les avoirs.
       client_tel: donnees.get('client_tel'),
+      // L'article désigné pour le lot ; sans lui, le serveur prend le plus cher.
+      lot_sur: donnees.get('lot-sur') || null,
       note: donnees.get('note'),
     });
 

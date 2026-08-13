@@ -82,6 +82,15 @@
     <p class="recap__total"><span>Total</span> <span id="recap-total">0 €</span></p>
 
     <form class="formulaire" id="formulaire-commande">
+      <!-- Sur quel article appliquer le lot gagné : rempli par js/carte.js
+           quand un lot trouve plusieurs candidats dans le panier. -->
+      <fieldset class="choix-lot" id="choix-lot" hidden style="border: 0; padding: 0; margin: 0;">
+        <legend class="champ__label" style="margin-bottom: 0.5rem;" id="choix-lot-titre">
+          Appliquer mon lot sur
+        </legend>
+        <div class="choix-lot__options" id="choix-lot-options"></div>
+      </fieldset>
+
       <fieldset style="border: 0; padding: 0; margin: 0;">
         <legend class="champ__label" style="margin-bottom: 0.5rem;">Le service</legend>
         <div class="choix">
