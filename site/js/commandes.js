@@ -31,6 +31,20 @@ export function commandesRecentes() {
   }
 }
 
+/**
+ * Oublie une commande que la base ne connaît plus — annulée par le
+ * comptoir, effacée, ou simplement trop vieille. Sans ça, l'appareil
+ * continuerait de proposer « Vos commandes en cours » vers une page vide.
+ */
+export function oublierCommande(jeton) {
+  try {
+    const liste = commandesRecentes().filter((c) => c.jeton !== jeton);
+    localStorage.setItem(CLE_COMMANDES, JSON.stringify(liste));
+  } catch {
+    /* sans stockage, il n'y avait rien à oublier */
+  }
+}
+
 /** Retient une commande qui vient d'être passée (et balaie les périmées). */
 export function retenirCommande(commande) {
   try {

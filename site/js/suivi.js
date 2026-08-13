@@ -6,7 +6,7 @@
 // jeton est dans l'URL et périme au bout d'une journée, côté base.
 
 import { SUPABASE_URL, SUPABASE_CLE_PUBLIABLE, euros } from './config.js';
-import { commandesRecentes } from './commandes.js';
+import { commandesRecentes, oublierCommande } from './commandes.js';
 
 const ETAPES = [
   ['recue', 'Reçue'],
@@ -78,15 +78,51 @@ function afficher(commande) {
   return commande.statut === 'servie';
 }
 
+/** Quand la commande n'existe plus, on propose une porte de sortie. */
+function montrerLaSuite(suivante) {
+  if (document.getElementById('suivi-suite')) return;
+  const p = document.createElement('p');
+  p.id = 'suivi-suite';
+  p.style.marginTop = '2rem';
+  const lien = document.createElement('a');
+  lien.className = 'bouton';
+  if (suivante) {
+    lien.href = `suivi.html?c=${encodeURIComponent(suivante.jeton)}`;
+    lien.textContent = suivante.numero
+      ? `Suivre la commande n° ${suivante.numero}`
+      : 'Suivre ma commande en cours';
+  } else {
+    lien.href = 'carte.html';
+    lien.textContent = 'Voir la carte';
+  }
+  p.append(lien);
+  document.getElementById('suivi-etat').after(p);
+}
+
 async function rafraichir() {
   try {
     const commande = await interroger();
     if (!commande) {
+      // La base ne la connaît plus : effacée au comptoir, ou d'hier. On
+      // cesse de la proposer sur cet appareil, sinon l'onglet « Vos
+      // commandes en cours » ramènerait indéfiniment sur cette page vide.
+      oublierCommande(jeton);
+      const onglet = document.getElementById('nav-commandes');
+      const [suivante] = commandesRecentes();
+      if (onglet) {
+        if (suivante) onglet.href = `suivi.html?c=${encodeURIComponent(suivante.jeton)}`;
+        else onglet.hidden = true;
+      }
+
       etat.className = 'message';
-      etat.textContent =
-        "Cette commande est introuvable — elle date peut-être d'hier. Passez nous voir au comptoir.";
+      etat.textContent = suivante
+        ? "Cette commande n'est plus suivie. Vous en avez une autre en cours."
+        : "Cette commande n'est plus suivie — elle a été clôturée au comptoir, ou elle date d'hier.";
       etat.hidden = false;
       corps.hidden = true;
+      document.getElementById('avis-bloc').hidden = true;
+      document.getElementById('facture-choix').hidden = true;
+      montrerLaSuite(suivante);
       return true;
     }
     etat.hidden = true;
