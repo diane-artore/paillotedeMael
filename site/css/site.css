@@ -1126,6 +1126,24 @@ select:focus-visible {
   color: var(--abricot-texte);
 }
 
+/* --- Horaires, sur la page d'accueil ---------------------------------------- */
+
+.horaires__badge {
+  display: inline-block;
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+}
+
+.horaires__badge--ouvert {
+  color: var(--olive);
+}
+
+.horaires__badge--ferme {
+  color: var(--pasteque);
+}
+
 /* Un bouton de service, discret : « me prévenir », et compagnie. */
 .bouton-discret {
   font: inherit;
