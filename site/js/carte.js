@@ -395,6 +395,9 @@ async function envoyer(evenement) {
       mode: donnees.get('mode') || 'sur_place',
       table_numero: donnees.get('table_numero'),
       client_nom: donnees.get('client_nom'),
+      // Sans lui, la fidélité ne s'accroche à personne : c'est le
+      // téléphone qui porte les points, la roue et les avoirs.
+      client_tel: donnees.get('client_tel'),
       note: donnees.get('note'),
     });
 
@@ -510,10 +513,16 @@ async function demarrer() {
   });
   formulaire.addEventListener('submit', envoyer);
 
-  // Le téléphone déjà donné une fois se représente tout seul.
+  // Le téléphone déjà donné une fois se représente tout seul — et on le
+  // dit, pour que le client sache que ses points suivent.
   try {
     const tel = localStorage.getItem('paillote.telephone');
-    if (tel) document.getElementById('client_tel').value = tel;
+    if (tel) {
+      const champ = document.getElementById('client_tel');
+      champ.value = tel;
+      champ.closest('.champ').querySelector('.champ__aide').textContent =
+        'Numéro déjà enregistré sur cet appareil — vos points continuent de s’y ajouter.';
+    }
   } catch {
     /* rien */
   }

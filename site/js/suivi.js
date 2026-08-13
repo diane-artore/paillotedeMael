@@ -431,6 +431,10 @@ async function montrerFidelite() {
   const bloc = document.getElementById('fidelite');
   bloc.hidden = false;
   document.getElementById('fidelite-points').textContent = solde.points;
+  // Dire à quel numéro ces points sont attachés : c'est lui qu'il faudra
+  // redonner à la prochaine commande pour les retrouver.
+  document.getElementById('fidelite-numero').textContent =
+    `Attachés au ${telephoneFidele}`;
   const detail = document.getElementById('fidelite-detail');
   const manque = Math.max(0, solde.seuil - solde.points);
   detail.textContent =
