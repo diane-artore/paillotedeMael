@@ -484,12 +484,26 @@ async function montrerFidelite() {
       ? 'Le compte y est : la roue vous attend.'
       : `Encore ${manque} point${manque > 1 ? 's' : ''} et la roue tourne (1 € = 1 point).`;
 
+  // Un seul lot par commande, le plus ancien d'abord : la liste doit le
+  // dire, sinon elle promet à chaque ligne ce qui n'arrivera qu'à une.
   const listeAvoirs = document.getElementById('fidelite-avoirs');
   listeAvoirs.textContent = '';
-  for (const avoir of solde.avoirs || []) {
+  (solde.avoirs || []).forEach((avoir, i) => {
     const li = document.createElement('li');
-    li.textContent = `🎁 ${avoir.titre} — appliqué à votre prochaine commande`;
+    if (i === 0) {
+      li.innerHTML = '🎁 <strong></strong> — s’applique à votre prochaine commande';
+      li.querySelector('strong').textContent = avoir.titre;
+    } else {
+      li.className = 'fidelite__avoir--reserve';
+      li.textContent = `🎁 ${avoir.titre} — en réserve`;
+    }
     listeAvoirs.append(li);
+  });
+  if ((solde.avoirs || []).length > 1) {
+    const note = document.createElement('li');
+    note.className = 'fidelite__avoir--reserve';
+    note.textContent = `Un lot par commande : il vous en reste ${solde.avoirs.length - 1} après celle-ci.`;
+    listeAvoirs.append(note);
   }
 
   lotsRoue = solde.lots || [];

@@ -1213,3 +1213,9 @@ select:focus-visible {
   color: var(--pasteque-texte);
   font-weight: 600;
 }
+
+/* Les lots en réserve : présents, mais visiblement pas pour cette fois. */
+.fidelite__avoir--reserve {
+  color: var(--gris);
+  font-size: 0.9rem;
+}
