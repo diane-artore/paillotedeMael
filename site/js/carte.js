@@ -366,14 +366,22 @@ function champDeroulant(libelle, valeurs, descriptions) {
   for (const valeur of valeurs) {
     const option = document.createElement('option');
     option.value = valeur;
-    // Une recette peut préciser ses ingrédients (ex. les pizzas) : le
-    // descriptif s'affiche directement dans le menu, à côté du nom.
-    option.textContent = descriptions?.[valeur]
-      ? `${valeur} — ${descriptions[valeur]}`
-      : valeur;
+    option.textContent = valeur;
     select.append(option);
   }
   bloc.append(label);
+
+  // Une recette peut préciser ses ingrédients (ex. les pizzas) : ce petit
+  // texte sous le menu suit le choix en cours.
+  if (descriptions && Object.keys(descriptions).length) {
+    const aide = document.createElement('p');
+    aide.className = 'champ__aide';
+    aide.textContent = descriptions[select.value] || '';
+    select.addEventListener('change', () => {
+      aide.textContent = descriptions[select.value] || '';
+    });
+    bloc.append(aide);
+  }
 
   return bloc;
 }
