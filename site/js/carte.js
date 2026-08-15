@@ -357,6 +357,46 @@ let formuleEnCours = null;
 function champDeroulant(libelle, valeurs, descriptions) {
   const bloc = document.createElement('div');
   bloc.className = 'champ';
+
+  // Une recette qui a un descriptif (ex. les pizzas) se choisit dans une
+  // liste à deux lignes — le nom, puis les ingrédients en petit — plutôt
+  // que dans un <select> natif qui ne peut afficher qu'une seule ligne
+  // par option. Le titre reste un simple texte : chaque choix porte son
+  // propre <label> autour de son bouton radio.
+  if (descriptions && Object.keys(descriptions).length) {
+    const titre = document.createElement('span');
+    titre.className = 'champ__label';
+    titre.textContent = libelle;
+    bloc.append(titre);
+
+    const groupe = document.createElement('div');
+    groupe.className = 'champ-recette';
+    const nomGroupe = `recette-${Math.random().toString(36).slice(2)}`;
+    valeurs.forEach((valeur, i) => {
+      const item = document.createElement('label');
+      item.className = 'champ-recette__option';
+      const radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = nomGroupe;
+      radio.value = valeur;
+      radio.checked = i === 0;
+      radio.required = true;
+      const texte = document.createElement('span');
+      const nom = document.createElement('strong');
+      nom.textContent = valeur;
+      texte.append(nom);
+      if (descriptions[valeur]) {
+        const desc = document.createElement('small');
+        desc.textContent = descriptions[valeur];
+        texte.append(document.createElement('br'), desc);
+      }
+      item.append(radio, texte);
+      groupe.append(item);
+    });
+    bloc.append(groupe);
+    return bloc;
+  }
+
   const label = document.createElement('label');
   label.className = 'champ__label';
   label.textContent = libelle;
@@ -370,18 +410,6 @@ function champDeroulant(libelle, valeurs, descriptions) {
     select.append(option);
   }
   bloc.append(label);
-
-  // Une recette peut préciser ses ingrédients (ex. les pizzas) : ce petit
-  // texte sous le menu suit le choix en cours.
-  if (descriptions && Object.keys(descriptions).length) {
-    const aide = document.createElement('p');
-    aide.className = 'champ__aide';
-    aide.textContent = descriptions[select.value] || '';
-    select.addEventListener('change', () => {
-      aide.textContent = descriptions[select.value] || '';
-    });
-    bloc.append(aide);
-  }
 
   return bloc;
 }
@@ -428,9 +456,11 @@ function brancherComposition() {
   document.getElementById('formulaire-formule').addEventListener('submit', (e) => {
     e.preventDefault();
     if (!formuleEnCours) return;
-    const morceaux = [
-      ...document.querySelectorAll('#formule-champs select'),
-    ].map((s) => s.value);
+    const morceaux = [...document.querySelectorAll('#formule-champs .champ')].map(
+      (bloc) =>
+        bloc.querySelector('select')?.value ??
+        bloc.querySelector('input[type="radio"]:checked')?.value,
+    );
     // La barre verticale sépare l'id du choix dans la clé : elle ne doit
     // donc jamais entrer dans le choix lui-même.
     const choix = morceaux.join(' · ').replaceAll('|', '/');
