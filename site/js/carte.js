@@ -353,7 +353,7 @@ const LIBELLES_RAYON = {
 
 let formuleEnCours = null;
 
-function champDeroulant(libelle, valeurs) {
+function champDeroulant(libelle, valeurs, descriptions) {
   const bloc = document.createElement('div');
   bloc.className = 'champ';
   const label = document.createElement('label');
@@ -366,9 +366,23 @@ function champDeroulant(libelle, valeurs) {
     const option = document.createElement('option');
     option.value = valeur;
     option.textContent = valeur;
+    if (descriptions?.[valeur]) option.title = descriptions[valeur];
     select.append(option);
   }
   bloc.append(label);
+
+  // Une recette peut préciser ses ingrédients (ex. les pizzas) : la ligne
+  // d'aide sous le menu suit le choix en cours.
+  if (descriptions && Object.keys(descriptions).length) {
+    const aide = document.createElement('p');
+    aide.className = 'champ__aide';
+    aide.textContent = descriptions[select.value] || '';
+    select.addEventListener('change', () => {
+      aide.textContent = descriptions[select.value] || '';
+    });
+    bloc.append(aide);
+  }
+
   return bloc;
 }
 
@@ -400,7 +414,7 @@ function ouvrirComposition(article) {
     document.getElementById('formule-ajouter').textContent = 'Ajouter la formule';
   } else {
     const v = article.variantes;
-    champs.append(champDeroulant(v.titre || 'Choix', v.valeurs));
+    champs.append(champDeroulant(v.titre || 'Choix', v.valeurs, v.descriptions));
     document.getElementById('formule-ajouter').textContent = 'Ajouter';
   }
   dialogue.showModal();

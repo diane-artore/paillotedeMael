@@ -141,6 +141,18 @@ function ligneArticle(article, rayonId) {
   const varianteValeurs = entreeTexte((article.variantes?.valeurs || []).join(', '));
   varianteValeurs.placeholder = 'Vanille, Chocolat, Magnum Classic…';
 
+  // Un descriptif par choix (ex. les ingrédients de chaque recette de
+  // pizza) : une ligne « Valeur : description ». Facultatif — une valeur
+  // sans ligne correspondante n'affiche simplement pas d'aide au client.
+  const varianteDescriptions = document.createElement('textarea');
+  varianteDescriptions.rows = 3;
+  varianteDescriptions.placeholder =
+    'Margarita : Tomate, mozzarella, basilic\nParma : Crème, mozzarella, jambon de Parme…';
+  const descriptionsInitiales = article.variantes?.descriptions || {};
+  varianteDescriptions.value = Object.entries(descriptionsInitiales)
+    .map(([valeur, texte]) => `${valeur} : ${texte}`)
+    .join('\n');
+
   ligne.recolterVariantes = () => {
     const valeurs = varianteValeurs.value
       .split(',')
@@ -150,10 +162,23 @@ function ligneArticle(article, rayonId) {
     // l'enregistrement depuis l'admin la préserve sans y toucher.
     const rayons = article.variantes?.rayons;
     if (!valeurs.length && !rayons) return null;
+
+    const descriptions = {};
+    for (const ligneTexte of varianteDescriptions.value.split('\n')) {
+      const sep = ligneTexte.indexOf(':');
+      if (sep === -1) continue;
+      const valeur = ligneTexte.slice(0, sep).trim();
+      const texte = ligneTexte.slice(sep + 1).trim();
+      // Une description ne survit que si sa valeur existe encore parmi
+      // les choix proposés, pour ne pas traîner de texte orphelin.
+      if (valeur && texte && valeurs.includes(valeur)) descriptions[valeur] = texte;
+    }
+
     return {
       titre: varianteTitre.value.trim() || 'Choix',
       valeurs,
       rayons,
+      ...(Object.keys(descriptions).length ? { descriptions } : {}),
     };
   };
 
@@ -171,7 +196,12 @@ function ligneArticle(article, rayonId) {
   variantes.className = 'admin-article__colonnes';
   const blocValeurs = champ('Choix proposés (facultatif, séparés par des virgules)', varianteValeurs);
   blocValeurs.style.flex = '1';
-  variantes.append(champ('Titre du choix', varianteTitre), blocValeurs);
+  const blocDescriptions = champ(
+    'Descriptif de chaque choix (facultatif, une ligne « Valeur : description »)',
+    varianteDescriptions,
+  );
+  blocDescriptions.style.flex = '1';
+  variantes.append(champ('Titre du choix', varianteTitre), blocValeurs, blocDescriptions);
   ligne.append(colonnes, champ('Description (facultative)', description), variantes);
   return ligne;
 }
