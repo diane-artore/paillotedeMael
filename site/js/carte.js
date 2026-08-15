@@ -358,58 +358,43 @@ function champDeroulant(libelle, valeurs, descriptions) {
   const bloc = document.createElement('div');
   bloc.className = 'champ';
 
-  // Une recette qui a un descriptif (ex. les pizzas) se choisit dans une
-  // liste à deux lignes — le nom, puis les ingrédients en petit — plutôt
-  // que dans un <select> natif qui ne peut afficher qu'une seule ligne
-  // par option. Le titre reste un simple texte : chaque choix porte son
-  // propre <label> autour de son bouton radio.
-  if (descriptions && Object.keys(descriptions).length) {
-    const titre = document.createElement('span');
-    titre.className = 'champ__label';
-    titre.textContent = libelle;
-    bloc.append(titre);
+  // Tous les choix (glace, jus de fruit, recette de pizza, formule…) se
+  // présentent de la même façon : une liste de boutons radio, le nom en
+  // gras et — quand il existe — un descriptif en petit dessous. Un
+  // <select> natif ne peut afficher qu'une seule ligne par option, donc
+  // ne convenait pas dès qu'on a voulu détailler une recette ; par
+  // cohérence, tous les choix de la carte suivent maintenant ce même
+  // habillage, avec ou sans descriptif.
+  const titre = document.createElement('span');
+  titre.className = 'champ__label';
+  titre.textContent = libelle;
+  bloc.append(titre);
 
-    const groupe = document.createElement('div');
-    groupe.className = 'champ-recette';
-    const nomGroupe = `recette-${Math.random().toString(36).slice(2)}`;
-    valeurs.forEach((valeur, i) => {
-      const item = document.createElement('label');
-      item.className = 'champ-recette__option';
-      const radio = document.createElement('input');
-      radio.type = 'radio';
-      radio.name = nomGroupe;
-      radio.value = valeur;
-      radio.checked = i === 0;
-      radio.required = true;
-      const texte = document.createElement('span');
-      const nom = document.createElement('strong');
-      nom.textContent = valeur;
-      texte.append(nom);
-      if (descriptions[valeur]) {
-        const desc = document.createElement('small');
-        desc.textContent = descriptions[valeur];
-        texte.append(document.createElement('br'), desc);
-      }
-      item.append(radio, texte);
-      groupe.append(item);
-    });
-    bloc.append(groupe);
-    return bloc;
-  }
-
-  const label = document.createElement('label');
-  label.className = 'champ__label';
-  label.textContent = libelle;
-  const select = document.createElement('select');
-  select.required = true;
-  label.append(select);
-  for (const valeur of valeurs) {
-    const option = document.createElement('option');
-    option.value = valeur;
-    option.textContent = valeur;
-    select.append(option);
-  }
-  bloc.append(label);
+  const groupe = document.createElement('div');
+  groupe.className = 'champ-choix';
+  const nomGroupe = `choix-${Math.random().toString(36).slice(2)}`;
+  valeurs.forEach((valeur, i) => {
+    const item = document.createElement('label');
+    item.className = 'champ-choix__option';
+    const radio = document.createElement('input');
+    radio.type = 'radio';
+    radio.name = nomGroupe;
+    radio.value = valeur;
+    radio.checked = i === 0;
+    radio.required = true;
+    const texte = document.createElement('span');
+    const nom = document.createElement('strong');
+    nom.textContent = valeur;
+    texte.append(nom);
+    if (descriptions?.[valeur]) {
+      const desc = document.createElement('small');
+      desc.textContent = descriptions[valeur];
+      texte.append(document.createElement('br'), desc);
+    }
+    item.append(radio, texte);
+    groupe.append(item);
+  });
+  bloc.append(groupe);
 
   return bloc;
 }
@@ -457,9 +442,7 @@ function brancherComposition() {
     e.preventDefault();
     if (!formuleEnCours) return;
     const morceaux = [...document.querySelectorAll('#formule-champs .champ')].map(
-      (bloc) =>
-        bloc.querySelector('select')?.value ??
-        bloc.querySelector('input[type="radio"]:checked')?.value,
+      (bloc) => bloc.querySelector('input[type="radio"]:checked')?.value,
     );
     // La barre verticale sépare l'id du choix dans la clé : elle ne doit
     // donc jamais entrer dans le choix lui-même.

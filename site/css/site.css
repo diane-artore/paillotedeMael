@@ -507,14 +507,15 @@ a:hover {
   color: var(--gris);
 }
 
-/* Le choix d'une recette (ex. la pizza) : le nom en gros, les ingrédients
-   en dessous, en petit — même esprit que .choix-lot__options. */
-.champ-recette {
+/* Tout choix de la carte (glace, jus de fruit, recette de pizza,
+   formule…) : le nom en gras, un descriptif en petit dessous quand il y
+   en a un — même esprit que .choix-lot__options. */
+.champ-choix {
   display: grid;
   gap: 0.4rem;
 }
 
-.champ-recette__option {
+.champ-choix__option {
   display: flex;
   align-items: flex-start;
   gap: 0.6rem;
@@ -524,17 +525,17 @@ a:hover {
   cursor: pointer;
 }
 
-.champ-recette__option input {
+.champ-choix__option input {
   margin-top: 0.3rem;
   accent-color: var(--pasteque);
   flex-shrink: 0;
 }
 
-.champ-recette__option strong {
+.champ-choix__option strong {
   font-weight: 600;
 }
 
-.champ-recette__option small {
+.champ-choix__option small {
   color: var(--gris);
   font-size: 0.85rem;
 }
