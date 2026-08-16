@@ -896,6 +896,16 @@ select:focus-visible {
   color: var(--bassin);
 }
 
+.suivi__heure-voulue {
+  margin-top: 0.6rem;
+  display: inline-block;
+  background: color-mix(in srgb, var(--pasteque) 10%, var(--creme));
+  border-inline-start: 3px solid var(--pasteque);
+  padding: 0.4rem 0.7rem;
+  font-weight: 600;
+  color: var(--pasteque);
+}
+
 .suivi__etapes {
   display: flex;
   justify-content: center;
