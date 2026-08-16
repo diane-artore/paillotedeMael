@@ -103,6 +103,16 @@ function carteTicket(c, active) {
   entete.append(numero, ou, heure);
   ticket.append(entete);
 
+  // Le client a demandé à être servi à une heure précise : la cuisine doit
+  // la voir tout de suite, pas la découvrir en lisant le mot en bas du
+  // ticket.
+  if (c.heure_souhaitee) {
+    const voulue = document.createElement('p');
+    voulue.className = 'ticket__heure-voulue';
+    voulue.textContent = `⏱ Servir vers ${c.heure_souhaitee}`;
+    ticket.append(voulue);
+  }
+
   const lignes = document.createElement('div');
   lignes.className = 'ticket__lignes';
   for (const l of c.lignes || []) {

@@ -354,17 +354,17 @@ const LIBELLES_RAYON = {
 
 let formuleEnCours = null;
 
-function champDeroulant(libelle, valeurs, descriptions) {
+function champDeroulant(libelle, valeurs, descriptions, nom) {
   const bloc = document.createElement('div');
   bloc.className = 'champ';
 
-  // Tous les choix (glace, jus de fruit, recette de pizza, formule…) se
-  // présentent de la même façon : une liste de boutons radio, le nom en
-  // gras et — quand il existe — un descriptif en petit dessous. Un
-  // <select> natif ne peut afficher qu'une seule ligne par option, donc
-  // ne convenait pas dès qu'on a voulu détailler une recette ; par
-  // cohérence, tous les choix de la carte suivent maintenant ce même
-  // habillage, avec ou sans descriptif.
+  // Tous les choix (glace, jus de fruit, recette de pizza, formule, heure
+  // de service…) se présentent de la même façon : une liste de boutons
+  // radio, le nom en gras et — quand il existe — un descriptif en petit
+  // dessous. Un <select> natif ne peut afficher qu'une seule ligne par
+  // option, donc ne convenait pas dès qu'on a voulu détailler une
+  // recette ; par cohérence, tous les choix de la carte suivent
+  // maintenant ce même habillage, avec ou sans descriptif.
   const titre = document.createElement('span');
   titre.className = 'champ__label';
   titre.textContent = libelle;
@@ -372,7 +372,11 @@ function champDeroulant(libelle, valeurs, descriptions) {
 
   const groupe = document.createElement('div');
   groupe.className = 'champ-choix';
-  const nomGroupe = `choix-${Math.random().toString(36).slice(2)}`;
+  // Le nom du groupe radio : fixe (fourni par l'appelant) quand ce champ
+  // doit être relu par son `name` — le formulaire de commande — sinon
+  // tiré au sort pour ne jamais entrer en collision avec les autres
+  // champs de la même formule.
+  const nomGroupe = nom || `choix-${Math.random().toString(36).slice(2)}`;
   valeurs.forEach((valeur, i) => {
     const item = document.createElement('label');
     item.className = 'champ-choix__option';
@@ -383,9 +387,9 @@ function champDeroulant(libelle, valeurs, descriptions) {
     radio.checked = i === 0;
     radio.required = true;
     const texte = document.createElement('span');
-    const nom = document.createElement('strong');
-    nom.textContent = valeur;
-    texte.append(nom);
+    const nom2 = document.createElement('strong');
+    nom2.textContent = valeur;
+    texte.append(nom2);
     if (descriptions?.[valeur]) {
       const desc = document.createElement('small');
       desc.textContent = descriptions[valeur];
@@ -572,6 +576,41 @@ function direLeBandeauDuLot() {
   bandeau.hidden = false;
 }
 
+// Les créneaux de « heure souhaitée » : toutes les demi-heures entre
+// l'ouverture et la fermeture du service (repli 11 h–22 h si les
+// réglages n'ont pas encore répondu). « Dès que possible » est toujours
+// le premier choix, coché par défaut — la grande majorité des clients ne
+// veulent pas se donner la peine de choisir une heure.
+function creneauxService(service) {
+  const debut = service?.debut || '11:00';
+  const fin = service?.fin || '22:00';
+  const [hD, mD] = debut.split(':').map(Number);
+  const [hF, mF] = fin.split(':').map(Number);
+  let minutes = hD * 60 + (mD || 0);
+  const finMinutes = hF * 60 + (mF || 0);
+  const creneaux = [];
+  while (minutes < finMinutes && creneaux.length < 60) {
+    const h = String(Math.floor(minutes / 60) % 24).padStart(2, '0');
+    const m = String(minutes % 60).padStart(2, '0');
+    creneaux.push(`${h}:${m}`);
+    minutes += 30;
+  }
+  return creneaux;
+}
+
+function afficherChampHeure(service) {
+  const cible = document.getElementById('champ-heure');
+  if (!cible) return;
+  const bloc = champDeroulant(
+    'Vous voulez être servi vers…',
+    ['Dès que possible', ...creneauxService(service)],
+    null,
+    'heure_souhaitee',
+  );
+  bloc.id = 'champ-heure';
+  cible.replaceWith(bloc);
+}
+
 async function verifierLeService() {
   try {
     const [service, hh] = await Promise.all([
@@ -585,10 +624,12 @@ async function verifierLeService() {
       );
     }
     if (hh?.actif) annoncerHeureMystere(hh);
+    afficherChampHeure(service);
   } catch (e) {
     // Pas de réseau pour ces deux-là : on laisse la carte se comporter
     // normalement, `commander` tranchera.
     console.error(e);
+    afficherChampHeure(null);
   }
 }
 
@@ -623,6 +664,13 @@ async function envoyer(evenement) {
       // L'article désigné pour le lot ; sans lui, le serveur prend le plus cher.
       lot_sur: donnees.get('lot-sur') || null,
       note: donnees.get('note'),
+      // « Dès que possible » n'est pas une heure : on l'envoie comme
+      // absence de préférence, `commander` la traite pareil qu'un champ
+      // laissé vide.
+      heure_souhaitee:
+        donnees.get('heure_souhaitee') === 'Dès que possible'
+          ? null
+          : donnees.get('heure_souhaitee'),
     });
 
     // Le jeton est la seule clé de suivi : on le retient pour cet appareil
