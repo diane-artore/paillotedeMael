@@ -107,6 +107,7 @@ function ligneArticle(article, rayonId) {
         p_position: article.position ?? 0,
         p_variantes: ligne.recolterVariantes(),
         p_debloque_par_roue: verrou.checked,
+        p_supplements: ligne.recolterSupplements(),
       });
       dire(`« ${nom.value.trim()} » enregistré.`);
       await charger();
@@ -182,6 +183,30 @@ function ligneArticle(article, rayonId) {
     };
   };
 
+  // Les suppléments (fromage en plus, boule supplémentaire…) : une ligne
+  // « Nom : prix », le prix en euros comme partout ailleurs dans l'admin.
+  // Contrairement à la recette, le client peut en cocher plusieurs.
+  const supplementsEntree = document.createElement('textarea');
+  supplementsEntree.rows = 3;
+  supplementsEntree.placeholder = 'Fromage supplémentaire : 1,50\nChorizo : 1,50\nŒuf : 1';
+  supplementsEntree.value = (article.supplements || [])
+    .map((s) => `${s.nom} : ${(s.prix_cents / 100).toFixed(2).replace('.', ',')}`)
+    .join('\n');
+
+  ligne.recolterSupplements = () => {
+    const supplements = [];
+    for (const ligneTexte of supplementsEntree.value.split('\n')) {
+      const sep = ligneTexte.indexOf(':');
+      if (sep === -1) continue;
+      const nom = ligneTexte.slice(0, sep).trim();
+      const prixCents = Math.round(parseFloat(ligneTexte.slice(sep + 1).trim().replace(',', '.')) * 100);
+      if (nom && Number.isFinite(prixCents) && prixCents >= 0) {
+        supplements.push({ nom, prix_cents: prixCents });
+      }
+    }
+    return supplements;
+  };
+
   const colonnes = document.createElement('div');
   colonnes.className = 'admin-article__colonnes';
   colonnes.append(
@@ -202,6 +227,12 @@ function ligneArticle(article, rayonId) {
   );
   blocDescriptions.style.flex = '1';
   variantes.append(champ('Titre du choix', varianteTitre), blocValeurs, blocDescriptions);
+  const blocSupplements = champ(
+    'Suppléments (facultatif, une ligne « Nom : prix en € »)',
+    supplementsEntree,
+  );
+  blocSupplements.style.flex = '1';
+  variantes.append(blocSupplements);
   ligne.append(colonnes, champ('Description (facultative)', description), variantes);
   return ligne;
 }
