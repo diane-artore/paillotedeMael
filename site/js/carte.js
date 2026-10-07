@@ -35,6 +35,15 @@ const CLE_PANIER = 'paillote.panier';
  * toujours de l'article, jamais de la clé.
  */
 let panier = new Map();
+/**
+ * @type {Map<string, string[]>} clé de panier → suppléments choisis
+ *
+ * Suit `panier` un à un (mêmes clés). Le prix d'un supplément vient
+ * toujours du catalogue de l'article (`article.supplements`), jamais de
+ * cette liste : elle ne sert qu'à savoir *quoi* a été coché, `commander`
+ * revérifie le prix.
+ */
+let supplementsPanier = new Map();
 /** @type {Map<string, object>} id d'article → article */
 let catalogue = new Map();
 /** @type {Array<object>} les rayons chargés, pour composer les formules */
@@ -147,21 +156,35 @@ const quantiteArticle = (articleId) =>
 function charger() {
   try {
     const brut = JSON.parse(sessionStorage.getItem(CLE_PANIER) || '[]');
-    if (Array.isArray(brut)) {
+    // Ancien format : un simple tableau [clé, quantité]. Nouveau format :
+    // { lignes, suppléments } — on lit l'un ou l'autre pour ne pas vider
+    // le panier de qui avait déjà la page ouverte au moment du déploiement.
+    const lignes = Array.isArray(brut) ? brut : brut.lignes;
+    const supplements = Array.isArray(brut) ? [] : brut.supplements || [];
+    if (Array.isArray(lignes)) {
       panier = new Map(
-        brut.filter(
+        lignes.filter(
           ([id, q]) => typeof id === 'string' && Number.isInteger(q) && q > 0
         )
       );
     }
+    if (Array.isArray(supplements)) {
+      supplementsPanier = new Map(
+        supplements.filter(([cle, s]) => typeof cle === 'string' && Array.isArray(s)),
+      );
+    }
   } catch {
     panier = new Map();
+    supplementsPanier = new Map();
   }
 }
 
 function ranger() {
   try {
-    sessionStorage.setItem(CLE_PANIER, JSON.stringify([...panier]));
+    sessionStorage.setItem(
+      CLE_PANIER,
+      JSON.stringify({ lignes: [...panier], supplements: [...supplementsPanier] }),
+    );
   } catch {
     // Navigation privée, quota plein : le panier reste en mémoire, tant pis.
   }
@@ -169,10 +192,24 @@ function ranger() {
 
 function ajuster(id, delta) {
   const quantite = (panier.get(id) || 0) + delta;
-  if (quantite <= 0) panier.delete(id);
-  else panier.set(id, Math.min(20, quantite));
+  if (quantite <= 0) {
+    panier.delete(id);
+    supplementsPanier.delete(id);
+  } else {
+    panier.set(id, Math.min(20, quantite));
+  }
   ranger();
   redessiner();
+}
+
+/** Le supplément coûte ce que dit le catalogue de l'article — jamais autre
+ * chose. Une clé sans suppléments choisis ne coûte rien de plus. */
+function coutSupplementsCle(cle) {
+  const noms = supplementsPanier.get(cle);
+  if (!noms?.length) return 0;
+  const article = catalogue.get(idDe(cle));
+  const catalogueDeLArticle = new Map((article?.supplements || []).map((s) => [s.nom, s.prix_cents]));
+  return noms.reduce((s, nom) => s + (catalogueDeLArticle.get(nom) || 0), 0);
 }
 
 const totalArticles = () => [...panier.values()].reduce((s, q) => s + q, 0);
@@ -182,8 +219,10 @@ const totalCents = () =>
     const article = catalogue.get(idDe(cle));
     if (!article) return s;
     const paye = estOffert(article) ? Math.max(0, q - 1) : q;
-    // Un lot n'offre qu'une unité : le reste se paie.
-    return s + (article.prix_cents || 0) * (article.debloque_par_roue ? 0 : paye);
+    // Un lot n'offre que l'article de base : les suppléments, eux, se
+    // paient toujours, sur chaque unité commandée.
+    const base = (article.prix_cents || 0) * (article.debloque_par_roue ? 0 : paye);
+    return s + base + coutSupplementsCle(cle) * q;
   }, 0);
 
 // --- Rendu de la carte -------------------------------------------------------
@@ -313,9 +352,12 @@ function redessiner() {
       prix.className = 'recap__prix';
       if (estOffert(article)) {
         prix.classList.add('recap__prix--offert');
-        prix.textContent = 'Offert';
+        prix.textContent =
+          coutSupplementsCle(cle) > 0
+            ? `Offert + ${euros(coutSupplementsCle(cle) * quantite)}`
+            : 'Offert';
       } else {
-        prix.textContent = euros(article.prix_cents * quantite);
+        prix.textContent = euros((article.prix_cents + coutSupplementsCle(cle)) * quantite);
       }
       li.append(nom, prix);
       recap.append(li);
@@ -324,6 +366,7 @@ function redessiner() {
   }
 
   dessinerLeChoixDuLot();
+  direLeBandeauDuLot();
 }
 
 // --- Composer un article -----------------------------------------------------
@@ -353,36 +396,88 @@ const LIBELLES_RAYON = {
 
 let formuleEnCours = null;
 
-function champDeroulant(libelle, valeurs, descriptions) {
+function champDeroulant(libelle, valeurs, descriptions, nom) {
   const bloc = document.createElement('div');
   bloc.className = 'champ';
-  const label = document.createElement('label');
-  label.className = 'champ__label';
-  label.textContent = libelle;
-  const select = document.createElement('select');
-  select.required = true;
-  label.append(select);
-  for (const valeur of valeurs) {
-    const option = document.createElement('option');
-    option.value = valeur;
-    option.textContent = valeur;
-    if (descriptions?.[valeur]) option.title = descriptions[valeur];
-    select.append(option);
-  }
-  bloc.append(label);
 
-  // Une recette peut préciser ses ingrédients (ex. les pizzas) : la ligne
-  // d'aide sous le menu suit le choix en cours.
-  if (descriptions && Object.keys(descriptions).length) {
-    const aide = document.createElement('p');
-    aide.className = 'champ__aide';
-    aide.textContent = descriptions[select.value] || '';
-    select.addEventListener('change', () => {
-      aide.textContent = descriptions[select.value] || '';
-    });
-    bloc.append(aide);
-  }
+  // Tous les choix (glace, jus de fruit, recette de pizza, formule, heure
+  // de service…) se présentent de la même façon : une liste de boutons
+  // radio, le nom en gras et — quand il existe — un descriptif en petit
+  // dessous. Un <select> natif ne peut afficher qu'une seule ligne par
+  // option, donc ne convenait pas dès qu'on a voulu détailler une
+  // recette ; par cohérence, tous les choix de la carte suivent
+  // maintenant ce même habillage, avec ou sans descriptif.
+  const titre = document.createElement('span');
+  titre.className = 'champ__label';
+  titre.textContent = libelle;
+  bloc.append(titre);
 
+  const groupe = document.createElement('div');
+  groupe.className = 'champ-choix';
+  // Le nom du groupe radio : fixe (fourni par l'appelant) quand ce champ
+  // doit être relu par son `name` — le formulaire de commande — sinon
+  // tiré au sort pour ne jamais entrer en collision avec les autres
+  // champs de la même formule.
+  const nomGroupe = nom || `choix-${Math.random().toString(36).slice(2)}`;
+  valeurs.forEach((valeur, i) => {
+    const item = document.createElement('label');
+    item.className = 'champ-choix__option';
+    const radio = document.createElement('input');
+    radio.type = 'radio';
+    radio.name = nomGroupe;
+    radio.value = valeur;
+    radio.checked = i === 0;
+    radio.required = true;
+    const texte = document.createElement('span');
+    const nom2 = document.createElement('strong');
+    nom2.textContent = valeur;
+    texte.append(nom2);
+    if (descriptions?.[valeur]) {
+      const desc = document.createElement('small');
+      desc.textContent = descriptions[valeur];
+      texte.append(document.createElement('br'), desc);
+    }
+    item.append(radio, texte);
+    groupe.append(item);
+  });
+  bloc.append(groupe);
+
+  return bloc;
+}
+
+// Les suppléments (fromage en plus, boule supplémentaire…) : contrairement
+// à la recette ou au parfum, on peut en cocher plusieurs — d'où des cases à
+// cocher plutôt que des boutons radio. Même habillage que champDeroulant,
+// par cohérence, avec le prix affiché à la place du descriptif.
+function champSupplements(options) {
+  const bloc = document.createElement('div');
+  bloc.className = 'champ';
+  const titre = document.createElement('span');
+  titre.className = 'champ__label';
+  titre.textContent = 'Suppléments';
+  bloc.append(titre);
+
+  const groupe = document.createElement('div');
+  groupe.className = 'champ-choix';
+  groupe.dataset.supplements = '';
+  for (const { nom, prix_cents } of options) {
+    const item = document.createElement('label');
+    item.className = 'champ-choix__option';
+    const case_ = document.createElement('input');
+    case_.type = 'checkbox';
+    case_.name = 'supplement';
+    case_.value = nom;
+    case_.dataset.prixCents = prix_cents;
+    const texte = document.createElement('span');
+    const fort = document.createElement('strong');
+    fort.textContent = nom;
+    const prix = document.createElement('small');
+    prix.textContent = `+ ${euros(prix_cents)}`;
+    texte.append(fort, document.createElement('br'), prix);
+    item.append(case_, texte);
+    groupe.append(item);
+  }
+  bloc.append(groupe);
   return bloc;
 }
 
@@ -414,7 +509,12 @@ function ouvrirComposition(article) {
     document.getElementById('formule-ajouter').textContent = 'Ajouter la formule';
   } else {
     const v = article.variantes;
-    champs.append(champDeroulant(v.titre || 'Choix', v.valeurs, v.descriptions));
+    if (v?.valeurs?.length) {
+      champs.append(champDeroulant(v.titre || 'Choix', v.valeurs, v.descriptions));
+    }
+    if (article.supplements?.length) {
+      champs.append(champSupplements(article.supplements));
+    }
     document.getElementById('formule-ajouter').textContent = 'Ajouter';
   }
   dialogue.showModal();
@@ -428,20 +528,34 @@ function brancherComposition() {
   document.getElementById('formulaire-formule').addEventListener('submit', (e) => {
     e.preventDefault();
     if (!formuleEnCours) return;
-    const morceaux = [
-      ...document.querySelectorAll('#formule-champs select'),
-    ].map((s) => s.value);
-    // La barre verticale sépare l'id du choix dans la clé : elle ne doit
-    // donc jamais entrer dans le choix lui-même.
-    const choix = morceaux.join(' · ').replaceAll('|', '/');
-    ajuster(`${formuleEnCours.id}|${choix}`, 1);
+    const morceaux = [...document.querySelectorAll('#formule-champs .champ')]
+      .map((bloc) => bloc.querySelector('input[type="radio"]:checked')?.value)
+      .filter(Boolean);
+    const supplements = [
+      ...document.querySelectorAll('#formule-champs input[type="checkbox"]:checked'),
+    ].map((c) => c.value);
+
+    // Le nom affiché (récap, ticket cuisine, facture) résume le choix et
+    // les suppléments ; la barre verticale sépare l'id du choix dans la
+    // clé, elle ne doit donc jamais s'y retrouver.
+    const choixBase = morceaux.join(' · ');
+    const choixAffiche = [choixBase, supplements.length ? `Suppl. ${supplements.join(', ')}` : null]
+      .filter(Boolean)
+      .join(' + ')
+      .replaceAll('|', '/');
+    const cle = choixAffiche ? `${formuleEnCours.id}|${choixAffiche}` : formuleEnCours.id;
+
+    if (supplements.length) supplementsPanier.set(cle, supplements);
+    ajuster(cle, 1);
     dialogue.close();
   });
 }
 
 /** L'article demande-t-il un choix au moment de l'ajouter ? */
 const seCompose = (article) =>
-  estFormule(article) || (article.variantes?.valeurs?.length > 0);
+  estFormule(article) ||
+  (article.variantes?.valeurs?.length > 0) ||
+  (article.supplements?.length > 0);
 
 // --- Le service et l'heure mystère -------------------------------------------
 // Deux bandeaux, deux vérités qui viennent de la base : hors service, la
@@ -456,6 +570,8 @@ let articlesGagnes = new Set();
 let rayonsOfferts = new Set();
 /** Le lot en attente qui vise un rayon, s'il y en a un. */
 let lotDuRayon = null;
+/** Tous les lots en attente, pour ce que le bandeau doit annoncer. */
+let lotsEnAttente = [];
 /** L'article sur lequel le client a choisi d'appliquer son lot. */
 let lotSur = null;
 /** Le rayon d'un article, pour savoir à quel lot il se rattache. */
@@ -516,13 +632,80 @@ async function reclamerSesLots() {
   rayonsOfferts = new Set(avoirs.map((a) => a.rayon_slug).filter(Boolean));
   lotDuRayon = avoirs.find((a) => a.rayon_slug && !a.article_id) || null;
 
+  lotsEnAttente = avoirs;
+  direLeBandeauDuLot();
+}
+
+/**
+ * Le bandeau dit ce qui va réellement se passer. Un lot qui ne trouve rien
+ * à offrir dans le panier n'est pas perdu — il reste en attente — mais il
+ * ne faut pas promettre une déduction qui n'arrivera pas. C'est le cas
+ * d'une formule : son dessert est un texte dans la ligne, pas un article
+ * du rayon « desserts ».
+ */
+function direLeBandeauDuLot() {
   const bandeau = document.getElementById('bandeau-lot');
-  const titres = avoirs.map((a) => a.titre);
-  bandeau.textContent =
-    titres.length === 1
-      ? `🎁 Vous avez gagné : ${titres[0]} — c'est déduit de cette commande.`
-      : `🎁 Vos lots : ${titres.join(', ')} — un seul par commande, le plus ancien d'abord.`;
+  if (!bandeau || !lotsEnAttente.length) return;
+
+  const lot = lotsEnAttente[0];
+  const suite = lotsEnAttente.length > 1
+    ? ` (${lotsEnAttente.length - 1} autre${lotsEnAttente.length > 2 ? 's' : ''} en réserve)`
+    : '';
+
+  let applicable;
+  let commentFaire = '';
+  if (lot.article_id) {
+    applicable = quantiteArticle(lot.article_id) > 0;
+    commentFaire = ` Ajoutez « ${lot.article_nom} » à votre commande pour en profiter.`;
+  } else if (lot.rayon_slug) {
+    applicable = candidatsDuLot().length > 0;
+    const ou = lot.rayon_nom ? ` du rayon « ${lot.rayon_nom} »` : '';
+    commentFaire = ` Ajoutez un article${ou} à la carte pour en profiter — une formule ne compte pas, son contenu est déjà inclus.`;
+  } else {
+    applicable = panier.size > 0;
+    commentFaire = ' Il s’appliquera dès que vous aurez choisi quelque chose.';
+  }
+
+  bandeau.textContent = applicable
+    ? `🎁 Vous avez gagné : ${lot.titre} — c'est déduit de cette commande${suite}.`
+    : `🎁 Vous avez gagné : ${lot.titre}${suite}.${commentFaire}`;
+  bandeau.dataset.applicable = applicable ? 'oui' : 'non';
   bandeau.hidden = false;
+}
+
+// Les créneaux de « heure souhaitée » : toutes les demi-heures entre
+// l'ouverture et la fermeture du service (repli 11 h–22 h si les
+// réglages n'ont pas encore répondu). « Dès que possible » est toujours
+// le premier choix, coché par défaut — la grande majorité des clients ne
+// veulent pas se donner la peine de choisir une heure.
+function creneauxService(service) {
+  const debut = service?.debut || '11:00';
+  const fin = service?.fin || '22:00';
+  const [hD, mD] = debut.split(':').map(Number);
+  const [hF, mF] = fin.split(':').map(Number);
+  let minutes = hD * 60 + (mD || 0);
+  const finMinutes = hF * 60 + (mF || 0);
+  const creneaux = [];
+  while (minutes < finMinutes && creneaux.length < 60) {
+    const h = String(Math.floor(minutes / 60) % 24).padStart(2, '0');
+    const m = String(minutes % 60).padStart(2, '0');
+    creneaux.push(`${h}:${m}`);
+    minutes += 30;
+  }
+  return creneaux;
+}
+
+function afficherChampHeure(service) {
+  const cible = document.getElementById('champ-heure');
+  if (!cible) return;
+  const bloc = champDeroulant(
+    'Vous voulez être servi vers…',
+    ['Dès que possible', ...creneauxService(service)],
+    null,
+    'heure_souhaitee',
+  );
+  bloc.id = 'champ-heure';
+  cible.replaceWith(bloc);
 }
 
 async function verifierLeService() {
@@ -538,10 +721,12 @@ async function verifierLeService() {
       );
     }
     if (hh?.actif) annoncerHeureMystere(hh);
+    afficherChampHeure(service);
   } catch (e) {
     // Pas de réseau pour ces deux-là : on laisse la carte se comporter
     // normalement, `commander` tranchera.
     console.error(e);
+    afficherChampHeure(null);
   }
 }
 
@@ -566,6 +751,9 @@ async function envoyer(evenement) {
         article_id: idDe(cle),
         quantite,
         choix: choixDe(cle),
+        // Le nom des suppléments cochés ; leur prix n'est jamais envoyé
+        // d'ici, `commander` le relit dans le catalogue.
+        supplements: supplementsPanier.get(cle) || [],
       })),
       mode: donnees.get('mode') || 'sur_place',
       table_numero: donnees.get('table_numero'),
@@ -576,6 +764,13 @@ async function envoyer(evenement) {
       // L'article désigné pour le lot ; sans lui, le serveur prend le plus cher.
       lot_sur: donnees.get('lot-sur') || null,
       note: donnees.get('note'),
+      // « Dès que possible » n'est pas une heure : on l'envoie comme
+      // absence de préférence, `commander` la traite pareil qu'un champ
+      // laissé vide.
+      heure_souhaitee:
+        donnees.get('heure_souhaitee') === 'Dès que possible'
+          ? null
+          : donnees.get('heure_souhaitee'),
     });
 
     // Le jeton est la seule clé de suivi : on le retient pour cet appareil
@@ -615,7 +810,7 @@ async function demarrer() {
 
   try {
     const rayons = await lire(
-      'rayons?select=slug,nom,position,articles(id,nom,description,prix_cents,position,disponible,variantes,debloque_par_roue)' +
+      'rayons?select=slug,nom,position,articles(id,nom,description,prix_cents,position,disponible,variantes,supplements,debloque_par_roue)' +
         '&order=position.asc'
     );
 

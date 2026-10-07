@@ -56,6 +56,14 @@ function afficher(commande) {
   document.getElementById('suivi-paiement').textContent =
     PAIEMENT[commande.statut_paiement] || '';
 
+  const heureVoulue = document.getElementById('suivi-heure-voulue');
+  if (commande.heure_souhaitee) {
+    heureVoulue.textContent = `⏱ Vous souhaitiez être servi vers ${commande.heure_souhaitee}`;
+    heureVoulue.hidden = false;
+  } else {
+    heureVoulue.hidden = true;
+  }
+
   guetterPrete(commande.statut);
   // Plus rien à guetter une fois le plateau sur la table.
   document.getElementById('alerte-prete').hidden =

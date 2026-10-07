@@ -119,6 +119,14 @@
   font-style: italic;
 }
 
+.ticket__heure-voulue {
+  background: color-mix(in srgb, var(--pasteque) 10%, var(--papier));
+  border-inline-start: 3px solid var(--pasteque);
+  padding: 0.4rem 0.6rem;
+  font-weight: 600;
+  color: var(--pasteque);
+}
+
 .ticket__pied {
   display: flex;
   align-items: center;
