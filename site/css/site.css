@@ -1289,3 +1289,14 @@ select:focus-visible {
   color: var(--texte);
   font-weight: 400;
 }
+
+/* L'annonce de Ti Maël : la paillote a changé de vie, le lien doit se voir. */
+.bandeau--ti-mael {
+  color: var(--bassin);
+}
+
+.bandeau--ti-mael a {
+  color: var(--pasteque-texte);
+  text-underline-offset: 0.15em;
+  white-space: nowrap;
+}
