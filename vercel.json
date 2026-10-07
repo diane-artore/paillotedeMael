@@ -1,4 +1,12 @@
 {
+  "redirects": [
+    { "source": "/carte", "destination": "/", "permanent": false },
+    { "source": "/carte.html", "destination": "/", "permanent": false },
+    { "source": "/avis", "destination": "/", "permanent": false },
+    { "source": "/avis.html", "destination": "/", "permanent": false },
+    { "source": "/site/carte.html", "destination": "/", "permanent": false },
+    { "source": "/site/avis.html", "destination": "/", "permanent": false }
+  ],
   "rewrites": [
     { "source": "/", "destination": "/site/index.html" },
     { "source": "/carte", "destination": "/site/carte.html" },
