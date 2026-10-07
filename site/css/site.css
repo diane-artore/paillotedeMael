@@ -1238,3 +1238,14 @@ select:focus-visible {
 .choix-lot__options input {
   accent-color: var(--pasteque);
 }
+
+/* L'annonce de Ti'Maël : la paillote a changé de vie, le lien doit se voir. */
+.bandeau--ti-mael {
+  color: var(--bassin);
+}
+
+.bandeau--ti-mael a {
+  color: var(--pasteque-texte);
+  text-underline-offset: 0.15em;
+  white-space: nowrap;
+}
