@@ -1239,7 +1239,7 @@ select:focus-visible {
   accent-color: var(--pasteque);
 }
 
-/* L'annonce de Ti'Maël : la paillote a changé de vie, le lien doit se voir. */
+/* L'annonce de Ti Maël : la paillote a changé de vie, le lien doit se voir. */
 .bandeau--ti-mael {
   color: var(--bassin);
 }
